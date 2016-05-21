@@ -1,21 +1,39 @@
 package edu.unh.cs.android.dopesafe;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
 
   private static final String TAG = "MainActivity";
+
+  TextView time;
+  Button startButton;
+  long startTime = 0L;
+  long timeInMilliseconds = 0L;
+  long timeSwapBuff = 0L;
+  long updatedtime = 0L;
+  int t = 1;
+  int seconds = 0;
+  int minutes = 0;
+  int milliseconds = 0;
+  Handler handler = new Handler();
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +42,10 @@ public class MainActivity extends AppCompatActivity
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    Button startButton = (Button) findViewById(R.id.start_button);
+    startButton = (Button) findViewById(R.id.start_button);
+
+    time = (TextView) findViewById(R.id.time);
+
 
     if (startButton != null) {
       startButton.setOnClickListener(new View.OnClickListener() {
@@ -34,10 +55,69 @@ public class MainActivity extends AppCompatActivity
         }
       });
     }
+
+    Button smsButton = (Button) findViewById(R.id.test_sms);
+
+    if (smsButton != null) {
+      smsButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          String number = "7024301384";
+          String sms = "test test yo!";
+
+          try {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(number, null, sms, null, null);
+            Log.d(TAG, "onClick() called with: " + "v = [" + v + "]" + " SMS Sent!");
+          } catch (Exception e) {
+            Log.e(TAG, "SMS failed, please try again later!", e);
+          }
+        }
+      });
+    }
+
+
   }
+
+  public Runnable updateTimer = new Runnable() {
+
+    public void run() {
+
+      timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+
+      updatedtime = timeSwapBuff + timeInMilliseconds;
+
+      seconds = (int) (updatedtime / 1000);
+      minutes = seconds / 60;
+      seconds = seconds % 60;
+      milliseconds = (int) (updatedtime % 1000);
+      time.setText("" + minutes + ":" + String.format("%02d", seconds) + ":"
+          + String.format("%03d", milliseconds));
+      time.setTextColor(Color.RED);
+      handler.postDelayed(this, 0);
+    }
+  };
+
 
   private void startTimer() {
     Log.d(TAG, "startTimer() called with: " + "");
+
+    if (t == 1) {
+//timer will start
+      startButton.setText("Pause");
+      startTime = SystemClock.uptimeMillis();
+      handler.postDelayed(updateTimer, 0);
+      t = 0;
+    } else {
+//timer will pause
+      startButton.setText("Start");
+      time.setTextColor(Color.BLUE);
+      timeSwapBuff += timeInMilliseconds;
+      handler.removeCallbacks(updateTimer);
+      t = 1;
+    }
+
+
   }
 
   @Override

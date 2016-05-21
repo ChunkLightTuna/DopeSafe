@@ -13,6 +13,11 @@
     tools:context="edu.unh.cs.android.dopesafe.MainActivity">
     <!--tools:showIn="@layout/activity_main">-->
 
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <Button
         android:src="@drawable/ic_fiber_manual_record_black_24dp"
         android:layout_width="wrap_content"
@@ -27,6 +32,12 @@
         android:textColor="@color/abc_primary_text_material_dark"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/test_sms"
+        android:layout_gravity="bottom"/>
 
 
 </RelativeLayout>
