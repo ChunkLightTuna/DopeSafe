@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
           // The toggle is disabled
+          stopButton.setVisibility(View.VISIBLE);
         }
       }
     });
@@ -170,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
       time.setTextColor(Color.BLUE);
 
       t = 1;*/
+
+      startButton.setVisibility(View.VISIBLE);
     }
 
 
