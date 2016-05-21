@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
@@ -15,7 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements NavigationView.OnNavigationItemSelectedListener {
 
   private static final String TAG = "MainActivity";
 
@@ -24,12 +27,12 @@ public class MainActivity extends AppCompatActivity {
   long startTime = 0L;
   long timeInMilliseconds = 0L;
   long timeSwapBuff = 0L;
-  long updatedTime = 0L;
+  long updatedtime = 0L;
   int t = 1;
   int seconds = 0;
   int minutes = 0;
+  int milliseconds = 0;
   Handler handler = new Handler();
-  Settings settings;
 
 
   @Override
@@ -39,15 +42,9 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
-    settings = new Settings(this);
-
     startButton = (Button) findViewById(R.id.start_button);
+
     time = (TextView) findViewById(R.id.time);
-
-    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
-    if (navigationView != null)
-      navigationView.setNavigationItemSelectedListener(settings);
 
 
     if (startButton != null) {
@@ -73,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
             smsManager.sendTextMessage(number, null, sms, null, null);
             Log.d(TAG, "onClick() called with: " + "v = [" + v + "]" + " SMS Sent!");
           } catch (Exception e) {
-            Log.e(TAG, "SMS failed!", e);
+            Log.e(TAG, "SMS failed, please try again later!", e);
           }
         }
       });
@@ -88,13 +85,15 @@ public class MainActivity extends AppCompatActivity {
 
       timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
 
-      updatedTime = timeSwapBuff + timeInMilliseconds;
+      updatedtime = timeSwapBuff + timeInMilliseconds;
 
-      seconds = (int) (updatedTime / 1000);
+      seconds = (int) (updatedtime / 1000);
       minutes = seconds / 60;
       seconds = seconds % 60;
-      time.setText("" + minutes + ":" + String.format("%02d", seconds));
-      time.setTextColor(Color.GREEN);
+      milliseconds = (int) (updatedtime % 1000);
+      time.setText("" + minutes + ":" + String.format("%02d", seconds) + ":"
+          + String.format("%03d", milliseconds));
+      time.setTextColor(Color.RED);
       handler.postDelayed(this, 0);
     }
   };
@@ -105,24 +104,16 @@ public class MainActivity extends AppCompatActivity {
 
     if (t == 1) {
 //timer will start
-      startButton.setText("Stop");
+      startButton.setText("Pause");
       startTime = SystemClock.uptimeMillis();
       handler.postDelayed(updateTimer, 0);
       t = 0;
     } else {
 //timer will pause
       startButton.setText("Start");
-
-      startTime = 0L;
-      timeInMilliseconds = 0L;
-      timeSwapBuff = 0L;
-      updatedTime = 0L;
-      seconds = 0;
-      minutes = 0;
-      handler.removeCallbacks(updateTimer);
-      time.setText("00:00");
       time.setTextColor(Color.BLUE);
-
+      timeSwapBuff += timeInMilliseconds;
+      handler.removeCallbacks(updateTimer);
       t = 1;
     }
 
@@ -143,10 +134,36 @@ public class MainActivity extends AppCompatActivity {
     // as you specify a parent activity in AndroidManifest.xml.
     int id = item.getItemId();
 
+    //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
       return true;
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  @SuppressWarnings("StatementWithEmptyBody")
+  @Override
+  public boolean onNavigationItemSelected(MenuItem item) {
+    // Handle navigation view item clicks here.
+    int id = item.getItemId();
+
+    if (id == R.id.nav_camera) {
+      // Handle the camera action
+    } else if (id == R.id.nav_gallery) {
+
+    } else if (id == R.id.nav_slideshow) {
+
+    } else if (id == R.id.nav_manage) {
+
+    } else if (id == R.id.nav_share) {
+
+    } else if (id == R.id.nav_send) {
+
+    }
+
+    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    drawer.closeDrawer(GravityCompat.START);
+    return true;
   }
 }
