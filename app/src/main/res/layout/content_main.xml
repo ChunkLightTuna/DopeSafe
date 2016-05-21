@@ -15,11 +15,6 @@
     android:background="@android:drawable/ic_dialog_dialer">
     <!--tools:showIn="@layout/activity_main">-->
 
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
     <Button
         android:layout_width="275dp"
         android:layout_height="260dp"
@@ -37,15 +32,16 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:layout_width="138dp"
-        android:layout_height="70dp"
-        android:text=":TIME"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="30:00"
         android:textSize="45sp"
         android:typeface="normal"
-        android:id="@+id/textView2"
+        android:id="@+id/time"
         android:textColor="@color/material_grey_600"
         android:textIsSelectable="false"
-        android:layout_alignTop="@+id/time"
+        android:layout_marginTop="20dp"
+        android:gravity="top|center_horizontal"
         android:layout_centerHorizontal="true" />
 
     <Switch

@@ -1,6 +1,5 @@
 package edu.unh.cs.android.dopesafe;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,7 +10,9 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 
 /**
  * Created by Chris Oelerich on 5/21/16.
@@ -20,19 +21,17 @@ public class Settings
     implements NavigationView.OnNavigationItemSelectedListener {
 
   private static final String TAG = "Settings";
-  private Activity activity;
+  private MainActivity activity;
 
   //TODO should be pulled out and saved b/w sessions
   private String contact_phone;
   private boolean motion;
+  private boolean location;
   private int timeout;
+  private String message;
 
-  public Settings(Activity activity) {
+  public Settings(MainActivity activity) {
     this.activity = activity;
-
-
-    //defaults for now
-    contact_phone = activity.getResources().getString(R.string.ali);
   }
 
 
@@ -72,11 +71,30 @@ public class Settings
 
       } else if (id == R.id.time_out) {
 
+        final NumberPicker input = new NumberPicker(activity);
+        input.setMinValue(1);
+        input.setMaxValue(60);
+        input.setValue(timeout);
+
+        builder
+            .setTitle("Time Out")
+            .setMessage("Set time out in minutes")
+            .setView(input)
+            .setPositiveButton("set", new DialogInterface.OnClickListener() {
+              public void onClick(DialogInterface dialog, int id) {
+                timeout = input.getValue();
+                activity.updateTime();
+              }
+            });
+
+      } else if (id == R.id.message) {
 
         final EditText input = new EditText(activity);
 
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-        input.setText(contact_phone);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        input.setText(message);
+        input.setMinLines(5);
+        input.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
         builder
             .setTitle("Emergency Contact")
@@ -86,8 +104,6 @@ public class Settings
                 contact_phone = input.getText().toString();
               }
             });
-
-      } else if (id == R.id.message) {
 
 
       } else if (id == R.id.motion_detection) {
@@ -125,5 +141,46 @@ public class Settings
     DrawerLayout drawer = (DrawerLayout) activity.getWindow().getDecorView().findViewById(R.id.drawer_layout);
     drawer.closeDrawer(GravityCompat.START);
     return true;
+  }
+
+
+  public String getContact_phone() {
+    return contact_phone;
+  }
+
+  public void setContact_phone(String contact_phone) {
+    this.contact_phone = contact_phone;
+  }
+
+  public boolean isMotion() {
+    return motion;
+  }
+
+  public void setMotion(boolean motion) {
+    this.motion = motion;
+  }
+
+  public int getTimeout() {
+    return timeout;
+  }
+
+  public void setTimeout(int timeout) {
+    this.timeout = timeout;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public boolean isLocation() {
+    return location;
+  }
+
+  public void setLocation(boolean location) {
+    this.location= location;
   }
 }
