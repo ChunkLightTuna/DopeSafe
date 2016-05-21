@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
 
     if (t == 1) {
 //timer will start
-      startButton.setText("Pause");
+      //startButton.setText("Pause");
       startTime = SystemClock.uptimeMillis();
       handler.postDelayed(updateTimer, 0);
       t = 0;
