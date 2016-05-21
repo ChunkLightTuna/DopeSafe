@@ -1,30 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:title="Tools" />
+    <group>
+    <item
+        android:id="@+id/emergency_contact"
+        android:title="Emergency Contact"/>
+    <item
+        android:id="@+id/time_out"
+        android:title="Time Out"/>
+    <item
+        android:id="@+id/message"
+        android:title="Message"/>
+    <item
+        android:id="@+id/get_help"
+        android:title="Get Help"/>
+    <item
+        android:id="@+id/motion_detection"
+        android:title="Motion Detection"/>
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:title="Send" />
-        </menu>
-    </item>
 
 </menu>
