@@ -8,8 +8,10 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 /**
  * Created by Chris Oelerich on 5/21/16.
@@ -21,7 +23,6 @@ public class Settings
   private Activity activity;
 
   //TODO should be pulled out and saved b/w sessions
-  private String contact_name;
   private String contact_phone;
   private boolean motion;
   private int timeout;
@@ -31,7 +32,6 @@ public class Settings
 
 
     //defaults for now
-    contact_name = "Ali";
     contact_phone = activity.getResources().getString(R.string.ali);
   }
 
@@ -56,28 +56,37 @@ public class Settings
 
       if (id == R.id.emergency_contact) {
 
+        final EditText input = new EditText(activity);
+
+        input.setInputType(InputType.TYPE_CLASS_PHONE);
+        input.setText(contact_phone);
+
         builder
-            .setMessage("A")
-            .setTitle("B")
-            .setPositiveButton("enable", new DialogInterface.OnClickListener() {
+            .setTitle("Emergency Contact")
+            .setView(input)
+            .setPositiveButton("set", new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                //toggle
-              }
-            })
-            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-              public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
+                contact_phone = input.getText().toString();
               }
             });
 
       } else if (id == R.id.time_out) {
+
+
+        final EditText input = new EditText(activity);
+
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setText(contact_phone);
+
         builder
-            .setTitle("Time out length")
-            .setPositiveButton("Set", new DialogInterface.OnClickListener() {
+            .setTitle("Emergency Contact")
+            .setView(input)
+            .setPositiveButton("set", new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                Log.d(TAG, "motion is set  to " + motion);
+                contact_phone = input.getText().toString();
               }
             });
+
       } else if (id == R.id.message) {
 
 
