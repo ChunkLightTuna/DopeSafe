@@ -7,7 +7,6 @@ import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,25 +58,25 @@ public class MainActivity extends AppCompatActivity {
       });
     }
 
-    Button smsButton = (Button) findViewById(R.id.test_sms);
-
-    if (smsButton != null) {
-      smsButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          String number = "7024301384";
-          String sms = "test test yo!";
-
-          try {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(number, null, sms, null, null);
-            Log.d(TAG, "onClick() called with: " + "v = [" + v + "]" + " SMS Sent!");
-          } catch (Exception e) {
-            Log.e(TAG, "SMS failed!", e);
-          }
-        }
-      });
-    }
+//    Button smsButton = (Button) findViewById(R.id.test_sms);
+//
+//    if (smsButton != null) {
+//      smsButton.setOnClickListener(new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//          String number = "7024301384";
+//          String sms = "test test yo!";
+//
+//          try {
+//            SmsManager smsManager = SmsManager.getDefault();
+//            smsManager.sendTextMessage(number, null, sms, null, null);
+//            Log.d(TAG, "onClick() called with: " + "v = [" + v + "]" + " SMS Sent!");
+//          } catch (Exception e) {
+//            Log.e(TAG, "SMS failed!", e);
+//          }
+//        }
+//      });
+//    }
 
 
   }
