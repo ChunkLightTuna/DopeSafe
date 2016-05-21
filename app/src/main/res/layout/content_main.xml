@@ -13,8 +13,9 @@
     tools:context="edu.unh.cs.android.dopesafe.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"/>
+        android:id="@+id/start_button"
+        android:text="Go!"/>
 </RelativeLayout>
