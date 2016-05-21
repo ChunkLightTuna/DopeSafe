@@ -12,7 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
 
   TextView time;
   Button startButton;
+  Switch stopButton;
+  ProgressBar progressCircle;
   long startTime = 0L;
   long timeInMilliseconds = 0L;
   long timeSwapBuff = 0L;
@@ -41,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
     settings = new Settings(this);
 
     startButton = (Button) findViewById(R.id.start_button);
+    stopButton = (Switch) findViewById(R.id.stop_button);
+    progressCircle = (ProgressBar) findViewById(R.id.progress_bar);
+
+    stopButton.setVisibility(View.INVISIBLE);
+    progressCircle.setVisibility(View.INVISIBLE);
     time = (TextView) findViewById(R.id.time);
 
     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -56,6 +67,38 @@ public class MainActivity extends AppCompatActivity {
           startTimer();
         }
       });
+    }
+
+    if (stopButton != null) {
+      stopButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+          // The toggle is enabled
+          stopButton.setVisibility(View.INVISIBLE);
+          startButton.setVisibility(View.VISIBLE);
+          progressCircle.setVisibility(View.INVISIBLE);
+
+          //stop the timer
+          startTime = 0L;
+          timeInMilliseconds = 0L;
+          timeSwapBuff = 0L;
+          updatedTime = 0L;
+          seconds = 0;
+          minutes = 0;
+          handler.removeCallbacks(updateTimer);
+          time.setText("00:00");
+          time.setTextColor(Color.BLUE);
+
+          t = 1;
+
+          //reset the toggle button
+          stopButton.setChecked(false);
+
+        } else {
+          // The toggle is disabled
+        }
+      }
+    });
     }
 
 //    Button smsButton = (Button) findViewById(R.id.test_sms);
@@ -104,15 +147,19 @@ public class MainActivity extends AppCompatActivity {
 
     if (t == 1) {
 //timer will start
-      startButton.setText("Stop");
+      //startButton.setText("Stop");
+      startButton.setVisibility(View.INVISIBLE);
+      stopButton.setVisibility(View.VISIBLE);
+      progressCircle.setVisibility(View.VISIBLE);
+
       startTime = SystemClock.uptimeMillis();
       handler.postDelayed(updateTimer, 0);
       t = 0;
     } else {
 //timer will pause
-      startButton.setText("Start");
+      //startButton.setText("Start");
 
-      startTime = 0L;
+      /*startTime = 0L;
       timeInMilliseconds = 0L;
       timeSwapBuff = 0L;
       updatedTime = 0L;
@@ -122,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
       time.setText("00:00");
       time.setTextColor(Color.BLUE);
 
-      t = 1;
+      t = 1;*/
     }
 
 

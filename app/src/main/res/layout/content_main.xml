@@ -23,8 +23,8 @@
     <Button
         android:layout_width="275dp"
         android:layout_height="260dp"
-        android:text="START"
-        android:textSize="70sp"
+        android:text="Be Safe"
+        android:textSize="55sp"
         android:textStyle="normal"
         android:id="@+id/start_button"
         android:layout_weight="0.41"
@@ -32,9 +32,9 @@
         android:layout_gravity="center_vertical"
         android:textColor="@color/abc_primary_text_material_dark"
         android:typeface="normal"
+        android:visibility="visible"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:visibility="visible" />
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="138dp"
@@ -51,12 +51,26 @@
     <Switch
         android:layout_width="300dp"
         android:layout_height="75dp"
-        android:text="            STOP"
-        android:textSize="45sp"
-        android:id="@+id/stop_Button"
+        android:text="STOP"
+        android:gravity="end"
+        android:textSize="55sp"
+        android:id="@+id/stop_button"
         android:textOff="STOP"
         android:textOn=""
         android:background="@color/bright_foreground_disabled_material_light"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:indeterminate="false"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:background="@drawable/circle_shape"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:max="100"
+        android:progress="65"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
