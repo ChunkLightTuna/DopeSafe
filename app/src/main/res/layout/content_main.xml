@@ -12,10 +12,10 @@
 
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="edu.unh.cs.android.dopesafe.MainActivity"
-    android:background="@android:drawable/ic_dialog_dialer">
-    <!--tools:showIn="@layout/activity_main">-->
+    android:background="@drawable/background">
+    tools:showIn="@layout/activity_main">
 
-    <Button
+   <Button
         android:layout_width="275dp"
         android:layout_height="260dp"
         android:text="Be Safe"
@@ -28,8 +28,8 @@
         android:textColor="@color/abc_primary_text_material_dark"
         android:typeface="normal"
         android:visibility="visible"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+       android:layout_alignTop="@+id/progress_bar"
+       android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="match_parent"
@@ -55,7 +55,8 @@
         android:background="@color/bright_foreground_disabled_material_light"
         android:switchMinWidth="150dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/button_material_light" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -74,7 +75,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:id="@+id/imageView2"
-        android:src="@drawable/dope_safe_logo"
+        android:src="@drawable/logo_small"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
