@@ -1,83 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
 
+    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="edu.unh.cs.android.dopesafe.MainActivity"
-    android:background="@drawable/background">
+    tools:context="edu.unh.cs.android.dopesafe.MainActivity">
     tools:showIn="@layout/activity_main">
 
-   <Button
+    <Button
+        android:id="@+id/start_button"
+
         android:layout_width="275dp"
         android:layout_height="260dp"
-        android:text="Be Safe"
-        android:textSize="55sp"
-        android:textStyle="normal"
-        android:id="@+id/start_button"
+        android:layout_alignTop="@+id/progress_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_vertical"
         android:layout_weight="0.41"
         android:background="@drawable/round_button"
-        android:layout_gravity="center_vertical"
+        android:text="Be Safe"
         android:textColor="@color/abc_primary_text_material_dark"
+        android:textSize="55sp"
+        android:textStyle="normal"
         android:typeface="normal"
-        android:visibility="visible"
-       android:layout_alignTop="@+id/progress_bar"
-       android:layout_centerHorizontal="true" />
+        android:visibility="visible" />
 
     <TextView
+        android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="30:00"
-        android:textSize="45sp"
-        android:typeface="normal"
-        android:id="@+id/time"
-        android:textColor="@color/material_grey_300"
-        android:textIsSelectable="false"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:gravity="top|center_horizontal"
-        android:layout_centerHorizontal="true" />
+        android:text="30:00"
+        android:textColor="@color/material_grey_300"
+        android:textIsSelectable="false"
+        android:textSize="45sp"
+        android:typeface="normal" />
 
     <Switch
+        android:id="@+id/stop_button"
         android:layout_width="300dp"
         android:layout_height="75dp"
-        android:text=" STOP"
-        android:textSize="50sp"
-        android:id="@+id/stop_button"
-        android:textOff="STOP"
-        android:textOn=""
-        android:background="@color/bright_foreground_disabled_material_light"
-        android:switchMinWidth="150dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:textColor="@color/button_material_light" />
+        android:background="@color/bright_foreground_disabled_material_light"
+        android:switchMinWidth="150dp"
+        android:text=" STOP"
+        android:textColor="@color/button_material_light"
+        android:textOff="STOP"
+        android:textOn=""
+        android:textSize="50sp" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="260dp"
         android:layout_height="260dp"
-        android:indeterminate="false"
-        android:progressDrawable="@drawable/circular_progress_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:background="@drawable/circle_shape"
-        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminate="false"
         android:max="60000"
         android:progress="0"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:progressDrawable="@drawable/circular_progress_bar" />
 
     <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:id="@+id/imageView2"
-        android:src="@drawable/logo_small"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:src="@drawable/logo_small" />
 
 
 </RelativeLayout>
