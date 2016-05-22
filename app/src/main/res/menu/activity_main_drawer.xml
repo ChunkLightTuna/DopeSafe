@@ -14,8 +14,10 @@
             android:id="@+id/motion_detection"
             android:title="Motion Detection"/>
         <item
+            android:id="@+id/location"
+            android:title="Location"/>
+        <item
             android:id="@+id/get_help"
             android:title="Get Help"/>
     </group>
-
 </menu>

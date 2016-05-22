@@ -55,53 +55,66 @@ public class Settings
 
       if (id == R.id.emergency_contact) {
 
-        final EditText input = new EditText(activity);
+        final EditText editText = new EditText(activity);
 
-        input.setInputType(InputType.TYPE_CLASS_PHONE);
-        input.setText(contact_phone);
+        editText.setInputType(InputType.TYPE_CLASS_PHONE);
+        editText.setText(contact_phone);
 
         builder
             .setTitle("Emergency Contact")
-            .setView(input)
+            .setView(editText)
             .setPositiveButton("set", new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                contact_phone = input.getText().toString();
+                contact_phone = editText.getText().toString();
               }
             });
 
       } else if (id == R.id.time_out) {
 
-        final NumberPicker input = new NumberPicker(activity);
-        input.setMinValue(1);
-        input.setMaxValue(60);
-        input.setValue(timeMax);
+        final NumberPicker numberPicker = new NumberPicker(activity);
+
+        final String[] minuteValues = new String[13];
+
+        minuteValues[0] = "1";
+
+        for (int i = 1; i < minuteValues.length; i++) {
+          String number = Integer.toString((i+1)*5);
+          minuteValues[i] = number.length() < 2 ? "0" + number : number;
+        }
+
+        numberPicker.setDisplayedValues(minuteValues);
+
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(12);
+
+        numberPicker.setValue(timeMax);
 
         builder
             .setTitle("Time Out")
             .setMessage("Set time out in minutes")
-            .setView(input)
+            .setView(numberPicker)
             .setPositiveButton("set", new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                timeMax = input.getValue();
+                timeMax = Integer.parseInt(minuteValues[numberPicker.getValue() - 1]);
                 activity.updateTime();
               }
             });
 
       } else if (id == R.id.message) {
 
-        final EditText input = new EditText(activity);
+        final EditText editText = new EditText(activity);
 
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        input.setText(message);
-        input.setMinLines(5);
-        input.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        editText.setText(message);
+        editText.setMinLines(5);
+        editText.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
         builder
             .setTitle("Emergency Contact")
-            .setView(input)
+            .setView(editText)
             .setPositiveButton("set", new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                contact_phone = input.getText().toString();
+                contact_phone = editText.getText().toString();
               }
             });
 
@@ -119,11 +132,19 @@ public class Settings
                 motion = !motion;
                 Log.d(TAG, "motion is set  to " + motion);
               }
-            })
+            });
+      } else if (id == R.id.location) {
 
-            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+        String current = location ? "enabled" : "disabled";
+        String action = location ? "disable" : "enable";
+
+        builder
+            .setTitle("Location currently " + current + ".")
+            .setMessage("Would you like to " + action + " it?")
+            .setPositiveButton(action, new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                // User cancelled the dialog
+                location = !location;
+                Log.d(TAG, "motion is set  to " + location);
               }
             });
       }
@@ -144,7 +165,7 @@ public class Settings
   }
 
 
-  public String getContact_phone() {
+  public String getPhone() {
     return contact_phone;
   }
 
@@ -181,6 +202,6 @@ public class Settings
   }
 
   public void setLocation(boolean location) {
-    this.location= location;
+    this.location = location;
   }
 }

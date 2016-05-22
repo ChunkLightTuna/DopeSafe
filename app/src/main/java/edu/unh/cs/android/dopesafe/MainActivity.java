@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity
 
   TextView time;
   Button startButton;
+  //  SeekBar stopButton;
   Switch stopButton;
   long startTime = 0L;
   long timeInMilliseconds = 0L;
@@ -56,38 +57,12 @@ public class MainActivity extends AppCompatActivity
 
     updateValuesFromBundle(savedInstanceState);
 
-    updateTimer = new Runnable() {
-
-      public void run() {
-
-        timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
-
-        updatedTime = timeSwapBuff + timeInMilliseconds;
-
-        seconds = (int) (updatedTime / 1000);
-        minutes = seconds / 60;
-        seconds = seconds % 60;
-
-        if (minutes == settings.getTimeMax()) {
-          sendSMS(settings.getContact_phone(), settings.getMessage());
-
-          Log.d(TAG, "times up");
-          time.setTextColor(Color.RED);
-        } else {
-          if (minutes != 0 || seconds != 0) {
-            time.setText((settings.getTimeMax() - minutes - 1) + ":" + String.format("%02d", (60 - seconds)));
-          }
-        }
-
-        handler.postDelayed(this, 0);
-      }
-    };
+    updateTimer = getTimer();
 
     setContentView(R.layout.activity_main);
-//    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//    setSupportActionBar(toolbar);
 
     startButton = (Button) findViewById(R.id.start_button);
+//    stopButton = (SeekBar) findViewById(R.id.stop_button);
     stopButton = (Switch) findViewById(R.id.stop_button);
     progressCircle = (ProgressBar) findViewById(R.id.progress_bar);
 
@@ -111,6 +86,28 @@ public class MainActivity extends AppCompatActivity
     }
 
     if (stopButton != null) {
+//      stopButton.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//        @Override
+//        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//          if(progress>95) {
+//            seekBar.setThumb(getResources().getDrawable(R.drawable.common_google_signin_btn_icon_light_focused));
+//          }
+//        }
+//
+//        @Override
+//        public void onStartTrackingTouch(SeekBar seekBar) {
+//
+//        }
+//
+//        @Override
+//        public void onStopTrackingTouch(SeekBar seekBar) {
+//
+//          if(seekBar.getProgress()>95) {
+//            seekBar.setThumb(getResources().getDrawable(R.drawable.circular_progress_bar));
+//          }
+//        }
+//      });
+
       stopButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
           if (isChecked) {
@@ -128,7 +125,7 @@ public class MainActivity extends AppCompatActivity
             minutes = 0;
             handler.removeCallbacks(updateTimer);
             updateTime();
-            time.setTextColor(Color.BLUE);
+            time.setTextColor(Color.WHITE);
 
             t = 1;
 
@@ -154,8 +151,8 @@ public class MainActivity extends AppCompatActivity
 
     Boolean motion = false;
     Boolean location = false;
-    String phone = getResources().getString(R.string.ali);
-    String message = "Hey, it's hk. This is an automated request for help. I haven't moved in a while after using. Would you mind checking up on me?";
+    String phone = getResources().getString(R.string.default_phone);
+    String message = getResources().getString(R.string.default_message);
     int timeout = 30;
 
     if (savedInstanceState != null) {
@@ -176,7 +173,7 @@ public class MainActivity extends AppCompatActivity
   public void onSaveInstanceState(Bundle savedInstanceState) {
     savedInstanceState.putBoolean("motion", settings.isMotion());
     savedInstanceState.putString("message", settings.getMessage());
-    savedInstanceState.putString("phone", settings.getContact_phone());
+    savedInstanceState.putString("phone", settings.getPhone());
     savedInstanceState.putInt("timeout", settings.getTimeMax());
     savedInstanceState.putBoolean("location", settings.isLocation());
 
@@ -246,9 +243,11 @@ public class MainActivity extends AppCompatActivity
   }
 
   private Runnable getTimer() {
+
     return new Runnable() {
 
       public void run() {
+
         timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
 
         updatedTime = timeSwapBuff + timeInMilliseconds;
@@ -258,17 +257,15 @@ public class MainActivity extends AppCompatActivity
         seconds = seconds % 60;
 
         if (minutes == settings.getTimeMax()) {
-          sendSMS(settings.getContact_phone(), settings.getMessage());
+          sendSMS(settings.getPhone(), settings.getMessage());
           time.setText("00:00");
           time.setTextColor(Color.RED);
-
         } else {
           if (minutes != 0 || seconds != 0) {
             time.setText(String.format("%02d", (settings.getTimeMax() - minutes - 1)) + ":" + String.format("%02d", (60 - seconds)));
           }
-
           long p = updatedTime / settings.getTimeMax();
-          progressCircle.setProgress((int)p);
+          progressCircle.setProgress((int) p);
           handler.postDelayed(this, 0);
         }
       }
