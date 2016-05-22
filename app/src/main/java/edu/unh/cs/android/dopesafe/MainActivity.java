@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity
         } else {
           if (minutes != 0 || seconds != 0) {
             time.setText((settings.getTimeout() - minutes - 1) + ":" + String.format("%02d", (60 - seconds)));
-            progressCircle.setProgress((int)(startTime / minutes));
           }
         }
 
@@ -88,8 +87,8 @@ public class MainActivity extends AppCompatActivity
     };
 
     setContentView(R.layout.activity_main);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
+//    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//    setSupportActionBar(toolbar);
 
     startButton = (Button) findViewById(R.id.start_button);
     stopButton = (Switch) findViewById(R.id.stop_button);
@@ -101,7 +100,6 @@ public class MainActivity extends AppCompatActivity
     time = (TextView) findViewById(R.id.time);
 
     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
     if (navigationView != null)
       navigationView.setNavigationItemSelectedListener(settings);
 
@@ -114,16 +112,6 @@ public class MainActivity extends AppCompatActivity
         }
       });
     }
-
-// Create an instance of GoogleAPIClient.
-    if (mGoogleApiClient == null) {
-      mGoogleApiClient = new GoogleApiClient.Builder(this)
-          .addConnectionCallbacks(this)
-          .addOnConnectionFailedListener(this)
-          .addApi(LocationServices.API)
-          .build();
-    }
-
 
     if (stopButton != null) {
       stopButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -157,10 +145,12 @@ public class MainActivity extends AppCompatActivity
         }
       });
     }
+
+    mapInit();
   }
 
   public void updateTime() {
-    time.setText(settings.getTimeout() + ":00");
+    time.setText(String.format("%02d", settings.getTimeMax()) + ":00");
   }
 
   private void updateValuesFromBundle(Bundle savedInstanceState) {
@@ -182,7 +172,7 @@ public class MainActivity extends AppCompatActivity
     settings.setMotion(motion);
     settings.setMessage(message);
     settings.setContact_phone(phone);
-    settings.setTimeout(timeout);
+    settings.setTimeMax(timeout);
     settings.setLocation(location);
   }
 
@@ -190,7 +180,7 @@ public class MainActivity extends AppCompatActivity
     savedInstanceState.putBoolean("motion", settings.isMotion());
     savedInstanceState.putString("message", settings.getMessage());
     savedInstanceState.putString("phone", settings.getContact_phone());
-    savedInstanceState.putInt("timeout", settings.getTimeout());
+    savedInstanceState.putInt("timeout", settings.getTimeMax());
     savedInstanceState.putBoolean("location", settings.isLocation());
 
     super.onSaveInstanceState(savedInstanceState);
@@ -207,7 +197,7 @@ public class MainActivity extends AppCompatActivity
       progressCircle.setVisibility(View.VISIBLE);
 
       startTime = SystemClock.uptimeMillis();
-      handler.postDelayed(updateTimer, 0);
+      handler.postDelayed(updateTimer, 500);
       t = 0;
     } else {
       startButton.setVisibility(View.VISIBLE);
@@ -246,6 +236,49 @@ public class MainActivity extends AppCompatActivity
     }
   }
 
+  private void mapInit() {
+
+// Create an instance of GoogleAPIClient.
+    if (mGoogleApiClient == null) {
+      mGoogleApiClient = new GoogleApiClient.Builder(this)
+          .addConnectionCallbacks(this)
+          .addOnConnectionFailedListener(this)
+          .addApi(LocationServices.API)
+          .build();
+    }
+  }
+
+  private Runnable getTimer() {
+    return new Runnable() {
+
+      public void run() {
+        timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+
+        updatedTime = timeSwapBuff + timeInMilliseconds;
+
+        seconds = (int) (updatedTime / 1000);
+        minutes = seconds / 60;
+        seconds = seconds % 60;
+
+        if (minutes == settings.getTimeMax()) {
+          sendSMS(settings.getContact_phone(), settings.getMessage());
+          time.setText("00:00");
+          time.setTextColor(Color.RED);
+
+        } else {
+          if (minutes != 0 || seconds != 0) {
+            time.setText(String.format("%02d", (settings.getTimeMax() - minutes - 1)) + ":" + String.format("%02d", (60 - seconds)));
+          }
+
+          long p = updatedTime / settings.getTimeMax();
+          progressCircle.setProgress((int)p);
+          handler.postDelayed(this, 0);
+        }
+      }
+    };
+  }
+
+
   /**
    * Runs when a GoogleApiClient object successfully connects.
    */
@@ -279,26 +312,5 @@ public class MainActivity extends AppCompatActivity
     // attempt to re-establish the connection.
     Log.i(TAG, "Connection suspended");
     mGoogleApiClient.connect();
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.menu_main, menu);
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
-
-    if (id == R.id.action_settings) {
-      return true;
-    }
-
-    return super.onOptionsItemSelected(item);
   }
 }

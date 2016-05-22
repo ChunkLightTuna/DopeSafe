@@ -27,7 +27,7 @@ public class Settings
   private String contact_phone;
   private boolean motion;
   private boolean location;
-  private int timeout;
+  private int timeMax;
   private String message;
 
   public Settings(MainActivity activity) {
@@ -74,7 +74,7 @@ public class Settings
         final NumberPicker input = new NumberPicker(activity);
         input.setMinValue(1);
         input.setMaxValue(60);
-        input.setValue(timeout);
+        input.setValue(timeMax);
 
         builder
             .setTitle("Time Out")
@@ -82,7 +82,7 @@ public class Settings
             .setView(input)
             .setPositiveButton("set", new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                timeout = input.getValue();
+                timeMax = input.getValue();
                 activity.updateTime();
               }
             });
@@ -160,12 +160,12 @@ public class Settings
     this.motion = motion;
   }
 
-  public int getTimeout() {
-    return timeout;
+  public int getTimeMax() {
+    return timeMax;
   }
 
-  public void setTimeout(int timeout) {
-    this.timeout = timeout;
+  public void setTimeMax(int timeMax) {
+    this.timeMax = timeMax;
   }
 
   public String getMessage() {
