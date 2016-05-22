@@ -1,5 +1,7 @@
 package edu.unh.cs.android.dopesafe;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -55,7 +57,8 @@ public class MainActivity extends AppCompatActivity
 
     settings = new Settings(this);
 
-    updateValuesFromBundle(savedInstanceState);
+
+    updateValuesFromBundle(getPreferences(Context.MODE_PRIVATE));
 
     updateTimer = getTimer();
 
@@ -147,20 +150,19 @@ public class MainActivity extends AppCompatActivity
     time.setText(String.format("%02d", settings.getTimeMax()) + ":00");
   }
 
-  private void updateValuesFromBundle(Bundle savedInstanceState) {
-
+  private void updateValuesFromBundle(SharedPreferences sharedPref) {
     Boolean motion = false;
     Boolean location = false;
     String phone = getResources().getString(R.string.default_phone);
     String message = getResources().getString(R.string.default_message);
     int timeout = 30;
 
-    if (savedInstanceState != null) {
-      motion = savedInstanceState.getBoolean("motion", motion);
-      message = savedInstanceState.getString("message", message);
-      phone = savedInstanceState.getString("phone", phone);
-      timeout = savedInstanceState.getInt("timeout", timeout);
-      location = savedInstanceState.getBoolean("location", location);
+    if (sharedPref != null) {
+      motion = sharedPref.getBoolean("motion", motion);
+      message = sharedPref.getString("message", message);
+      phone = sharedPref.getString("phone", phone);
+      timeout = sharedPref.getInt("timeout", timeout);
+      location = sharedPref.getBoolean("location", location);
     }
 
     settings.setMotion(motion);
@@ -170,14 +172,18 @@ public class MainActivity extends AppCompatActivity
     settings.setLocation(location);
   }
 
-  public void onSaveInstanceState(Bundle savedInstanceState) {
-    savedInstanceState.putBoolean("motion", settings.isMotion());
-    savedInstanceState.putString("message", settings.getMessage());
-    savedInstanceState.putString("phone", settings.getPhone());
-    savedInstanceState.putInt("timeout", settings.getTimeMax());
-    savedInstanceState.putBoolean("location", settings.isLocation());
+  @Override
+  public void onPause() {
 
-    super.onSaveInstanceState(savedInstanceState);
+    SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
+    editor.putBoolean("motion", settings.isMotion());
+    editor.putString("message", settings.getMessage());
+    editor.putString("phone", settings.getPhone());
+    editor.putInt("timeout", settings.getTimeMax());
+    editor.putBoolean("location", settings.isLocation());
+    editor.apply();
+
+    super.onPause();
   }
 
 
