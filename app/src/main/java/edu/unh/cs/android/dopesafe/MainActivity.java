@@ -10,11 +10,8 @@ import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -71,14 +68,14 @@ public class MainActivity extends AppCompatActivity
         minutes = seconds / 60;
         seconds = seconds % 60;
 
-        if (minutes == settings.getTimeout()) {
+        if (minutes == settings.getTimeMax()) {
           sendSMS(settings.getContact_phone(), settings.getMessage());
 
           Log.d(TAG, "times up");
           time.setTextColor(Color.RED);
         } else {
           if (minutes != 0 || seconds != 0) {
-            time.setText((settings.getTimeout() - minutes - 1) + ":" + String.format("%02d", (60 - seconds)));
+            time.setText((settings.getTimeMax() - minutes - 1) + ":" + String.format("%02d", (60 - seconds)));
           }
         }
 
