@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity
         } else {
           if (minutes != 0 || seconds != 0) {
             time.setText((settings.getTimeout() - minutes - 1) + ":" + String.format("%02d", (60 - seconds)));
+            progressCircle.setProgress((int)(startTime / minutes));
           }
         }
 
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity
 
     stopButton.setVisibility(View.INVISIBLE);
     progressCircle.setVisibility(View.INVISIBLE);
+    progressCircle.setProgress(0);
     time = (TextView) findViewById(R.id.time);
 
     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);

@@ -47,13 +47,13 @@
     <Switch
         android:layout_width="300dp"
         android:layout_height="75dp"
-        android:text="STOP"
-        android:gravity="end"
-        android:textSize="55sp"
+        android:text=" STOP"
+        android:textSize="50sp"
         android:id="@+id/stop_button"
         android:textOff="STOP"
         android:textOn=""
         android:background="@color/bright_foreground_disabled_material_light"
+        android:switchMinWidth="150dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
@@ -66,7 +66,7 @@
         android:background="@drawable/circle_shape"
         style="?android:attr/progressBarStyleHorizontal"
         android:max="100"
-        android:progress="10"
+        android:progress="0"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
