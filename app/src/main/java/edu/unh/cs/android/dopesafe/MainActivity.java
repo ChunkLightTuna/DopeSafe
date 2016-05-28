@@ -17,6 +17,12 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+
+/**
+ * Created by Chris Oelerich on 5/20/16.
+ *
+ * Main
+ */
 public class MainActivity extends AppCompatActivity
     /*implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener*/ {
 

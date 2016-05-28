@@ -4,6 +4,8 @@ import android.util.Log;
 
 /**
  * Created by Chris Oelerich on 5/27/16.
+ *
+ * Singleton for holding user data.
  */
 public class Preferences {
   private static final String TAG = "Preferences";

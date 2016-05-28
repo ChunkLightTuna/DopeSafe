@@ -16,6 +16,8 @@ import android.widget.NumberPicker;
 
 /**
  * Created by Chris Oelerich on 5/21/16.
+ *
+ * Attaches alert dialogs to settings menu
  */
 public class SettingsMenu
     implements NavigationView.OnNavigationItemSelectedListener {
