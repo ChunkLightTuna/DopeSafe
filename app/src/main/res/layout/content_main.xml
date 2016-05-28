@@ -28,8 +28,7 @@
         android:textColor="@color/colorMaterialGrey300"
         android:textSize="55sp"
         android:textStyle="normal"
-        android:typeface="normal"
-        android:visibility="visible"/>
+        android:typeface="normal"/>
 
     <TextView
         android:id="@+id/time"
@@ -62,9 +61,9 @@
         android:layout_height="75dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
         android:background="@color/colorDarkGray"
         android:switchMinWidth="150dp"
-        android:layout_marginLeft="10dp"
         android:text="@string/stop_button_text"
         android:textColor="@color/colorMaterialGrey300"
         android:textOff="STOP"
@@ -85,12 +84,12 @@
         android:progressDrawable="@drawable/circular_progress_bar"/>
 
     <ImageView
-        android:contentDescription="@string/app_name"
         android:id="@+id/logo"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:contentDescription="@string/app_name"
         android:src="@drawable/logo_small"/>
 
 

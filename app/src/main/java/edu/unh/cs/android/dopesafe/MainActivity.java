@@ -3,9 +3,12 @@ package edu.unh.cs.android.dopesafe;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.os.Vibrator;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
@@ -28,55 +31,66 @@ public class MainActivity extends AppCompatActivity
 
   private static final String TAG = "MainActivity";
 
-  TextView time;
-  Button startButton;
-  //  SeekBar stopButton;
-  Switch stopButton;
-  long startTime = 0L;
-  long timeInMilliseconds = 0L;
-  long timeSwapBuff = 0L;
-  long updatedTime = 0L;
-  int t = 1;
-  int seconds = 0;
-  int minutes = 0;
-  Handler handler = new Handler();
-  ProgressBar progressCircle;
-
-  Runnable updateTimer;
-
   private UserPrefs prefs;
 
+  private TextView time;
+  private Button startButton;
+  private Switch stopButton;//  SeekBar stopButton;
+  private ProgressBar progressCircle;
+
+  private long startTime = 0L;
+  private long timeInMilliseconds = 0L;
+  private long timeSwapBuff = 0L;
+  private long updatedTime = 0L;
+  private boolean t = true;
+  private int seconds = 0;
+  private int minutes = 0;
+  private boolean alarm = false;
+
+  private Handler handler = new Handler();
+  private Runnable timer;
+
+  private Ringtone ringtone;
+  Vibrator vibrator;
 //  private GoogleApiClient mGoogleApiClient;
 //  protected Location mLastLocation;
-
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    prefs = UserPrefs.getInstance();
-
-    updateValuesFromBundle(getPreferences(Context.MODE_PRIVATE));
-
-    updateTimer = getTimer();
+    Log.d(TAG, "onCreate() called with: " + "savedInstanceState = [" + savedInstanceState + "]");
 
     setContentView(R.layout.activity_main);
 
-    startButton = (Button) findViewById(R.id.start_button);
-//    stopButton = (SeekBar) findViewById(R.id.stop_button);
-    stopButton = (Switch) findViewById(R.id.stop_button);
-    progressCircle = (ProgressBar) findViewById(R.id.progress_bar);
+    prefs = UserPrefs.getInstance();
+    getSharedPrefs(getPreferences(Context.MODE_PRIVATE));
 
-    stopButton.setVisibility(View.INVISIBLE);
-    progressCircle.setVisibility(View.INVISIBLE);
-    progressCircle.setProgress(0);
+    timer = getTimer();
+
+    ringtone = RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+
+    if(ringtone == null) {
+      Log.d(TAG, "volume is muted, might want to fix that!");
+    }
+
+    vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+
+//    stopButton = (SeekBar) findViewById(R.id.stop_button);
+
+    progressCircle = (ProgressBar) findViewById(R.id.progress_bar);
+    if (progressCircle != null) {
+      progressCircle.setProgress(0);
+      progressCircle.setVisibility(View.INVISIBLE);
+    }
+
     time = (TextView) findViewById(R.id.time);
+    updateTime();
 
     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
     if (navigationView != null)
       navigationView.setNavigationItemSelectedListener(new SettingsMenu(this, prefs));
 
-
+    startButton = (Button) findViewById(R.id.start_button);
     if (startButton != null) {
       startButton.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -86,7 +100,9 @@ public class MainActivity extends AppCompatActivity
       });
     }
 
+    stopButton = (Switch) findViewById(R.id.stop_button);
     if (stopButton != null) {
+      stopButton.setVisibility(View.INVISIBLE);
 //      stopButton.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 //        @Override
 //        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -108,13 +124,15 @@ public class MainActivity extends AppCompatActivity
 //          }
 //        }
 //      });
-
       stopButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+          Log.d(TAG, "onCheckedChanged() called with: " + "buttonView = [" + buttonView + "], isChecked = [" + isChecked + "]");
           if (isChecked) {
             // The toggle is enabled
             stopButton.setVisibility(View.INVISIBLE);
             startButton.setVisibility(View.VISIBLE);
+            progressCircle.setProgress(0);
             progressCircle.setVisibility(View.INVISIBLE);
 
             //stop the timer
@@ -124,17 +142,21 @@ public class MainActivity extends AppCompatActivity
             updatedTime = 0L;
             seconds = 0;
             minutes = 0;
-            handler.removeCallbacks(updateTimer);
+            handler.removeCallbacks(timer);
             updateTime();
             time.setTextColor(Color.WHITE);
 
-            t = 1;
+            alarm = false;
+            ringtone.stop();
+            vibrator.cancel();
+            t = true;
 
             //reset the toggle button
             stopButton.setChecked(false);
 
           } else {
             // The toggle is disabled
+            Log.wtf(TAG, "onCheckedChanged: this shouldn't have happened!");
             stopButton.setVisibility(View.VISIBLE);
           }
         }
@@ -144,12 +166,19 @@ public class MainActivity extends AppCompatActivity
 //    mapInit();
   }
 
+  @Override
+  protected void onPause() {
+    super.onPause();
+    Log.d(TAG, "onPause() called");
+    setSharedPrefs();
+  }
+
   public void updateTime() {
     time.setText(String.format(getString(R.string.display_time), prefs.getTime(), 0));
   }
 
-  private void updateValuesFromBundle(SharedPreferences sharedPref) {
-    Log.d(TAG, "updateValuesFromBundle() called with: " + "sharedPref = [" + sharedPref + "]");
+  private void getSharedPrefs(SharedPreferences sharedPref) {
+    Log.d(TAG, "getSharedPrefs() called with: " + "sharedPref = [" + sharedPref + "]");
 
     Boolean motion = false;
     Boolean location = false;
@@ -170,39 +199,23 @@ public class MainActivity extends AppCompatActivity
     prefs.setTime(timeout);
     prefs.setMotion(motion);
     prefs.setLoc(location);
+
+    Log.d(TAG, "getSharedPrefs() msg: " + prefs.getMsg());
+    Log.d(TAG, "getSharedPrefs() phone: " + prefs.getPhone());
+    Log.d(TAG, "getSharedPrefs() time: " + prefs.getTime());
+    Log.d(TAG, "getSharedPrefs() motion: " + prefs.isMotion());
+    Log.d(TAG, "getSharedPrefs() loc: " + prefs.isLoc());
   }
 
-  private void startTimer() {
-    Log.d(TAG, "startTimer() called with: " + "");
+  private void setSharedPrefs() {
+    Log.d(TAG, "setSharedPrefs() msg: " + prefs.getMsg());
+    Log.d(TAG, "setSharedPrefs() phone: " + prefs.getPhone());
+    Log.d(TAG, "setSharedPrefs() time: " + prefs.getTime());
+    Log.d(TAG, "setSharedPrefs() motion: " + prefs.isMotion());
+    Log.d(TAG, "setSharedPrefs() loc: " + prefs.isLoc());
 
-    if (t == 1) {
-//timer will start
-      startButton.setVisibility(View.INVISIBLE);
-      stopButton.setVisibility(View.VISIBLE);
-      progressCircle.setVisibility(View.VISIBLE);
-
-      startTime = SystemClock.uptimeMillis();
-      handler.postDelayed(updateTimer, 500);
-      t = 0;
-    } else {
-      startButton.setVisibility(View.VISIBLE);
-    }
-  }
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-//    mGoogleApiClient.connect();
-  }
-
-  @Override
-  protected void onStop() {
-    super.onStop();
-//    if (mGoogleApiClient.isConnected()) {
-//      mGoogleApiClient.disconnect();
-//    }
-
-    SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
+    SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = preferences.edit();
     editor.putString("message", prefs.getMsg());
     editor.putString("phone", prefs.getPhone());
     editor.putInt("time", prefs.getTime());
@@ -210,8 +223,40 @@ public class MainActivity extends AppCompatActivity
     editor.putBoolean("location", prefs.isLoc());
 
     editor.apply();
-
   }
+
+  private void startTimer() {
+    Log.d(TAG, "startTimer() called with: " + "");
+
+    if (t) {
+//timer will start
+      startButton.setVisibility(View.INVISIBLE);
+      stopButton.setVisibility(View.VISIBLE);
+      progressCircle.setVisibility(View.VISIBLE);
+
+      startTime = SystemClock.uptimeMillis();
+      handler.postDelayed(timer, 500);
+      t = false;
+    } else {
+      startButton.setVisibility(View.VISIBLE);
+    }
+  }
+
+//  @Override
+//  protected void onStart() {
+//    super.onStart();
+//    Log.d(TAG, "onStart() called");
+//    mGoogleApiClient.connect();
+//  }
+
+//  @Override
+//  protected void onStop() {
+//    super.onStop();
+//    Log.d(TAG, "onStop() called");
+//    if (mGoogleApiClient.isConnected()) {
+//      mGoogleApiClient.disconnect();
+//    }
+//  }
 
 //  public String getMapsUrl() {
 //    return mLastLocation == null ? "" : "http://maps.google.com/?q=" + mLastLocation.getLatitude() + "," + mLastLocation.getLongitude();
@@ -258,15 +303,28 @@ public class MainActivity extends AppCompatActivity
         minutes = seconds / 60;
         seconds = seconds % 60;
 
+        //times up
         if (minutes == prefs.getTime()) {
           sendSMS(prefs.getPhone(), prefs.getMsg());
           time.setText(String.format(getString(R.string.display_time), 0, 0));
           time.setTextColor(Color.RED);
         } else {
+
+          //one minute left
+          if (minutes + 1 >= prefs.getTime() && !alarm) {
+            Log.d(TAG, "playing alarm");
+
+            if(ringtone == null) {
+              ringtone = RingtoneManager.getRingtone(getApplicationContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+            }
+
+            ringtone.play();
+            vibrator.vibrate(200);
+            alarm = true;
+          }
+
           if (minutes != 0 || seconds != 0) {
-
             time.setText(String.format(getString(R.string.display_time), (prefs.getTime() - minutes - 1), (60 - seconds)));
-
           }
           long p = updatedTime / prefs.getTime();
           progressCircle.setProgress((int) p);
