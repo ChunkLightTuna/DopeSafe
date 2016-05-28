@@ -13,7 +13,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="edu.unh.cs.android.dopesafe.MainActivity">
-    tools:showIn="@layout/activity_main">
+    <!--tools:showIn="@layout/activity_main">-->
 
     <Button
         android:id="@+id/start_button"
@@ -23,10 +23,9 @@
         android:layout_alignTop="@+id/progress_bar"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_vertical"
-        android:layout_weight="0.41"
         android:background="@drawable/round_button"
-        android:text="Be Safe"
-        android:textColor="@color/abc_primary_text_material_dark"
+        android:text="@string/start_button_text"
+        android:textColor="@color/colorMaterialGrey300"
         android:textSize="55sp"
         android:textStyle="normal"
         android:typeface="normal"
@@ -38,8 +37,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:gravity="top|center_horizontal"
-        android:text="30:00"
-        android:textColor="@color/material_grey_300"
+        android:text="@string/default_time"
+        android:textColor="@color/colorMaterialGrey300"
         android:textIsSelectable="false"
         android:textSize="110sp"
         android:typeface="normal"/>
@@ -63,10 +62,11 @@
         android:layout_height="75dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@color/bright_foreground_disabled_material_light"
+        android:background="@color/colorDarkGray"
         android:switchMinWidth="150dp"
-        android:text=" STOP"
-        android:textColor="@color/button_material_light"
+        android:layout_marginLeft="10dp"
+        android:text="@string/stop_button_text"
+        android:textColor="@color/colorMaterialGrey300"
         android:textOff="STOP"
         android:textOn=""
         android:textSize="50sp"/>
@@ -85,7 +85,8 @@
         android:progressDrawable="@drawable/circular_progress_bar"/>
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:contentDescription="@string/app_name"
+        android:id="@+id/logo"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"

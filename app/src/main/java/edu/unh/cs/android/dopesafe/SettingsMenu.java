@@ -16,7 +16,7 @@ import android.widget.NumberPicker;
 
 /**
  * Created by Chris Oelerich on 5/21/16.
- *
+ * <p/>
  * Attaches alert dialogs to settings menu
  */
 public class SettingsMenu
@@ -25,9 +25,9 @@ public class SettingsMenu
   private static final String TAG = "SettingsMenu";
   private MainActivity activity;
 
-  private Preferences prefs;
+  private UserPrefs prefs;
 
-  public SettingsMenu(MainActivity activity, Preferences prefs) {
+  public SettingsMenu(MainActivity activity, UserPrefs prefs) {
     this.activity = activity;
     this.prefs = prefs;
   }
@@ -82,7 +82,7 @@ public class SettingsMenu
         numberPicker.setMinValue(1);
         numberPicker.setMaxValue(12);
 
-        numberPicker.setValue(prefs.getTime());
+        numberPicker.setValue(prefs.getTime() / 5);
 
         builder
             .setTitle("Time Out")

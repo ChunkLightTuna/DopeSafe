@@ -4,28 +4,27 @@ import android.util.Log;
 
 /**
  * Created by Chris Oelerich on 5/27/16.
- *
+ * <p/>
  * Singleton for holding user data.
  */
-public class Preferences {
-  private static final String TAG = "Preferences";
+public class UserPrefs {
+  private static final String TAG = "UserPrefs";
 
-  private static Preferences prefs;
+  private static UserPrefs prefs;
 
   private String phone;
+  private String message;
   private boolean motion;
   private boolean location;
   private int time;
-  private String message;
 
-  private Preferences() {
+  private UserPrefs() {
   }
 
-  public static Preferences getInstance() {
+  public static UserPrefs getInstance() {
     if (prefs == null) {
-      prefs = new Preferences();
+      prefs = new UserPrefs();
     }
-
     return prefs;
   }
 

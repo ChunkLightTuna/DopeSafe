@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 /**
  * Created by Chris Oelerich on 5/20/16.
- *
+ * <p/>
  * Main
  */
 public class MainActivity extends AppCompatActivity
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity
 
   Runnable updateTimer;
 
-  private Preferences prefs;
+  private UserPrefs prefs;
 
 //  private GoogleApiClient mGoogleApiClient;
 //  protected Location mLastLocation;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    prefs = Preferences.getInstance();
+    prefs = UserPrefs.getInstance();
 
     updateValuesFromBundle(getPreferences(Context.MODE_PRIVATE));
 
@@ -145,11 +145,12 @@ public class MainActivity extends AppCompatActivity
   }
 
   public void updateTime() {
-//    time.setText(String.format("%02d", prefs.getTime()) + ":00");
     time.setText(String.format(getString(R.string.display_time), prefs.getTime(), 0));
   }
 
   private void updateValuesFromBundle(SharedPreferences sharedPref) {
+    Log.d(TAG, "updateValuesFromBundle() called with: " + "sharedPref = [" + sharedPref + "]");
+
     Boolean motion = false;
     Boolean location = false;
     String phone = getResources().getString(R.string.default_phone);
@@ -159,31 +160,17 @@ public class MainActivity extends AppCompatActivity
     if (sharedPref != null) {
       message = sharedPref.getString("message", message);
       phone = sharedPref.getString("phone", phone);
-      timeout = sharedPref.getInt("timeout", timeout);
+      timeout = sharedPref.getInt("time", timeout);
       motion = sharedPref.getBoolean("motion", motion);
       location = sharedPref.getBoolean("location", location);
     }
+
     prefs.setMsg(message);
     prefs.setPhone(phone);
     prefs.setTime(timeout);
     prefs.setMotion(motion);
     prefs.setLoc(location);
   }
-
-  @Override
-  public void onPause() {
-
-    SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
-    editor.putBoolean("motion", prefs.isMotion());
-    editor.putString("message", prefs.getMsg());
-    editor.putString("phone", prefs.getPhone());
-    editor.putInt("timeout", prefs.getTime());
-    editor.putBoolean("location", prefs.isLoc());
-    editor.apply();
-
-    super.onPause();
-  }
-
 
   private void startTimer() {
     Log.d(TAG, "startTimer() called with: " + "");
@@ -214,6 +201,16 @@ public class MainActivity extends AppCompatActivity
 //    if (mGoogleApiClient.isConnected()) {
 //      mGoogleApiClient.disconnect();
 //    }
+
+    SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
+    editor.putString("message", prefs.getMsg());
+    editor.putString("phone", prefs.getPhone());
+    editor.putInt("time", prefs.getTime());
+    editor.putBoolean("motion", prefs.isMotion());
+    editor.putBoolean("location", prefs.isLoc());
+
+    editor.apply();
+
   }
 
 //  public String getMapsUrl() {
@@ -225,13 +222,13 @@ public class MainActivity extends AppCompatActivity
 //    if (prefs.isLoc())
 //      message += getMapsUrl();
 
-      try {
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(number, null, message, null, null);
-        Log.d(TAG, "sendSMS() called with: " + "number = [" + number + "], message = [" + message + "]");
-      } catch (Exception e) {
-        Log.e(TAG, "SMS failed!", e);
-      }
+    try {
+      SmsManager smsManager = SmsManager.getDefault();
+      smsManager.sendTextMessage(number, null, message, null, null);
+      Log.d(TAG, "sendSMS() called with: " + "number = [" + number + "], message = [" + message + "]");
+    } catch (Exception e) {
+      Log.e(TAG, "SMS failed!", e);
+    }
   }
 
 //  private void mapInit() {
