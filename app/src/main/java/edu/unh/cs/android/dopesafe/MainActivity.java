@@ -2,15 +2,11 @@ package edu.unh.cs.android.dopesafe;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -21,12 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-
 public class MainActivity extends AppCompatActivity
-    implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+    /*implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener*/ {
 
   private static final String TAG = "MainActivity";
 
@@ -46,17 +38,17 @@ public class MainActivity extends AppCompatActivity
 
   Runnable updateTimer;
 
-  private Settings settings;
-  private GoogleApiClient mGoogleApiClient;
-  protected Location mLastLocation;
+  private Preferences prefs;
+
+//  private GoogleApiClient mGoogleApiClient;
+//  protected Location mLastLocation;
 
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    settings = new Settings(this);
-
+    prefs = Preferences.getInstance();
 
     updateValuesFromBundle(getPreferences(Context.MODE_PRIVATE));
 
@@ -76,7 +68,7 @@ public class MainActivity extends AppCompatActivity
 
     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
     if (navigationView != null)
-      navigationView.setNavigationItemSelectedListener(settings);
+      navigationView.setNavigationItemSelectedListener(new SettingsMenu(this, prefs));
 
 
     if (startButton != null) {
@@ -143,11 +135,12 @@ public class MainActivity extends AppCompatActivity
       });
     }
 
-    mapInit();
+//    mapInit();
   }
 
   public void updateTime() {
-    time.setText(String.format("%02d", settings.getTimeMax()) + ":00");
+//    time.setText(String.format("%02d", prefs.getTime()) + ":00");
+    time.setText(String.format(getString(R.string.display_time), prefs.getTime(), 0));
   }
 
   private void updateValuesFromBundle(SharedPreferences sharedPref) {
@@ -158,29 +151,28 @@ public class MainActivity extends AppCompatActivity
     int timeout = 30;
 
     if (sharedPref != null) {
-      motion = sharedPref.getBoolean("motion", motion);
       message = sharedPref.getString("message", message);
       phone = sharedPref.getString("phone", phone);
       timeout = sharedPref.getInt("timeout", timeout);
+      motion = sharedPref.getBoolean("motion", motion);
       location = sharedPref.getBoolean("location", location);
     }
-
-    settings.setMotion(motion);
-    settings.setMessage(message);
-    settings.setContact_phone(phone);
-    settings.setTimeMax(timeout);
-    settings.setLocation(location);
+    prefs.setMsg(message);
+    prefs.setPhone(phone);
+    prefs.setTime(timeout);
+    prefs.setMotion(motion);
+    prefs.setLoc(location);
   }
 
   @Override
   public void onPause() {
 
     SharedPreferences.Editor editor = getPreferences(Context.MODE_PRIVATE).edit();
-    editor.putBoolean("motion", settings.isMotion());
-    editor.putString("message", settings.getMessage());
-    editor.putString("phone", settings.getPhone());
-    editor.putInt("timeout", settings.getTimeMax());
-    editor.putBoolean("location", settings.isLocation());
+    editor.putBoolean("motion", prefs.isMotion());
+    editor.putString("message", prefs.getMsg());
+    editor.putString("phone", prefs.getPhone());
+    editor.putInt("timeout", prefs.getTime());
+    editor.putBoolean("location", prefs.isLoc());
     editor.apply();
 
     super.onPause();
@@ -207,46 +199,47 @@ public class MainActivity extends AppCompatActivity
   @Override
   protected void onStart() {
     super.onStart();
-    mGoogleApiClient.connect();
+//    mGoogleApiClient.connect();
   }
 
   @Override
   protected void onStop() {
     super.onStop();
-    if (mGoogleApiClient.isConnected()) {
-      mGoogleApiClient.disconnect();
-    }
+//    if (mGoogleApiClient.isConnected()) {
+//      mGoogleApiClient.disconnect();
+//    }
   }
 
-  public String getMapsUrl() {
-    return mLastLocation == null ? "" : "http://maps.google.com/?q=" + mLastLocation.getLatitude() + "," + mLastLocation.getLongitude();
-  }
+//  public String getMapsUrl() {
+//    return mLastLocation == null ? "" : "http://maps.google.com/?q=" + mLastLocation.getLatitude() + "," + mLastLocation.getLongitude();
+//  }
 
   public void sendSMS(String number, String message) {
 
-    if (settings.isLocation())
-      message.concat(getMapsUrl());
+//    if (prefs.isLoc())
+//      message += getMapsUrl();
 
-    try {
-      SmsManager smsManager = SmsManager.getDefault();
-      smsManager.sendTextMessage(number, null, message, null, null);
-      Log.d(TAG, "sendSMS() called with: " + "number = [" + number + "], message = [" + message + "]");
-    } catch (Exception e) {
-      Log.e(TAG, "SMS failed!", e);
-    }
+      try {
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(number, null, message, null, null);
+        Log.d(TAG, "sendSMS() called with: " + "number = [" + number + "], message = [" + message + "]");
+      } catch (Exception e) {
+        Log.e(TAG, "SMS failed!", e);
+      }
   }
 
-  private void mapInit() {
+//  private void mapInit() {
+//// Create an instance of GoogleAPIClient.
+//      if (mGoogleApiClient == null) {
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//            .addConnectionCallbacks(this)
+//            .addOnConnectionFailedListener(this)
+//            .addApi(LocationServices.API)
+//            .build();
+//      }
+//    }
+//  }
 
-// Create an instance of GoogleAPIClient.
-    if (mGoogleApiClient == null) {
-      mGoogleApiClient = new GoogleApiClient.Builder(this)
-          .addConnectionCallbacks(this)
-          .addOnConnectionFailedListener(this)
-          .addApi(LocationServices.API)
-          .build();
-    }
-  }
 
   private Runnable getTimer() {
 
@@ -262,15 +255,17 @@ public class MainActivity extends AppCompatActivity
         minutes = seconds / 60;
         seconds = seconds % 60;
 
-        if (minutes == settings.getTimeMax()) {
-          sendSMS(settings.getPhone(), settings.getMessage());
-          time.setText("00:00");
+        if (minutes == prefs.getTime()) {
+          sendSMS(prefs.getPhone(), prefs.getMsg());
+          time.setText(String.format(getString(R.string.display_time), 0, 0));
           time.setTextColor(Color.RED);
         } else {
           if (minutes != 0 || seconds != 0) {
-            time.setText(String.format("%02d", (settings.getTimeMax() - minutes - 1)) + ":" + String.format("%02d", (60 - seconds)));
+
+            time.setText(String.format(getString(R.string.display_time), (prefs.getTime() - minutes - 1), (60 - seconds)));
+
           }
-          long p = updatedTime / settings.getTimeMax();
+          long p = updatedTime / prefs.getTime();
           progressCircle.setProgress((int) p);
           handler.postDelayed(this, 0);
         }
@@ -278,39 +273,38 @@ public class MainActivity extends AppCompatActivity
     };
   }
 
-
-  /**
-   * Runs when a GoogleApiClient object successfully connects.
-   */
-  @Override
-  public void onConnected(Bundle connectionHint) {
-    // Provides a simple way of getting a device's location and is well suited for
-    // applications that do not require a fine-grained location and that do not need location
-    // updates. Gets the best and most recent location currently available, which may be null
-    // in rare cases when a location is not available.
-    if (Build.VERSION.SDK_INT >= 23 &&
-        ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-        ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-      mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-    } else {
-      Log.d(TAG, "location not found");
-    }
-  }
-
-  @Override
-  public void onConnectionFailed(ConnectionResult result) {
-    // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
-    // onConnectionFailed.
-    Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
-  }
-
-
-  @Override
-  public void onConnectionSuspended(int cause) {
-    // The connection to Google Play services was lost for some reason. We call connect() to
-    // attempt to re-establish the connection.
-    Log.i(TAG, "Connection suspended");
-    mGoogleApiClient.connect();
-  }
+//  /**
+//   * Runs when a GoogleApiClient object successfully connects.
+//   */
+//  @Override
+//  public void onConnected(Bundle connectionHint) {
+//    // Provides a simple way of getting a device's location and is well suited for
+//    // applications that do not require a fine-grained location and that do not need location
+//    // updates. Gets the best and most recent location currently available, which may be null
+//    // in rare cases when a location is not available.
+//    if (Build.VERSION.SDK_INT >= 23 &&
+//        ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+//        ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//
+//      mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+//    } else {
+//      Log.d(TAG, "location not found");
+//    }
+//  }
+//
+//  @Override
+//  public void onConnectionFailed(ConnectionResult result) {
+//    // Refer to the javadoc for ConnectionResult to see what error codes might be returned in
+//    // onConnectionFailed.
+//    Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + result.getErrorCode());
+//  }
+//
+//
+//  @Override
+//  public void onConnectionSuspended(int cause) {
+//    // The connection to Google Play services was lost for some reason. We call connect() to
+//    // attempt to re-establish the connection.
+//    Log.i(TAG, "Connection suspended");
+//    mGoogleApiClient.connect();
+//  }
 }

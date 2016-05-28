@@ -17,23 +17,18 @@ import android.widget.NumberPicker;
 /**
  * Created by Chris Oelerich on 5/21/16.
  */
-public class Settings
+public class SettingsMenu
     implements NavigationView.OnNavigationItemSelectedListener {
 
-  private static final String TAG = "Settings";
+  private static final String TAG = "SettingsMenu";
   private MainActivity activity;
 
-  //TODO should be pulled out and saved b/w sessions
-  private String contact_phone;
-  private boolean motion;
-  private boolean location;
-  private int timeMax;
-  private String message;
+  private Preferences prefs;
 
-  public Settings(MainActivity activity) {
+  public SettingsMenu(MainActivity activity, Preferences prefs) {
     this.activity = activity;
+    this.prefs = prefs;
   }
-
 
   @SuppressWarnings("StatementWithEmptyBody")
   @Override
@@ -44,11 +39,9 @@ public class Settings
     int id = item.getItemId();
 
     if (id == R.id.get_help) {
-      String url = "http://www.hopefornhrecovery.org/";
       Intent intent = new Intent(Intent.ACTION_VIEW);
-      intent.setData(Uri.parse(url));
+      intent.setData(Uri.parse(activity.getResources().getString(R.string.help_website)));
       activity.startActivity(intent);
-
     } else {
 
       AlertDialog.Builder builder = new AlertDialog.Builder(activity);
@@ -58,14 +51,14 @@ public class Settings
         final EditText editText = new EditText(activity);
 
         editText.setInputType(InputType.TYPE_CLASS_PHONE);
-        editText.setText(contact_phone);
+        editText.setText(prefs.getPhone());
 
         builder
             .setTitle("Emergency Contact")
             .setView(editText)
             .setPositiveButton("set", new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                contact_phone = editText.getText().toString();
+                prefs.setPhone(editText.getText().toString());
               }
             });
 
@@ -78,7 +71,7 @@ public class Settings
         minuteValues[0] = "1";
 
         for (int i = 1; i < minuteValues.length; i++) {
-          String number = Integer.toString((i+1)*5);
+          String number = Integer.toString((i + 1) * 5);
           minuteValues[i] = number.length() < 2 ? "0" + number : number;
         }
 
@@ -87,7 +80,7 @@ public class Settings
         numberPicker.setMinValue(1);
         numberPicker.setMaxValue(12);
 
-        numberPicker.setValue(timeMax);
+        numberPicker.setValue(prefs.getTime());
 
         builder
             .setTitle("Time Out")
@@ -95,7 +88,7 @@ public class Settings
             .setView(numberPicker)
             .setPositiveButton("set", new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                timeMax = Integer.parseInt(minuteValues[numberPicker.getValue() - 1]);
+                prefs.setTime(Integer.parseInt(minuteValues[numberPicker.getValue() - 1]));
                 activity.updateTime();
               }
             });
@@ -105,7 +98,7 @@ public class Settings
         final EditText editText = new EditText(activity);
 
         editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        editText.setText(message);
+        editText.setText(prefs.getMsg());
         editText.setMinLines(5);
         editText.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
@@ -114,41 +107,38 @@ public class Settings
             .setView(editText)
             .setPositiveButton("set", new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                contact_phone = editText.getText().toString();
+                prefs.setMsg(editText.getText().toString());
               }
             });
 
 
       } else if (id == R.id.motion_detection) {
 
-        String current = motion ? "disabled" : "enabled";
-        String action = motion ? "enable" : "disable";
+        String current = prefs.isMotion() ? "enabled" : "disabled";
+        String action = prefs.isMotion() ? "disable" : "enable";
 
         builder
             .setTitle("Motion detection currently " + current + ".")
             .setMessage("Would you like to " + action + " it?")
             .setPositiveButton(action, new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                motion = !motion;
-                Log.d(TAG, "motion is set  to " + motion);
+                prefs.setMotion(!prefs.isMotion());
               }
             });
       } else if (id == R.id.location) {
 
-        String current = location ? "enabled" : "disabled";
-        String action = location ? "disable" : "enable";
+        String current = prefs.isLoc() ? "enabled" : "disabled";
+        String action = prefs.isLoc() ? "disable" : "enable";
 
         builder
             .setTitle("Location currently " + current + ".")
             .setMessage("Would you like to " + action + " it?")
             .setPositiveButton(action, new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int id) {
-                location = !location;
-                Log.d(TAG, "motion is set  to " + location);
+                prefs.setLoc(!prefs.isLoc());
               }
             });
       }
-
       builder
           .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -162,46 +152,5 @@ public class Settings
     DrawerLayout drawer = (DrawerLayout) activity.getWindow().getDecorView().findViewById(R.id.drawer_layout);
     drawer.closeDrawer(GravityCompat.START);
     return true;
-  }
-
-
-  public String getPhone() {
-    return contact_phone;
-  }
-
-  public void setContact_phone(String contact_phone) {
-    this.contact_phone = contact_phone;
-  }
-
-  public boolean isMotion() {
-    return motion;
-  }
-
-  public void setMotion(boolean motion) {
-    this.motion = motion;
-  }
-
-  public int getTimeMax() {
-    return timeMax;
-  }
-
-  public void setTimeMax(int timeMax) {
-    this.timeMax = timeMax;
-  }
-
-  public String getMessage() {
-    return message;
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
-  }
-
-  public boolean isLocation() {
-    return location;
-  }
-
-  public void setLocation(boolean location) {
-    this.location = location;
   }
 }

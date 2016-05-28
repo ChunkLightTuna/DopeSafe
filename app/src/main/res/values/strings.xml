@@ -3,4 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="default_message">This is an automated request for help. Unresponsive after using. Would you mind checking up on me?</string>
     <string name="default_phone">0000000000</string>
+    <string name="help_website">http://www.hopefornhrecovery.org/</string>
+
+    <string name="display_time">%1$02d:%2$02d</string>
 </resources>
