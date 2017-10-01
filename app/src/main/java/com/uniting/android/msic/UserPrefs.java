@@ -1,4 +1,4 @@
-package edu.unh.cs.android.dopesafe;
+package com.uniting.android.msic;
 
 import android.util.Log;
 
@@ -7,7 +7,7 @@ import android.util.Log;
  * <p/>
  * Singleton for holding user data.
  */
-public class UserPrefs {
+class UserPrefs {
   private static final String TAG = "UserPrefs";
 
   private static UserPrefs prefs;
@@ -21,55 +21,55 @@ public class UserPrefs {
   private UserPrefs() {
   }
 
-  public static UserPrefs getInstance() {
+  static UserPrefs getInstance() {
     if (prefs == null) {
       prefs = new UserPrefs();
     }
     return prefs;
   }
 
-  public String getPhone() {
+  String getPhone() {
     return getInstance().phone;
   }
 
-  public void setPhone(String phone) {
+  void setPhone(String phone) {
     getInstance().phone = phone;
     Log.d(TAG, "setPhone() called with: " + "phone = [" + phone + "]");
 
   }
 
-  public boolean isMotion() {
+  boolean isMotion() {
     return getInstance().motion;
   }
 
-  public void setMotion(boolean motion) {
+  void setMotion(boolean motion) {
     getInstance().motion = motion;
     Log.d(TAG, "setMotion() called with: " + "motion = [" + motion + "]");
   }
 
-  public int getTime() {
+  int getTime() {
     return getInstance().time;
   }
 
-  public void setTime(int time) {
+  void setTime(int time) {
     getInstance().time = time;
     Log.d(TAG, "setTime() called with: " + "time = [" + time + "]");
   }
 
-  public String getMsg() {
+  String getMsg() {
     return getInstance().message;
   }
 
-  public void setMsg(String message) {
+  void setMsg(String message) {
     getInstance().message = message;
     Log.d(TAG, "setMsg() called with: " + "message = [" + message + "]");
   }
 
-  public boolean isLoc() {
+  boolean isLoc() {
     return getInstance().location;
   }
 
-  public void setLoc(boolean location) {
+  void setLoc(boolean location) {
     getInstance().location = location;
     Log.d(TAG, "setLoc() called with: " + "location = [" + location + "]");
   }

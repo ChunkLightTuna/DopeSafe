@@ -1,4 +1,4 @@
-package edu.unh.cs.android.dopesafe;
+package com.uniting.android.msic;
 
 import org.junit.Test;
 

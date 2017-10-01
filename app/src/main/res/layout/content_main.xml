@@ -12,7 +12,7 @@
 
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="edu.unh.cs.android.dopesafe.MainActivity">
+    tools:context="com.uniting.android.msic.MainActivity">
     <!--tools:showIn="@layout/activity_main">-->
 
     <Button
@@ -66,7 +66,7 @@
         android:switchMinWidth="150dp"
         android:text="@string/stop_button_text"
         android:textColor="@color/colorMaterialGrey300"
-        android:textOff="STOP"
+        android:textOff="@string/stop"
         android:textOn=""
         android:textSize="50sp"/>
 
