@@ -27,7 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-//test comment
+
 public class Main2Activity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
 
