@@ -1,38 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.uniting.android.msic"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.uniting.android.msic"
+    >
 
-    <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
+  <uses-permission android:name="android.permission.SEND_SMS"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+  <uses-permission android:name="android.permission.WAKE_LOCK"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
-    <application
-        android:allowBackup="true"
-        android:fullBackupContent="@xml/backup_descriptor"
-        android:icon="@drawable/dope_safe_logo"
+  <application
+      android:allowBackup="true"
+      android:fullBackupContent="@xml/backup_descriptor"
+      android:icon="@drawable/dope_safe_logo"
+      android:label="@string/app_name"
+      android:supportsRtl="true"
+      android:theme="@style/AppTheme.NoActionBar"
+      >
+    <activity
+        android:name=".MainActivity"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
-        <activity
-            android:name="com.uniting.android.msic.MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter android:label="@string/app_name">
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
+        android:screenOrientation="portrait"
+        android:theme="@style/AppTheme.NoActionBar"
+        >
+      <intent-filter android:label="@string/app_name">
+        <action android:name="android.intent.action.MAIN"/>
+        <action android:name="android.intent.action.VIEW"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.uniting.android.msic.SettingsActivity"
-            android:label="@string/title_activity_settings">
-        </activity>
-    </application>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+    <activity
+        android:name=".SettingsActivity"
+        android:label="@string/title_activity_settings"
+        >
+    </activity>
+    <activity
+        android:name=".Main2Activity"
+        android:label="@string/title_activity_main2"
+        android:theme="@style/AppTheme.NoActionBar"
+        >
+    </activity>
+  </application>
 
 </manifest>
