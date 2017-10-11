@@ -32,6 +32,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:support-vector-drawable:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
 }
