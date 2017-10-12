@@ -1,7 +1,9 @@
 package com.uniting.android.msic;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -11,6 +13,8 @@ import android.os.SystemClock;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +27,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -85,15 +90,59 @@ public class Main2Activity extends AppCompatActivity
     time = (TextView) findViewById(com.uniting.android.msic.R.id.time);
     updateTime();
 
+    startButton = (Button) findViewById(com.uniting.android.msic.R.id.start_button);
+    if (startButton != null) {
+      startButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          startTimer();
+        }
+      });
+    }
 
-    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-    fab.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-            .setAction("Action", null).show();
-      }
-    });
+    stopButton = (Switch) findViewById(com.uniting.android.msic.R.id.stop_button);
+    if (stopButton != null) {
+      stopButton.setVisibility(View.INVISIBLE);
+      stopButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+          Log.d(TAG, "onCheckedChanged() called with: " + "buttonView = [" + buttonView + "], isChecked = [" + isChecked + "]");
+          if (isChecked) {
+            // The toggle is enabled
+            stopButton.setVisibility(View.INVISIBLE);
+            startButton.setVisibility(View.VISIBLE);
+            progressCircle.setProgress(0);
+            progressCircle.setVisibility(View.INVISIBLE);
+
+            //stop the timer
+            startTime = 0L;
+            timeInMilliseconds = 0L;
+            timeSwapBuff = 0L;
+            updatedTime = 0L;
+            seconds = 0;
+            minutes = 0;
+            handler.removeCallbacks(timer);
+            updateTime();
+            time.setTextColor(Color.WHITE);
+
+            alarm = false;
+            ringtone.stop();
+            vibrator.cancel();
+            t = true;
+
+            //reset the toggle button
+            stopButton.setChecked(false);
+
+          } else {
+            // The toggle is disabled
+            Log.wtf(TAG, "onCheckedChanged: this shouldn't have happened!");
+            stopButton.setVisibility(View.VISIBLE);
+          }
+        }
+      });
+    }
+
+
 
     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -103,7 +152,26 @@ public class Main2Activity extends AppCompatActivity
 
     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
     navigationView.setNavigationItemSelectedListener(this);
+    getPermissions();
   }
+
+  private void getPermissions() {
+    if (ContextCompat.checkSelfPermission(this,
+        Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+      ActivityCompat.requestPermissions(this,
+          new String[]{Manifest.permission.SEND_SMS},
+          PERMISSIONS_REQUEST_SEND_SMS);
+    }
+  }
+
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    Log.d(TAG, "onPause() called");
+    setSharedPrefs();
+  }
+
 
   @Override
   public void onBackPressed() {
@@ -207,6 +275,24 @@ public class Main2Activity extends AppCompatActivity
 
     editor.apply();
   }
+
+  private void startTimer() {
+    Log.d(TAG, "startTimer() called with: " + "");
+
+    if (t) {
+//timer will start
+      startButton.setVisibility(View.INVISIBLE);
+      stopButton.setVisibility(View.VISIBLE);
+      progressCircle.setVisibility(View.VISIBLE);
+
+      startTime = SystemClock.uptimeMillis();
+      handler.postDelayed(timer, 500);
+      t = false;
+    } else {
+      startButton.setVisibility(View.VISIBLE);
+    }
+  }
+
 
   public void sendSMS(String number, String message) {
 

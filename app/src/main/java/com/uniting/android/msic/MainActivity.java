@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
                     startTimer();
                 }
             });
-
         }
 
         stopButton = (Switch) findViewById(com.uniting.android.msic.R.id.stop_button);
