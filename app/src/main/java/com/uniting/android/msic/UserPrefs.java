@@ -8,69 +8,69 @@ import android.util.Log;
  * Singleton for holding user data.
  */
 class UserPrefs {
-  private static final String TAG = "UserPrefs";
+    private static final String TAG = "UserPrefs";
 
-  private static UserPrefs prefs;
+    private static UserPrefs prefs;
 
-  private String phone;
-  private String message;
-  private boolean motion;
-  private boolean location;
-  private int time;
+    private String phone;
+    private String message;
+    private boolean motion;
+    private boolean location;
+    private int time;
 
-  private UserPrefs() {
-  }
-
-  static UserPrefs getInstance() {
-    if (prefs == null) {
-      prefs = new UserPrefs();
+    private UserPrefs() {
     }
-    return prefs;
-  }
 
-  String getPhone() {
-    return getInstance().phone;
-  }
+    static UserPrefs getInstance() {
+        if (prefs == null) {
+            prefs = new UserPrefs();
+        }
+        return prefs;
+    }
 
-  void setPhone(String phone) {
-    getInstance().phone = phone;
-    Log.d(TAG, "setPhone() called with: " + "phone = [" + phone + "]");
+    String getPhone() {
+        return getInstance().phone;
+    }
 
-  }
+    void setPhone(String phone) {
+        getInstance().phone = phone;
+        Log.d(TAG, "setPhone() called with: " + "phone = [" + phone + "]");
 
-  boolean isMotion() {
-    return getInstance().motion;
-  }
+    }
 
-  void setMotion(boolean motion) {
-    getInstance().motion = motion;
-    Log.d(TAG, "setMotion() called with: " + "motion = [" + motion + "]");
-  }
+    boolean isMotion() {
+        return getInstance().motion;
+    }
 
-  int getTime() {
-    return getInstance().time;
-  }
+    void setMotion(boolean motion) {
+        getInstance().motion = motion;
+        Log.d(TAG, "setMotion() called with: " + "motion = [" + motion + "]");
+    }
 
-  void setTime(int time) {
-    getInstance().time = time;
-    Log.d(TAG, "setTime() called with: " + "time = [" + time + "]");
-  }
+    int getTime() {
+        return getInstance().time;
+    }
 
-  String getMsg() {
-    return getInstance().message;
-  }
+    void setTime(int time) {
+        getInstance().time = time;
+        Log.d(TAG, "setTime() called with: " + "time = [" + time + "]");
+    }
 
-  void setMsg(String message) {
-    getInstance().message = message;
-    Log.d(TAG, "setMsg() called with: " + "message = [" + message + "]");
-  }
+    String getMsg() {
+        return getInstance().message;
+    }
 
-  boolean isLoc() {
-    return getInstance().location;
-  }
+    void setMsg(String message) {
+        getInstance().message = message;
+        Log.d(TAG, "setMsg() called with: " + "message = [" + message + "]");
+    }
 
-  void setLoc(boolean location) {
-    getInstance().location = location;
-    Log.d(TAG, "setLoc() called with: " + "location = [" + location + "]");
-  }
+    boolean isLoc() {
+        return getInstance().location;
+    }
+
+    void setLoc(boolean location) {
+        getInstance().location = location;
+        Log.d(TAG, "setLoc() called with: " + "location = [" + location + "]");
+    }
 }

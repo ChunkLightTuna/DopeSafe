@@ -141,10 +141,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void getPermissions() {
         if (ContextCompat.checkSelfPermission(this,
-            Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.SEND_SMS},
-                PERMISSIONS_REQUEST_SEND_SMS);
+                    new String[]{Manifest.permission.SEND_SMS},
+                    PERMISSIONS_REQUEST_SEND_SMS);
         }
     }
 
