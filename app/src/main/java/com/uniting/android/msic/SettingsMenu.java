@@ -41,16 +41,19 @@ class SettingsMenu
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == com.uniting.android.msic.R.id.get_help) {
+        if (id == R.id.get_help) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(activity.getResources().getString(com.uniting.android.msic.R.string.help_website)));
+            intent.setData(Uri.parse(activity.getResources().getString(R.string.help_website)));
+            activity.startActivity(intent);
+        } else if (id == R.id.settings) {
+            Intent intent = new Intent(activity, SettingsActivity.class);
             activity.startActivity(intent);
         } else {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
             switch (id) {
-                case com.uniting.android.msic.R.id.emergency_contact: {
+                case R.id.emergency_contact: {
 
                     final EditText editText = new EditText(activity);
 
@@ -60,15 +63,11 @@ class SettingsMenu
                     builder
                         .setTitle("Emergency Contact")
                         .setView(editText)
-                        .setPositiveButton("set", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                prefs.setPhone(editText.getText().toString());
-                            }
-                        });
+                        .setPositiveButton("set", (dialog, id16) -> prefs.setPhone(editText.getText().toString()));
 
                     break;
                 }
-                case com.uniting.android.msic.R.id.time_out:
+                case R.id.time_out:
 
                     final NumberPicker numberPicker = new NumberPicker(activity);
 
@@ -92,15 +91,13 @@ class SettingsMenu
                         .setTitle("Time Out")
                         .setMessage("Set time out in minutes")
                         .setView(numberPicker)
-                        .setPositiveButton("set", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                prefs.setTime(Integer.parseInt(minuteValues[numberPicker.getValue() - 1]));
-                                activity.updateTime();
-                            }
+                        .setPositiveButton("set", (dialog, id15) -> {
+                            prefs.setTime(Integer.parseInt(minuteValues[numberPicker.getValue() - 1]));
+                            activity.updateTime();
                         });
 
                     break;
-                case com.uniting.android.msic.R.id.message: {
+                case R.id.message: {
 
                     final EditText editText = new EditText(activity);
 
@@ -112,16 +109,12 @@ class SettingsMenu
                     builder
                         .setTitle("Emergency Contact")
                         .setView(editText)
-                        .setPositiveButton("set", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                prefs.setMsg(editText.getText().toString());
-                            }
-                        });
+                        .setPositiveButton("set", (dialog, id14) -> prefs.setMsg(editText.getText().toString()));
 
 
                     break;
                 }
-                case com.uniting.android.msic.R.id.motion_detection: {
+                case R.id.motion_detection: {
 
                     String current = prefs.isMotion() ? "enabled" : "disabled";
                     String action = prefs.isMotion() ? "disable" : "enable";
@@ -129,14 +122,10 @@ class SettingsMenu
                     builder
                         .setTitle("Motion detection currently " + current + ".")
                         .setMessage("Would you like to " + action + " it?")
-                        .setPositiveButton(action, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                prefs.setMotion(!prefs.isMotion());
-                            }
-                        });
+                        .setPositiveButton(action, (dialog, id13) -> prefs.setMotion(!prefs.isMotion()));
                     break;
                 }
-                case com.uniting.android.msic.R.id.location: {
+                case R.id.location: {
 
                     String current = prefs.isLoc() ? "enabled" : "disabled";
                     String action = prefs.isLoc() ? "disable" : "enable";
@@ -144,25 +133,19 @@ class SettingsMenu
                     builder
                         .setTitle("Location currently " + current + ".")
                         .setMessage("Would you like to " + action + " it?")
-                        .setPositiveButton(action, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                prefs.setLoc(!prefs.isLoc());
-                            }
-                        });
+                        .setPositiveButton(action, (dialog, id12) -> prefs.setLoc(!prefs.isLoc()));
                     break;
                 }
             }
             builder
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
-                    }
+                .setNegativeButton("cancel", (dialog, id1) -> {
+                    // User cancelled the dialog
                 })
                 .create()
                 .show();
         }
 
-        DrawerLayout drawer = (DrawerLayout) activity.getWindow().getDecorView().findViewById(com.uniting.android.msic.R.id.drawer_layout);
+        DrawerLayout drawer = activity.getWindow().getDecorView().findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

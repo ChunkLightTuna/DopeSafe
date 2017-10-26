@@ -8,6 +8,9 @@
             android:id="@+id/time_out"
             android:title="@string/time_out"/>
         <item
+            android:id="@+id/settings"
+            android:title="@string/settings"/>
+        <item
             android:id="@+id/message"
             android:title="@string/message"/>
         <item
