@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -23,20 +22,19 @@
         android:layout_alignTop="@+id/progress_bar"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_vertical"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="-2dp"
         android:background="@drawable/round_button"
         android:text="@string/start_button_text"
         android:textColor="@color/colorMaterialGrey300"
         android:textSize="55sp"
         android:textStyle="normal"
         android:typeface="normal"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="@+id/progress_bar"
-        app:layout_constraintLeft_toLeftOf="@+id/logo"
-        android:layout_marginLeft="0dp"
         app:layout_constraintHorizontal_bias="0.75"
-        app:layout_constraintTop_toTopOf="@+id/progress_bar"
-        android:layout_marginTop="-2dp"
-        />
+        app:layout_constraintLeft_toLeftOf="@+id/logo"
+        app:layout_constraintRight_toRightOf="@+id/progress_bar"
+        app:layout_constraintTop_toTopOf="@+id/progress_bar" />
 
     <TextView
         android:id="@+id/time"
@@ -45,6 +43,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="-5dp"
         android:gravity="top|center_horizontal"
         android:text="@string/default_time"
         android:textColor="@color/colorMaterialGrey300"
@@ -53,9 +52,7 @@
         android:typeface="normal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="-5dp"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--<SeekBar-->
     <!--android:id="@+id/stop_button"-->
@@ -76,6 +73,9 @@
         android:layout_height="75dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="-2dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:background="@color/colorDarkGray"
         android:switchMinWidth="150dp"
         android:text="@string/stop_button_text"
@@ -84,34 +84,29 @@
         android:textOn=""
         android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="-2dp"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
-        />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="260dp"
         android:layout_height="260dp"
+        android:layout_above="@+id/stop_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
         android:background="@drawable/circle_shape"
         android:indeterminate="false"
         android:max="60000"
         android:progress="0"
         android:progressDrawable="@drawable/circular_progress_bar"
-        android:layout_above="@+id/stop_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/time"
-        />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
 
     <ImageView
         android:id="@+id/logo"
@@ -119,18 +114,17 @@
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/logo_small"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="@+id/progress_bar"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="@+id/progress_bar"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintTop_toTopOf="@+id/progress_bar"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
-        android:layout_marginBottom="8dp"
-        />
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="@+id/progress_bar"
+        app:layout_constraintRight_toRightOf="@+id/progress_bar"
+        app:layout_constraintTop_toTopOf="@+id/progress_bar" />
 
 
 </android.support.constraint.ConstraintLayout>
