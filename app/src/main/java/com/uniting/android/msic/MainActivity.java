@@ -21,7 +21,6 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -66,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(com.uniting.android.msic.R.layout.activity_main);
 
+        startButton = findViewById(R.id.start_button);
+
         prefs = UserPrefs.getInstance();
         getSharedPrefs(getPreferences(Context.MODE_PRIVATE));
 
@@ -79,67 +80,59 @@ public class MainActivity extends AppCompatActivity {
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-        progressCircle = (ProgressBar) findViewById(com.uniting.android.msic.R.id.progress_bar);
+        progressCircle = findViewById(R.id.progress_bar);
         if (progressCircle != null) {
             progressCircle.setProgress(0);
             progressCircle.setVisibility(View.INVISIBLE);
         }
 
-        time = (TextView) findViewById(com.uniting.android.msic.R.id.time);
+        time = findViewById(R.id.time);
         updateTime();
 
-        NavigationView navigationView = (NavigationView) findViewById(com.uniting.android.msic.R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         if (navigationView != null)
             navigationView.setNavigationItemSelectedListener(new SettingsMenu(this, prefs));
 
-        startButton = (Button) findViewById(com.uniting.android.msic.R.id.start_button);
         if (startButton != null) {
-            startButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startTimer();
-                }
-            });
+            startButton.setOnClickListener(v -> startTimer());
         }
 
-        stopButton = (Switch) findViewById(com.uniting.android.msic.R.id.stop_button);
+        stopButton = findViewById(R.id.stop_button);
         if (stopButton != null) {
             stopButton.setVisibility(View.INVISIBLE);
-            stopButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            stopButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                    Log.d(TAG, "onCheckedChanged() called with: " + "buttonView = [" + buttonView + "], isChecked = [" + isChecked + "]");
-                    if (isChecked) {
-                        // The toggle is enabled
-                        stopButton.setVisibility(View.INVISIBLE);
-                        startButton.setVisibility(View.VISIBLE);
-                        progressCircle.setProgress(0);
-                        progressCircle.setVisibility(View.INVISIBLE);
+                Log.d(TAG, "onCheckedChanged() called with: " + "buttonView = [" + buttonView + "], isChecked = [" + isChecked + "]");
+                if (isChecked) {
+                    // The toggle is enabled
+                    stopButton.setVisibility(View.INVISIBLE);
+                    startButton.setVisibility(View.VISIBLE);
+                    progressCircle.setProgress(0);
+                    progressCircle.setVisibility(View.INVISIBLE);
 
-                        //stop the timer
-                        startTime = 0L;
-                        timeInMilliseconds = 0L;
-                        timeSwapBuff = 0L;
-                        updatedTime = 0L;
-                        seconds = 0;
-                        minutes = 0;
-                        handler.removeCallbacks(timer);
-                        updateTime();
-                        time.setTextColor(Color.WHITE);
+                    //stop the timer
+                    startTime = 0L;
+                    timeInMilliseconds = 0L;
+                    timeSwapBuff = 0L;
+                    updatedTime = 0L;
+                    seconds = 0;
+                    minutes = 0;
+                    handler.removeCallbacks(timer);
+                    updateTime();
+                    time.setTextColor(Color.WHITE);
 
-                        alarm = false;
-                        ringtone.stop();
-                        vibrator.cancel();
-                        t = true;
+                    alarm = false;
+                    ringtone.stop();
+                    vibrator.cancel();
+                    t = true;
 
-                        //reset the toggle button
-                        stopButton.setChecked(false);
+                    //reset the toggle button
+                    stopButton.setChecked(false);
 
-                    } else {
-                        // The toggle is disabled
-                        Log.wtf(TAG, "onCheckedChanged: this shouldn't have happened!");
-                        stopButton.setVisibility(View.VISIBLE);
-                    }
+                } else {
+                    // The toggle is disabled
+                    Log.wtf(TAG, "onCheckedChanged: this shouldn't have happened!");
+                    stopButton.setVisibility(View.VISIBLE);
                 }
             });
         }
@@ -246,12 +239,9 @@ public class MainActivity extends AppCompatActivity {
                     if (contentView != null) {
                         final Snackbar snackbar = Snackbar.make(contentView, "App will not work if you don't grant it SMS permissions", Snackbar.LENGTH_INDEFINITE);
 
-                        snackbar.getView().setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                snackbar.dismiss();
-                                getPermissions();
-                            }
+                        snackbar.getView().setOnClickListener(v -> {
+                            snackbar.dismiss();
+                            getPermissions();
                         });
                         snackbar.show();
                     }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -49,7 +50,7 @@ public class Main2Activity extends AppCompatActivity
   private long startTime = 0L;
   private long timeInMilliseconds = 0L;
   private long timeSwapBuff = 0L;
-  private long updatedTime = 0l;
+  private long updatedTime = 0L;
   private boolean t = true;
   private int seconds = 0;
   private int minutes = 0;
@@ -65,7 +66,7 @@ public class Main2Activity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main2);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
 
     prefs = UserPrefs.getInstance();
@@ -81,76 +82,71 @@ public class Main2Activity extends AppCompatActivity
 
     vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
-    progressCircle = (ProgressBar) findViewById(com.uniting.android.msic.R.id.progress_bar);
+    progressCircle = findViewById(R.id.progress_bar);
     if (progressCircle != null) {
       progressCircle.setProgress(0);
       progressCircle.setVisibility(View.INVISIBLE);
     }
 
-    time = (TextView) findViewById(com.uniting.android.msic.R.id.time);
+    time = findViewById(R.id.time);
     updateTime();
 
-    startButton = (Button) findViewById(com.uniting.android.msic.R.id.start_button);
+    startButton = findViewById(R.id.start_button);
     if (startButton != null) {
-      startButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          startTimer();
-        }
-      });
+      startButton.setOnClickListener(v -> startTimer());
     }
 
-    stopButton = (Switch) findViewById(com.uniting.android.msic.R.id.stop_button);
+    stopButton = findViewById(R.id.stop_button);
     if (stopButton != null) {
       stopButton.setVisibility(View.INVISIBLE);
-      stopButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+      stopButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-          Log.d(TAG, "onCheckedChanged() called with: " + "buttonView = [" + buttonView + "], isChecked = [" + isChecked + "]");
-          if (isChecked) {
-            // The toggle is enabled
-            stopButton.setVisibility(View.INVISIBLE);
-            startButton.setVisibility(View.VISIBLE);
-            progressCircle.setProgress(0);
-            progressCircle.setVisibility(View.INVISIBLE);
+        Log.d(TAG, "onCheckedChanged() called with: " + "buttonView = [" + buttonView + "], isChecked = [" + isChecked + "]");
+        if (isChecked) {
+          // The toggle is enabled
+          stopButton.setVisibility(View.INVISIBLE);
+          startButton.setVisibility(View.VISIBLE);
+          progressCircle.setProgress(0);
+          progressCircle.setVisibility(View.INVISIBLE);
 
-            //stop the timer
-            startTime = 0L;
-            timeInMilliseconds = 0L;
-            timeSwapBuff = 0L;
-            updatedTime = 0L;
-            seconds = 0;
-            minutes = 0;
-            handler.removeCallbacks(timer);
-            updateTime();
-            time.setTextColor(Color.WHITE);
+          //stop the timer
+          startTime = 0L;
+          timeInMilliseconds = 0L;
+          timeSwapBuff = 0L;
+          updatedTime = 0L;
+          seconds = 0;
+          minutes = 0;
+          handler.removeCallbacks(timer);
+          updateTime();
+          time.setTextColor(Color.WHITE);
 
-            alarm = false;
-            ringtone.stop();
-            vibrator.cancel();
-            t = true;
+          alarm = false;
+          ringtone.stop();
+          vibrator.cancel();
+          t = true;
 
-            //reset the toggle button
-            stopButton.setChecked(false);
+          //reset the toggle button
+          stopButton.setChecked(false);
 
-          } else {
-            // The toggle is disabled
-            Log.wtf(TAG, "onCheckedChanged: this shouldn't have happened!");
-            stopButton.setVisibility(View.VISIBLE);
-          }
+        } else {
+          // The toggle is disabled
+          Log.wtf(TAG, "onCheckedChanged: this shouldn't have happened!");
+          stopButton.setVisibility(View.VISIBLE);
         }
       });
     }
 
 
 
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    DrawerLayout drawer = findViewById(R.id.drawer_layout);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
         this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-    drawer.setDrawerListener(toggle);
+
+    drawer.addDrawerListener(toggle);
+
     toggle.syncState();
 
-    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+    NavigationView navigationView = findViewById(R.id.nav_view);
     navigationView.setNavigationItemSelectedListener(this);
     getPermissions();
   }
@@ -175,7 +171,7 @@ public class Main2Activity extends AppCompatActivity
 
   @Override
   public void onBackPressed() {
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    DrawerLayout drawer = findViewById(R.id.drawer_layout);
     if (drawer.isDrawerOpen(GravityCompat.START)) {
       drawer.closeDrawer(GravityCompat.START);
     } else {
@@ -207,7 +203,7 @@ public class Main2Activity extends AppCompatActivity
 
   @SuppressWarnings("StatementWithEmptyBody")
   @Override
-  public boolean onNavigationItemSelected(MenuItem item) {
+  public boolean onNavigationItemSelected(@NonNull MenuItem item) {
     // Handle navigation view item clicks here.
     int id = item.getItemId();
 
@@ -225,7 +221,7 @@ public class Main2Activity extends AppCompatActivity
 
     }
 
-    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+    DrawerLayout drawer = findViewById(R.id.drawer_layout);
     drawer.closeDrawer(GravityCompat.START);
     return true;
   }

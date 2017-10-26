@@ -20,8 +20,6 @@ import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
-//import org.uniting.dopesafe.R;
-
 import java.util.List;
 
 /**
