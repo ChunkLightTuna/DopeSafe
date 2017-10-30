@@ -96,4 +96,10 @@
   <string name="navigation_drawer_open">Open navigation drawer</string>
   <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="settings">Settings</string>
+  <string name="init_dialog_title">Warning</string>
+  <string name="init_dialog_message">An overdoes can still occur for some time after
+    injection!
+  </string>
+  <string name="init_dialog_positive_button_text">Continue</string>
+  <string name="init_dialog_negative_button_text">Cancel</string>
 </resources>

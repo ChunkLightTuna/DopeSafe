@@ -2,6 +2,7 @@ package com.uniting.android.msic;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
@@ -93,14 +95,13 @@ public class Main2Activity extends AppCompatActivity
 
         startButton = findViewById(R.id.start_button);
         if (startButton != null) {
-            startButton.setOnClickListener(v -> startTimer());
+            startButton.setOnClickListener(v -> confirmInitializeOfSession());
         }
 
         stopButton = findViewById(R.id.stop_button);
         if (stopButton != null) {
             stopButton.setVisibility(View.INVISIBLE);
             stopButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
                 Log.d(TAG, "onCheckedChanged() called with: " + "buttonView = [" + buttonView + "], isChecked = [" + isChecked + "]");
                 if (isChecked) {
                     // The toggle is enabled
@@ -286,6 +287,26 @@ public class Main2Activity extends AppCompatActivity
         } else {
             startButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void confirmInitializeOfSession(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.init_dialog_message)
+            .setTitle(R.string.init_dialog_title)
+            .setPositiveButton(R.string.init_dialog_positive_button_text, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    startTimer();
+                }
+            })
+            .setNegativeButton(R.string.init_dialog_negative_button_text, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //
+                }
+            })
+            .create()
+            .show();
     }
 
 
