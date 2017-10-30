@@ -293,17 +293,9 @@ public class Main2Activity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.init_dialog_message)
             .setTitle(R.string.init_dialog_title)
-            .setPositiveButton(R.string.init_dialog_positive_button_text, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    startTimer();
-                }
-            })
-            .setNegativeButton(R.string.init_dialog_negative_button_text, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    //
-                }
+            .setPositiveButton(R.string.init_dialog_positive_button_text, (dialogInterface, i) -> startTimer())
+            .setNegativeButton(R.string.init_dialog_negative_button_text, (dialogInterface, i) -> {
+                //
             })
             .create()
             .show();
