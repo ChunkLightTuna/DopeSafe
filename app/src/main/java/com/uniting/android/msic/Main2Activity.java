@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Bundle;
@@ -36,11 +37,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 
-public class Main2Activity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-
+public class Main2Activity extends AppCompatActivity implements
+    NavigationView.OnNavigationItemSelectedListener
+{
     private static final String TAG = "MainActivity";
     private final int PERMISSIONS_REQUEST_SEND_SMS = 15423;
+    private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 25413;
+    private final int PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 35421;
+
 
     private UserPrefs prefs;
 
@@ -57,12 +61,15 @@ public class Main2Activity extends AppCompatActivity
     private int seconds = 0;
     private int minutes = 0;
     private boolean alarm = false;
+    private boolean havePermissionForFineLocation = false;
+    private boolean havePermissionForCoarseLocation = false;
 
     private Handler handler = new Handler();
     private Runnable timer;
 
     private Ringtone ringtone;
     private Vibrator vibrator;
+    private LocationService locationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +156,7 @@ public class Main2Activity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         getPermissions();
+        locationService = new LocationService(this);
     }
 
     private void getPermissions() {
@@ -157,6 +165,20 @@ public class Main2Activity extends AppCompatActivity
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.SEND_SMS},
                     PERMISSIONS_REQUEST_SEND_SMS);
+        }
+
+        if(ContextCompat.checkSelfPermission(this,
+            Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+        }
+
+        if(ContextCompat.checkSelfPermission(this,
+            Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
 
@@ -226,9 +248,60 @@ public class Main2Activity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
+        switch (requestCode){
+            case PERMISSIONS_REQUEST_SEND_SMS:
+                if(!permissionGranted(grantResults))
+                    handleDenialOfPermission(requestCode);
+                return;
+            case PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION:
+                if(permissionGranted(grantResults)){
+                    this.havePermissionForFineLocation = true;
+                    tryToInitLocationService();
+                }else
+                    handleDenialOfPermission(requestCode);
+                return;
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
+                if(permissionGranted(grantResults)){
+                    this.havePermissionForCoarseLocation = true;
+                    tryToInitLocationService();
+                }else
+                    handleDenialOfPermission(requestCode);
+                return;
+        }
+    }
+
+    public void handleDenialOfPermission(int requestCode){
+        switch(requestCode){
+            case PERMISSIONS_REQUEST_SEND_SMS:
+                Log.d(TAG, "Permission SEND_SMS denied");
+                return;
+            case PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION:
+                Log.d(TAG, "Permission ACCESS_COARSE_LOACTION denied");
+                return;
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
+                Log.d(TAG, "Permission ACCESS_FINE_LOCATION denied");
+                return;
+        }
+    }
+
+    private boolean permissionGranted(int[] grantResults){
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            return true;
+        else
+            return false;
+    }
+
+    private void tryToInitLocationService(){
+        if(this.havePermissionForFineLocation && this.havePermissionForCoarseLocation)
+            this.locationService = new LocationService(this);
+    }
+
     public void updateTime() {
         time.setText(String.format(getString(com.uniting.android.msic.R.string.display_time), prefs.getTime(), 0));
     }
+
 
     private void getSharedPrefs(SharedPreferences sharedPref) {
         Log.d(TAG, "getSharedPrefs() called with: " + "sharedPref = [" + sharedPref + "]");
@@ -274,7 +347,6 @@ public class Main2Activity extends AppCompatActivity
 
     private void startTimer() {
         Log.d(TAG, "startTimer() called with: " + "");
-
         if (t) {
 //timer will start
             startButton.setVisibility(View.INVISIBLE);
@@ -302,14 +374,29 @@ public class Main2Activity extends AppCompatActivity
     }
 
 
-    public void sendSMS(String number, String message) {
-
+    public void sendSMS(String number, String message, Location location) {
         try {
             SmsManager smsManager = SmsManager.getDefault();
+            message += "\nLocation: " + getGoogleMapsUrl(location);
             smsManager.sendTextMessage(number, null, message, null, null);
             Log.d(TAG, "sendSMS() called with: " + "number = [" + number + "], message = [" + message + "]");
         } catch (Exception e) {
             Log.e(TAG, "SMS failed!", e);
+        }
+    }
+
+    public String getGoogleMapsUrl(Location location){
+        //TODO handle location issues better
+        try {
+            StringBuilder url = new StringBuilder();
+            url.append("http://maps.google.com?q=");
+            url.append(location.getLatitude());
+            url.append(",");
+            url.append(location.getLongitude());
+            return url.toString();
+        }catch(NullPointerException e){
+            Log.e(TAG, "unable to get location string(Probably because emulator is being used and location was not sent.)", e);
+            return "Location unavailable";
         }
     }
 
@@ -329,7 +416,7 @@ public class Main2Activity extends AppCompatActivity
 
                 //times up
                 if (minutes == prefs.getTime()) {
-                    sendSMS(prefs.getPhone(), prefs.getMsg());
+                    sendSMS(prefs.getPhone(), prefs.getMsg(), locationService.getLocation());
                     time.setText(String.format(getString(com.uniting.android.msic.R.string.display_time), 0, 0));
                     time.setTextColor(Color.RED);
                 } else {
