@@ -41,9 +41,7 @@ public class Main2Activity extends AppCompatActivity implements
     NavigationView.OnNavigationItemSelectedListener
 {
     private static final String TAG = "MainActivity";
-    private final int PERMISSIONS_REQUEST_SEND_SMS = 15423;
-    private final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 25413;
-    private final int PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 35421;
+    private final int PERMISSIONS_REQUEST_ALL_NECESSARY = 15423;
 
 
     private UserPrefs prefs;
@@ -160,28 +158,25 @@ public class Main2Activity extends AppCompatActivity implements
     }
 
     private void getPermissions() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.SEND_SMS},
-                    PERMISSIONS_REQUEST_SEND_SMS);
-        }
+        String[] permissions = new String[]{Manifest.permission.SEND_SMS,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(this,
-            Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
-        }
-
-        if(ContextCompat.checkSelfPermission(this,
-            Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
+        if (!allPermissionsAreGranted())
+            ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST_ALL_NECESSARY);
     }
 
+    private boolean allPermissionsAreGranted(){
+        if(ContextCompat.checkSelfPermission(this,
+            Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            return false;
+        }
+        return true;
+    }
 
     @Override
     protected void onPause() {
@@ -251,46 +246,39 @@ public class Main2Activity extends AppCompatActivity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
         switch (requestCode){
-            case PERMISSIONS_REQUEST_SEND_SMS:
-                if(!permissionGranted(grantResults))
-                    handleDenialOfPermission(requestCode);
-                return;
-            case PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION:
-                if(permissionGranted(grantResults)){
-                    this.havePermissionForFineLocation = true;
-                    tryToInitLocationService();
-                }else
-                    handleDenialOfPermission(requestCode);
-                return;
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
-                if(permissionGranted(grantResults)){
-                    this.havePermissionForCoarseLocation = true;
-                    tryToInitLocationService();
-                }else
-                    handleDenialOfPermission(requestCode);
+            case PERMISSIONS_REQUEST_ALL_NECESSARY:
+                if(!permissionsGranted(grantResults))
+                    showPermissionDialog();
                 return;
         }
     }
 
-    public void handleDenialOfPermission(int requestCode){
-        switch(requestCode){
-            case PERMISSIONS_REQUEST_SEND_SMS:
-                Log.d(TAG, "Permission SEND_SMS denied");
-                return;
-            case PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION:
-                Log.d(TAG, "Permission ACCESS_COARSE_LOACTION denied");
-                return;
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION:
-                Log.d(TAG, "Permission ACCESS_FINE_LOCATION denied");
-                return;
-        }
+    public void showPermissionDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.permissions_dialog_message)
+            .setTitle(R.string.permissions_dialog_title)
+            .setPositiveButton(R.string.permissions_dialog_positive_button_text,
+                (dialogInterface, i) -> {
+                    //
+                })
+            .setOnDismissListener(dialogInterface -> {
+                getPermissions();
+            })
+            .create()
+            .show();
     }
 
-    private boolean permissionGranted(int[] grantResults){
-        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            return true;
-        else
+    private boolean permissionsGranted(int[] grantResults){
+        if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){}
+
+        if(grantResults.length == 0)
             return false;
+        else
+            for(int result : grantResults)
+                if(result != PackageManager.PERMISSION_GRANTED)
+                    return false;
+
+        return true;
     }
 
     private void tryToInitLocationService(){

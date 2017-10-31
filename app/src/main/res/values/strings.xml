@@ -102,4 +102,7 @@
   </string>
   <string name="init_dialog_positive_button_text">Continue</string>
   <string name="init_dialog_negative_button_text">Cancel</string>
+  <string name="permissions_dialog_title">Error</string>
+  <string name="permissions_dialog_positive_button_text">Ok</string>
+  <string name="permissions_dialog_message">All requested permissions are required for the application to work.</string>
 </resources>
