@@ -33,11 +33,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 
-public class MainActivity extends AppCompatActivity implements
-    NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private final int PERMISSIONS_REQUEST_ALL_NECESSARY = 15423;
-
 
     private UserPrefs prefs;
 
@@ -149,8 +147,6 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new SettingsMenu(this, prefs));
 
-
-
         getPermissions();
         locationService = new LocationService(this);
     }
@@ -165,15 +161,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private boolean allPermissionsAreGranted() {
-        if (ContextCompat.checkSelfPermission(this,
+        return !(ContextCompat.checkSelfPermission(this,
             Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return false;
-        }
-        return true;
+                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED);
     }
 
     @Override
@@ -182,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements
         Log.d(TAG, "onPause() called");
         setSharedPrefs();
     }
-
 
     @Override
     public void onBackPressed() {
@@ -197,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main2, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -209,46 +201,31 @@ public class MainActivity extends AppCompatActivity implements
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ALL_NECESSARY:
                 if (!permissionsGranted(grantResults))
                     showPermissionDialog();
-                return;
         }
+    }
+
+    private boolean permissionsGranted(int[] grantResults) {
+        if (grantResults.length == 0)
+            return false;
+        else
+            for (int result : grantResults)
+                if (result != PackageManager.PERMISSION_GRANTED)
+                    return false;
+
+        return true;
     }
 
     public void showPermissionDialog() {
@@ -259,25 +236,9 @@ public class MainActivity extends AppCompatActivity implements
                 (dialogInterface, i) -> {
                     //
                 })
-            .setOnDismissListener(dialogInterface -> {
-                getPermissions();
-            })
+            .setOnDismissListener(dialogInterface -> getPermissions())
             .create()
             .show();
-    }
-
-    private boolean permissionsGranted(int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        }
-
-        if (grantResults.length == 0)
-            return false;
-        else
-            for (int result : grantResults)
-                if (result != PackageManager.PERMISSION_GRANTED)
-                    return false;
-
-        return true;
     }
 
     private void tryToInitLocationService() {
@@ -373,14 +334,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public String getGoogleMapsUrl(Location location) {
-        //TODO handle location issues better
         try {
-            StringBuilder url = new StringBuilder();
-            url.append("http://maps.google.com?q=");
-            url.append(location.getLatitude());
-            url.append(",");
-            url.append(location.getLongitude());
-            return url.toString();
+            return "http://maps.google.com?q=" +
+                location.getLatitude() +
+                "," +
+                location.getLongitude();
         } catch (NullPointerException e) {
             Log.e(TAG, "unable to get location string(Probably because emulator is being used and location was not sent.)", e);
             return "Location unavailable";
@@ -418,10 +376,8 @@ public class MainActivity extends AppCompatActivity implements
 
                         ringtone.play();
 
-
                         //noinspection deprecation
                         vibrator.vibrate(200);
-
 
                         alarm = true;
                     }

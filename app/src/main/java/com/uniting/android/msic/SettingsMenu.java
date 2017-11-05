@@ -31,7 +31,7 @@ class SettingsMenu implements NavigationView.OnNavigationItemSelectedListener {
         this.prefs = prefs;
     }
 
-    //    @SuppressWarnings("StatementWithEmptyBody")
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Log.d(TAG, "onNavigationItemSelected() called with: " + "item = [" + item + "]");
@@ -59,9 +59,9 @@ class SettingsMenu implements NavigationView.OnNavigationItemSelectedListener {
                     editText.setText(prefs.getPhone());
 
                     builder
-                            .setTitle("Emergency Contact")
-                            .setView(editText)
-                            .setPositiveButton("set", (dialog, id16) -> prefs.setPhone(editText.getText().toString()));
+                        .setTitle("Emergency Contact")
+                        .setView(editText)
+                        .setPositiveButton("set", (dialog, id16) -> prefs.setPhone(editText.getText().toString()));
 
                     break;
                 }
@@ -86,13 +86,13 @@ class SettingsMenu implements NavigationView.OnNavigationItemSelectedListener {
                     numberPicker.setValue(prefs.getTime() / 5);
 
                     builder
-                            .setTitle("Time Out")
-                            .setMessage("Set time out in minutes")
-                            .setView(numberPicker)
-                            .setPositiveButton("set", (dialog, id15) -> {
-                                prefs.setTime(Integer.parseInt(minuteValues[numberPicker.getValue() - 1]));
-                                activity.updateTime();
-                            });
+                        .setTitle("Time Out")
+                        .setMessage("Set time out in minutes")
+                        .setView(numberPicker)
+                        .setPositiveButton("set", (dialog, id15) -> {
+                            prefs.setTime(Integer.parseInt(minuteValues[numberPicker.getValue() - 1]));
+                            activity.updateTime();
+                        });
 
                     break;
                 case R.id.message: {
@@ -105,9 +105,9 @@ class SettingsMenu implements NavigationView.OnNavigationItemSelectedListener {
                     editText.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
                     builder
-                            .setTitle("Emergency Contact")
-                            .setView(editText)
-                            .setPositiveButton("set", (dialog, id14) -> prefs.setMsg(editText.getText().toString()));
+                        .setTitle("Emergency Contact")
+                        .setView(editText)
+                        .setPositiveButton("set", (dialog, id14) -> prefs.setMsg(editText.getText().toString()));
 
 
                     break;
@@ -118,9 +118,9 @@ class SettingsMenu implements NavigationView.OnNavigationItemSelectedListener {
                     String action = prefs.isMotion() ? "disable" : "enable";
 
                     builder
-                            .setTitle("Motion detection currently " + current + ".")
-                            .setMessage("Would you like to " + action + " it?")
-                            .setPositiveButton(action, (dialog, id13) -> prefs.setMotion(!prefs.isMotion()));
+                        .setTitle("Motion detection currently " + current + ".")
+                        .setMessage("Would you like to " + action + " it?")
+                        .setPositiveButton(action, (dialog, id13) -> prefs.setMotion(!prefs.isMotion()));
                     break;
                 }
                 case R.id.location: {
@@ -129,18 +129,18 @@ class SettingsMenu implements NavigationView.OnNavigationItemSelectedListener {
                     String action = prefs.isLoc() ? "disable" : "enable";
 
                     builder
-                            .setTitle("Location currently " + current + ".")
-                            .setMessage("Would you like to " + action + " it?")
-                            .setPositiveButton(action, (dialog, id12) -> prefs.setLoc(!prefs.isLoc()));
+                        .setTitle("Location currently " + current + ".")
+                        .setMessage("Would you like to " + action + " it?")
+                        .setPositiveButton(action, (dialog, id12) -> prefs.setLoc(!prefs.isLoc()));
                     break;
                 }
             }
             builder
-                    .setNegativeButton("cancel", (dialog, id1) -> {
-                        // User cancelled the dialog
-                    })
-                    .create()
-                    .show();
+                .setNegativeButton("cancel", (dialog, id1) -> {
+                    // User cancelled the dialog
+                })
+                .create()
+                .show();
         }
 
         DrawerLayout drawer = activity.getWindow().getDecorView().findViewById(R.id.drawer_layout);
