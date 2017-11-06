@@ -3,24 +3,33 @@
     <group>
         <item
             android:id="@+id/emergency_contact"
-            android:title="@string/emergency_contact"/>
+            android:title="@string/emergency_contact" />
         <item
             android:id="@+id/time_out"
-            android:title="@string/time_out"/>
+            android:title="@string/time_out" />
         <item
             android:id="@+id/settings"
-            android:title="@string/settings"/>
+            android:title="@string/settings" />
         <item
             android:id="@+id/message"
-            android:title="@string/message"/>
+            android:title="@string/message" />
         <item
             android:id="@+id/motion_detection"
-            android:title="@string/motion_detection"/>
+            android:title="@string/motion_detection" />
         <item
             android:id="@+id/location"
-            android:title="@string/location"/>
+            android:title="@string/location" />
         <item
             android:id="@+id/get_help"
-            android:title="@string/get_help"/>
+            android:title="@string/get_help" />
+        <item
+            android:id="@+id/Disclaimer"
+            android:title="@string/disclaimer" />
+        <item
+            android:id="@+id/drug_safety_information"
+            android:title="@string/drug_safety_information" />
+        <item
+            android:id="@+id/how_to_use_the_app"
+            android:title="@string/how_to_use_the_app" />
     </group>
 </menu>

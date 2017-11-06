@@ -104,4 +104,7 @@
   <string name="permissions_dialog_title">Error</string>
   <string name="permissions_dialog_positive_button_text">Ok</string>
   <string name="permissions_dialog_message">All requested permissions are required for the application to work.</string>
+    <string name="disclaimer">Disclaimer</string>
+  <string name="drug_safety_information">Drug Safety Information</string>
+  <string name="how_to_use_the_app">How to use the app</string>
 </resources>
