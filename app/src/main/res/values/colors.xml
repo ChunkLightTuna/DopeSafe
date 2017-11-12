@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#b53f41</color>
-    <color name="colorPrimaryDark">#5c1e1f</color>
-    <color name="colorAccent">#b53f41</color>
-    <color name="colorMaterialGrey300">#ffe0e0e0</color>
-    <color name="colorWhite">#fff</color>
-    <color name="colorDarkGray">#80000000</color>
+  <color name="colorPrimary">#b53f41</color>
+  <color name="colorPrimaryDark">#5c1e1f</color>
+  <color name="colorAccent">#b53f41</color>
+  <color name="colorMaterialGrey300">#ffe0e0e0</color>
+  <color name="colorWhite">#fff</color>
+  <color name="colorDarkGray">#80000000</color>
+
+  <color name="black_overlay">#66000000</color>
 </resources>

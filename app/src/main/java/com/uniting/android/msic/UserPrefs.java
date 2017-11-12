@@ -16,6 +16,7 @@ class UserPrefs {
     private String message;
     private boolean motion;
     private boolean location;
+    private boolean disclaimerAccepted;
     private int time;
 
     private UserPrefs() {
@@ -73,4 +74,11 @@ class UserPrefs {
         getInstance().location = location;
         Log.d(TAG, "setLoc() called with: " + "location = [" + location + "]");
     }
+
+    boolean isDisclaimerAccepted(){ return getInstance().disclaimerAccepted; }
+
+    void setDisclaimerAccepted(boolean disclaimerAccepted){
+        getInstance().disclaimerAccepted = disclaimerAccepted;
+    }
+
 }

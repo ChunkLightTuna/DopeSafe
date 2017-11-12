@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate called");
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         getPermissions();
         locationService = new LocationService(this);
     }
+
 
     private void getPermissions() {
         String[] permissions = new String[]{Manifest.permission.SEND_SMS,

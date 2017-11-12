@@ -1,5 +1,6 @@
 package com.uniting.android.msic;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -132,6 +133,15 @@ class SettingsMenu implements NavigationView.OnNavigationItemSelectedListener {
                         .setTitle("Location currently " + current + ".")
                         .setMessage("Would you like to " + action + " it?")
                         .setPositiveButton(action, (dialog, id12) -> prefs.setLoc(!prefs.isLoc()));
+                    break;
+                }
+                case R.id.disclaimer: {
+                    builder
+                        .setTitle("Conditions")
+                        .setMessage(R.string.conditions)
+                        .setPositiveButton("Ok", (dialogInterface, i) -> {
+                            //
+                        });
                     break;
                 }
             }

@@ -23,7 +23,7 @@
             android:id="@+id/get_help"
             android:title="@string/get_help" />
         <item
-            android:id="@+id/Disclaimer"
+            android:id="@+id/disclaimer"
             android:title="@string/disclaimer" />
         <item
             android:id="@+id/drug_safety_information"
