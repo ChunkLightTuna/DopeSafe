@@ -6,12 +6,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -264,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
 
         String phone = getString(com.uniting.android.msic.R.string.default_phone);
         String message = getString(com.uniting.android.msic.R.string.default_message);
-        int timeout = 30;
+        int timeout = 1;
 
         if (sharedPref != null) {
             message = sharedPref.getString("message", message);
@@ -353,6 +355,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void setRingVolumeMax(){
+        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        am.setStreamVolume(
+            AudioManager.STREAM_RING,
+            am.getStreamMaxVolume(AudioManager.STREAM_RING),
+            0);
+    }
+
     private Runnable getTimer() {
 
         return new Runnable() {
@@ -381,7 +391,7 @@ public class MainActivity extends AppCompatActivity {
                         if (ringtone == null) {
                             ringtone = RingtoneManager.getRingtone(getApplicationContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
                         }
-
+                        setRingVolumeMax();
                         ringtone.play();
 
                         //noinspection deprecation
