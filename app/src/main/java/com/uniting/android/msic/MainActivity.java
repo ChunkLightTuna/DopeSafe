@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView time;
     private Button startButton;
+    private Button pauseButton;
     private Switch stopButton;
     private ProgressBar progressCircle;
 
@@ -99,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
             startButton.setOnClickListener(v -> confirmInitializeOfSession());
         }
 
+        pauseButton = findViewById(R.id.pause_button);
+        if(pauseButton != null){
+            pauseButton.setOnClickListener(v -> pauseTimer());
+        }
+
         stopButton = findViewById(R.id.stop_button);
         if (stopButton != null) {
             stopButton.setVisibility(View.INVISIBLE);
@@ -107,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isChecked) {
                     // The toggle is enabled
                     stopButton.setVisibility(View.INVISIBLE);
+                    pauseButton.setVisibility(View.INVISIBLE);
                     startButton.setVisibility(View.VISIBLE);
                     progressCircle.setProgress(0);
                     progressCircle.setVisibility(View.INVISIBLE);
@@ -308,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
         if (t) {
 //timer will start
             startButton.setVisibility(View.INVISIBLE);
+            pauseButton.setVisibility(View.VISIBLE);
             stopButton.setVisibility(View.VISIBLE);
             progressCircle.setVisibility(View.VISIBLE);
 
@@ -317,6 +325,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             startButton.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void pauseTimer(){
+        Log.d(TAG, "Pause clicked");
     }
 
     private void confirmInitializeOfSession() {

@@ -14,9 +14,10 @@
                                              tools:context="com.uniting.android.msic.MainActivity">
     <!--tools:showIn="@layout/activity_main">-->
 
+
+
     <Button
         android:id="@+id/start_button"
-
         android:layout_width="275dp"
         android:layout_height="260dp"
         android:layout_alignTop="@+id/progress_bar"
@@ -35,6 +36,28 @@
         app:layout_constraintLeft_toLeftOf="@+id/logo"
         app:layout_constraintRight_toRightOf="@+id/progress_bar"
         app:layout_constraintTop_toTopOf="@+id/progress_bar" />
+
+    <Button
+        android:id="@+id/pause_button"
+        android:layout_width="275dp"
+        android:layout_height="260dp"
+        android:layout_alignTop="@+id/progress_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="-2dp"
+        android:background="@drawable/round_button_transparent"
+        android:text="@string/pause_button_text"
+        android:textColor="@color/colorMaterialGrey300"
+        android:textSize="55sp"
+        android:textStyle="normal"
+        android:typeface="normal"
+        android:visibility="invisible"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintLeft_toLeftOf="@+id/logo"
+        app:layout_constraintRight_toRightOf="@+id/progress_bar"
+        app:layout_constraintTop_toTopOf="@+id/progress_bar"
+        />
 
     <TextView
         android:id="@+id/time"
