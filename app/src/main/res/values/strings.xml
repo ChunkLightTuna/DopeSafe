@@ -143,4 +143,6 @@
   <string name="dummy_button">Dummy Button</string>
   <string name="dummy_content">DUMMY\nCONTENT</string>
   <string name="pause_button_text">&#9612;&#9612;</string>
+  <string name="resume_button_text">&#9654;</string>
+  <string name="reset">RESET</string>
 </resources>

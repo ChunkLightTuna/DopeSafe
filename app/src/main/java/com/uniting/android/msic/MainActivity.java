@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView time;
     private Button startButton;
     private Button pauseButton;
+    private Button resumeButton;
     private Switch stopButton;
     private ProgressBar progressCircle;
 
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean alarm = false;
     private boolean havePermissionForFineLocation = false;
     private boolean havePermissionForCoarseLocation = false;
+    private boolean timerRunning = false;
 
     private Handler handler = new Handler();
     private Runnable timer;
@@ -96,14 +98,18 @@ public class MainActivity extends AppCompatActivity {
         updateTime();
 
         startButton = findViewById(R.id.start_button);
-        if (startButton != null) {
+        if (startButton != null)
             startButton.setOnClickListener(v -> confirmInitializeOfSession());
-        }
+
 
         pauseButton = findViewById(R.id.pause_button);
-        if(pauseButton != null){
+        if(pauseButton != null)
             pauseButton.setOnClickListener(v -> pauseTimer());
-        }
+
+
+        resumeButton = findViewById(R.id.resume_button);
+        if(resumeButton != null)
+            resumeButton.setOnClickListener(view -> resumeTimer());
 
         stopButton = findViewById(R.id.stop_button);
         if (stopButton != null) {
@@ -114,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                     // The toggle is enabled
                     stopButton.setVisibility(View.INVISIBLE);
                     pauseButton.setVisibility(View.INVISIBLE);
+                    resumeButton.setVisibility(View.INVISIBLE);
                     startButton.setVisibility(View.VISIBLE);
                     progressCircle.setProgress(0);
                     progressCircle.setVisibility(View.INVISIBLE);
@@ -320,6 +327,7 @@ public class MainActivity extends AppCompatActivity {
             progressCircle.setVisibility(View.VISIBLE);
 
             startTime = SystemClock.uptimeMillis();
+            timerRunning = true;
             handler.postDelayed(timer, 500);
             t = false;
         } else {
@@ -328,7 +336,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void pauseTimer(){
-        Log.d(TAG, "Pause clicked");
+            timerRunning = false;
+            ringtone.stop();
+            pauseButton.setVisibility(View.INVISIBLE);
+            resumeButton.setVisibility(View.VISIBLE);
+            progressCircle.setVisibility(View.INVISIBLE);
+            stopButton.setText(R.string.reset);
+    }
+
+    private void resumeTimer(){
+        timerRunning = true;
+        resumeButton.setVisibility(View.INVISIBLE);
+        pauseButton.setVisibility(View.VISIBLE);
+        progressCircle.setVisibility(View.VISIBLE);
+        stopButton.setText(R.string.stop);
     }
 
     private void confirmInitializeOfSession() {
@@ -380,45 +401,47 @@ public class MainActivity extends AppCompatActivity {
         return new Runnable() {
 
             public void run() {
+                if(timerRunning) {
+                    timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
 
-                timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+                    updatedTime = timeSwapBuff + timeInMilliseconds;
 
-                updatedTime = timeSwapBuff + timeInMilliseconds;
+                    seconds = (int) (updatedTime / 1000);
+                    minutes = seconds / 60;
+                    seconds = seconds % 60;
 
-                seconds = (int) (updatedTime / 1000);
-                minutes = seconds / 60;
-                seconds = seconds % 60;
+                    //times up
+                    if (minutes == prefs.getTime()) {
+                        sendSMS(prefs.getPhone(), prefs.getMsg(), locationService.getLocation());
+                        time.setText(String.format(getString(com.uniting.android.msic.R.string.display_time), 0, 0));
+                        time.setTextColor(Color.RED);
+                    } else {
 
-                //times up
-                if (minutes == prefs.getTime()) {
-                    sendSMS(prefs.getPhone(), prefs.getMsg(), locationService.getLocation());
-                    time.setText(String.format(getString(com.uniting.android.msic.R.string.display_time), 0, 0));
-                    time.setTextColor(Color.RED);
-                } else {
+                        //one minute left
+                        if (minutes + 1 >= prefs.getTime() && !alarm) {
+                            Log.d(TAG, "playing alarm");
 
-                    //one minute left
-                    if (minutes + 1 >= prefs.getTime() && !alarm) {
-                        Log.d(TAG, "playing alarm");
+                            if (ringtone == null) {
+                                ringtone = RingtoneManager.getRingtone(getApplicationContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+                            }
+                            setRingVolumeMax();
+                            ringtone.play();
 
-                        if (ringtone == null) {
-                            ringtone = RingtoneManager.getRingtone(getApplicationContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+                            //noinspection deprecation
+                            vibrator.vibrate(200);
+
+                            alarm = true;
                         }
-                        setRingVolumeMax();
-                        ringtone.play();
 
-                        //noinspection deprecation
-                        vibrator.vibrate(200);
-
-                        alarm = true;
+                        if (minutes != 0 || seconds != 0) {
+                            time.setText(String.format(getString(com.uniting.android.msic.R.string.display_time), (prefs.getTime() - minutes - 1), (60 - seconds)));
+                        }
+                        long p = updatedTime / prefs.getTime();
+                        progressCircle.setProgress((int) p);
                     }
-
-                    if (minutes != 0 || seconds != 0) {
-                        time.setText(String.format(getString(com.uniting.android.msic.R.string.display_time), (prefs.getTime() - minutes - 1), (60 - seconds)));
-                    }
-                    long p = updatedTime / prefs.getTime();
-                    progressCircle.setProgress((int) p);
-                    handler.postDelayed(this, 0);
                 }
+                handler.postDelayed(this, 0);
+
             }
         };
     }
