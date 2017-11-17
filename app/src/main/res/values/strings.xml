@@ -1,114 +1,120 @@
 <resources>
-  <string name="app_name">MSIC</string>
-  <string name="action_settings">Settings</string>
-  <string name="default_message">Urgent medical emergency. Cannot breathe, please call 911.</string>
-  <string name="default_phone">0000000000</string>
-  <string name="help_website">http://www.hopefornhrecovery.org/</string>
+    <string name="app_name">MSIC</string>
+    <string name="action_settings">Settings</string>
+    <string name="default_message">Urgent medical emergency. Cannot breathe, please call 911.</string>
+    <string name="default_phone">0000000000</string>
+    <string name="help_website">http://www.hopefornhrecovery.org/</string>
 
-  <string name="start_button_text">Be Safe</string>
-  <string name="stop_button_text">STOP</string>
-  <string name="default_time">30:00</string>
+    <string name="start_button_text">Be Safe</string>
+    <string name="stop_button_text">STOP</string>
+    <string name="default_time">30:00</string>
 
-  <string name="display_time">%1$02d:%2$02d</string>
-  <string name="emergency_contact">Emergency Contact</string>
-  <string name="time_out">Time Out</string>
-  <string name="message">Message</string>
-  <string name="motion_detection">Motion Detection</string>
-  <string name="location">Location</string>
-  <string name="get_help">Get Help</string>
-  <string name="stop">STOP</string>
-  <string name="title_activity_settings">Settings</string>
+    <string name="display_time">%1$02d:%2$02d</string>
+    <string name="emergency_contact">Emergency Contact</string>
+    <string name="time_out">Time Out</string>
+    <string name="message">Message</string>
+    <string name="motion_detection">Motion Detection</string>
+    <string name="location">Location</string>
+    <string name="get_help">Get Help</string>
+    <string name="stop">STOP</string>
+    <string name="title_activity_settings">Settings</string>
 
-  <!-- Strings related to Settings -->
+    <!-- Strings related to Settings -->
 
-  <!-- Example General settings -->
-  <string name="pref_header_general">General</string>
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
 
-  <string name="pref_title_social_recommendations">Enable social recommendations</string>
-  <string name="pref_description_social_recommendations">Recommendations for people to contact
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
         based on your message history
     </string>
 
-  <string name="pref_title_display_name">Display name</string>
-  <string name="pref_default_display_name">John Smith</string>
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
 
-  <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-  <string-array name="pref_example_list_titles">
-    <item>Always</item>
-    <item>When possible</item>
-    <item>Never</item>
-  </string-array>
-  <string-array name="pref_example_list_values">
-    <item>1</item>
-    <item>0</item>
-    <item>-1</item>
-  </string-array>
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
 
-  <!-- Example settings for Data & Sync -->
-  <string name="pref_header_data_sync">Data &amp; sync</string>
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
 
-  <string name="pref_title_sync_frequency">Sync frequency</string>
-  <string-array name="pref_sync_frequency_titles">
-    <item>15 minutes</item>
-    <item>30 minutes</item>
-    <item>1 hour</item>
-    <item>3 hours</item>
-    <item>6 hours</item>
-    <item>Never</item>
-  </string-array>
-  <string-array name="pref_sync_frequency_values">
-    <item>15</item>
-    <item>30</item>
-    <item>60</item>
-    <item>180</item>
-    <item>360</item>
-    <item>-1</item>
-  </string-array>
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
 
-  <string-array name="list_preference_entries">
-    <item>Entry 1</item>
-    <item>Entry 2</item>
-    <item>Entry 3</item>
-  </string-array>
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
 
-  <string-array name="list_preference_entry_values">
-    <item>1</item>
-    <item>2</item>
-    <item>3</item>
-  </string-array>
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 
-  <string-array name="multi_select_list_preference_default_value"/>
+    <string-array name="multi_select_list_preference_default_value" />
 
-  <string name="pref_title_system_sync_settings">System sync settings</string>
+    <string name="pref_title_system_sync_settings">System sync settings</string>
 
-  <!-- Example settings for Notifications -->
-  <string name="pref_header_notifications">Notifications</string>
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
 
-  <string name="pref_title_new_message_notifications">New message notifications</string>
+    <string name="pref_title_new_message_notifications">New message notifications</string>
 
-  <string name="pref_title_ringtone">Ringtone</string>
-  <string name="pref_ringtone_silent">Silent</string>
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
 
-  <string name="pref_title_vibrate">Vibrate</string>
-  <string name="lone_opiate_user_app">Lone Opiate User App</string>
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="pref_title_emergency_message">Vibrate</string>
+    <string name="pref_emergency_message">Vibrate</string>
+    <string name="pref_description_location">Vibrate</string>
+    <string name="pref_enable_location">Vibrate</string>
+    <string name="ok">Ok</string>
 
-  <string name="navigation_drawer_open">Open navigation drawer</string>
-  <string name="navigation_drawer_close">Close navigation drawer</string>
-  <string name="settings">Settings</string>
-  <string name="init_dialog_title">Warning</string>
-  <string name="init_dialog_message">An overdoes can still occur for some time after
+    <string name="lone_opiate_user_app">Lone Opiate User App</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="settings">Settings</string>
+    <string name="init_dialog_title">Warning</string>
+    <string name="init_dialog_message">An overdoes can still occur for some time after
     injection!
   </string>
-  <string name="init_dialog_positive_button_text">Continue</string>
-  <string name="init_dialog_negative_button_text">Cancel</string>
-  <string name="permissions_dialog_title">Error</string>
-  <string name="permissions_dialog_positive_button_text">Ok</string>
-  <string name="permissions_dialog_message">All requested permissions are required for the application to work.</string>
-  <string name="disclaimer_header">By clicking accept, the application user acknowledges that he/she
+    <string name="init_dialog_positive_button_text">Continue</string>
+    <string name="init_dialog_negative_button_text">Cancel</string>
+    <string name="permissions_dialog_title">Error</string>
+    <string name="permissions_dialog_positive_button_text">Ok</string>
+    <string name="permissions_dialog_message">All requested permissions are required for the application to work.</string>
+    <string name="disclaimer_header">By clicking accept, the application user acknowledges that he/she
     understands and accepts the following conditions:\n\n
   </string>
-  <string name="disclaimer">Disclaimer</string>
-  <string name="conditions">
+    <string name="disclaimer">Disclaimer</string>
+    <string name="conditions">
     1. The use of any opiate drug is an inherently dangerous activity with real and
     significant risks of injury and death.\n\n
     2. The app user further acknowledges that the risks of opiate use are increased when
@@ -133,16 +139,16 @@
     proceedings brought against it by the app user, his or her estate and his or her
     family members arising out of his or her injury or death.\n
   </string>
-  <string name="disclaimer_dialog_title">Accept Disclaimer To Continue</string>
-  <string name="disclaimer_dialog_neg_button_text">Decline</string>
-  <string name="disclaimer_dialog_pos_button_text">Accept</string>
-  <string name="drug_safety_information">Drug Safety Information</string>
-  <string name="how_to_use_the_app">How to use the app</string>
+    <string name="disclaimer_dialog_title">Accept Disclaimer To Continue</string>
+    <string name="disclaimer_dialog_neg_button_text">Decline</string>
+    <string name="disclaimer_dialog_pos_button_text">Accept</string>
+    <string name="drug_safety_information">Drug Safety Information</string>
+    <string name="how_to_use_the_app">How to use the app</string>
 
-  <string name="title_activity_loading">LoadingActivity</string>
-  <string name="dummy_button">Dummy Button</string>
-  <string name="dummy_content">DUMMY\nCONTENT</string>
-  <string name="pause_button_text">&#9612;&#9612;</string>
-  <string name="resume_button_text">&#9654;</string>
-  <string name="reset">RESET</string>
+    <string name="title_activity_loading">LoadingActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="pause_button_text">&#9612;&#9612;</string>
+    <string name="resume_button_text">&#9654;</string>
+    <string name="reset">RESET</string>
 </resources>
