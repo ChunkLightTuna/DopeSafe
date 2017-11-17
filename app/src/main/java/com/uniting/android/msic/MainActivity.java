@@ -2,6 +2,7 @@ package com.uniting.android.msic;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -9,10 +10,12 @@ import android.location.Location;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -33,7 +36,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
-
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Log.d(TAG, "onCreate called");
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -154,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         drawer.addDrawerListener(toggle);
 
@@ -170,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void getPermissions() {
         String[] permissions = new String[]{Manifest.permission.SEND_SMS,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION};
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION};
 
         if (!allPermissionsAreGranted())
             ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST_ALL_NECESSARY);
@@ -179,11 +182,11 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean allPermissionsAreGranted() {
         return !(ContextCompat.checkSelfPermission(this,
-            Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-            ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED);
+                Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED);
     }
 
     @Override
@@ -214,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
      * Handle action bar item clicks here. The action bar will
      * automatically handle clicks on the Home/Up button, so long
      * as you specify a parent activity in AndroidManifest.xml.
-
+     *
      * @param item MenuItem
      * @return resource has been consumed
      */
@@ -255,14 +258,21 @@ public class MainActivity extends AppCompatActivity {
     public void showPermissionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.permissions_dialog_message)
-            .setTitle(R.string.permissions_dialog_title)
-            .setPositiveButton(R.string.permissions_dialog_positive_button_text,
-                (dialogInterface, i) -> {
+                .setTitle(R.string.permissions_dialog_title)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
                     //
+
                 })
-            .setOnDismissListener(dialogInterface -> getPermissions())
-            .create()
-            .show();
+                .setNegativeButton(R.string.settings, ((dialog, which) -> {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+                    intent.setData(uri);
+                    startActivity(intent);
+                }))
+                .setOnDismissListener(dialog -> getPermissions())
+                .create()
+                .show();
     }
 
     private void tryToInitLocationService() {
@@ -355,20 +365,20 @@ public class MainActivity extends AppCompatActivity {
     private void confirmInitializeOfSession() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.init_dialog_message)
-            .setTitle(R.string.init_dialog_title)
-            .setPositiveButton(R.string.init_dialog_positive_button_text, (dialogInterface, i) -> startTimer())
-            .setNegativeButton(R.string.init_dialog_negative_button_text, (dialogInterface, i) -> {
-                //
-            })
-            .create()
-            .show();
+                .setTitle(R.string.init_dialog_title)
+                .setPositiveButton(R.string.init_dialog_positive_button_text, (dialogInterface, i) -> startTimer())
+                .setNegativeButton(R.string.init_dialog_negative_button_text, (dialogInterface, i) -> {
+                    //
+                })
+                .create()
+                .show();
     }
 
 
     public void sendSMS(String number, String message, Location location) {
         try {
             SmsManager smsManager = SmsManager.getDefault();
-            message += "\nLocation: " + getGoogleMapsUrl(location);
+            message += "\n" + getGoogleMapsUrl(location);
             smsManager.sendTextMessage(number, null, message, null, null);
             Log.d(TAG, "sendSMS() called with: " + "number = [" + number + "], message = [" + message + "]");
         } catch (Exception e) {
@@ -378,10 +388,10 @@ public class MainActivity extends AppCompatActivity {
 
     public String getGoogleMapsUrl(Location location) {
         try {
-            return "http://maps.google.com?q=" +
-                location.getLatitude() +
-                "," +
-                location.getLongitude();
+            return "google.com/maps?q=" +
+                    location.getLatitude() +
+                    "," +
+                    location.getLongitude();
         } catch (NullPointerException e) {
             Log.e(TAG, "unable to get location string(Probably because emulator is being used and location was not sent.)", e);
             return "Location unavailable";
