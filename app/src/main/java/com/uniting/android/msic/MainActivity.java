@@ -2,7 +2,6 @@ package com.uniting.android.msic;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.AudioManager;
@@ -32,7 +31,6 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private final int PERMISSIONS_REQUEST_ALL_NECESSARY = 15423;
 
     private UserPrefs prefs;
 
@@ -212,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
-            case PERMISSIONS_REQUEST_ALL_NECESSARY:
+            case Permissions.PERMISSIONS_REQUEST_ALL_NECESSARY:
                 if (!Permissions.permissionsGranted(grantResults))
                     Permissions.buildDialog(this).show();
         }

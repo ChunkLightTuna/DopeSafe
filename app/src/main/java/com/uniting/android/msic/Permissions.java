@@ -16,7 +16,7 @@ import android.support.v7.app.AlertDialog;
  */
 
 class Permissions {
-    private static final int PERMISSIONS_REQUEST_ALL_NECESSARY = 15423;
+    static final int PERMISSIONS_REQUEST_ALL_NECESSARY = 15423;
 
     static void getPermissions(Activity activity) {
         String[] permissions = new String[]{Manifest.permission.SEND_SMS,
