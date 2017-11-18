@@ -14,8 +14,6 @@
     tools:context="com.uniting.android.msic.MainActivity">
     <!--tools:showIn="@layout/activity_main">-->
 
-
-
     <Button
         android:id="@+id/start_button"
         android:layout_width="275dp"
