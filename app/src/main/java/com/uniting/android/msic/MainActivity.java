@@ -1,8 +1,6 @@
 package com.uniting.android.msic;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -10,17 +8,12 @@ import android.location.Location;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Vibrator;
-import android.provider.Settings;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -166,27 +159,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new SettingsMenu(this, prefs));
 
-        getPermissions();
+        Permissions.getPermissions(this);
         locationService = new LocationService(this);
-    }
-
-
-    private void getPermissions() {
-        String[] permissions = new String[]{Manifest.permission.SEND_SMS,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION};
-
-        if (!allPermissionsAreGranted())
-            ActivityCompat.requestPermissions(this, permissions, PERMISSIONS_REQUEST_ALL_NECESSARY);
-    }
-
-    private boolean allPermissionsAreGranted() {
-        return !(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED);
     }
 
     @Override
@@ -239,41 +213,11 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ALL_NECESSARY:
-                if (!permissionsGranted(grantResults))
-                    showPermissionDialog();
+                if (!Permissions.permissionsGranted(grantResults))
+                    Permissions.buildDialog(this).show();
         }
     }
 
-    private boolean permissionsGranted(int[] grantResults) {
-        if (grantResults.length == 0)
-            return false;
-        else
-            for (int result : grantResults)
-                if (result != PackageManager.PERMISSION_GRANTED)
-                    return false;
-
-        return true;
-    }
-
-    public void showPermissionDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.permissions_dialog_message)
-                .setTitle(R.string.permissions_dialog_title)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    //
-
-                })
-                .setNegativeButton(R.string.settings, ((dialog, which) -> {
-                    Intent intent = new Intent();
-                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    Uri uri = Uri.fromParts("package", getPackageName(), null);
-                    intent.setData(uri);
-                    startActivity(intent);
-                }))
-                .setOnDismissListener(dialog -> getPermissions())
-                .create()
-                .show();
-    }
 
     private void tryToInitLocationService() {
         if (this.havePermissionForFineLocation && this.havePermissionForCoarseLocation)
