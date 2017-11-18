@@ -22,7 +22,6 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -49,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private int seconds = 0;
     private int minutes = 0;
     private boolean alarm = false;
-    private boolean havePermissionForFineLocation = false;
-    private boolean havePermissionForCoarseLocation = false;
+    private boolean havePermissionsForLocation = false;
     private boolean timerRunning = false;
 
     private Handler handler = new Handler();
@@ -97,12 +95,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         pauseButton = findViewById(R.id.pause_button);
-        if(pauseButton != null)
+        if (pauseButton != null)
             pauseButton.setOnClickListener(v -> pauseTimer());
 
 
         resumeButton = findViewById(R.id.resume_button);
-        if(resumeButton != null)
+        if (resumeButton != null)
             resumeButton.setOnClickListener(view -> resumeTimer());
 
         stopButton = findViewById(R.id.stop_button);
@@ -157,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new SettingsMenu(this, prefs));
 
-        Permissions.getPermissions(this);
+        Permissions.getAll(this);
         locationService = new LocationService(this);
     }
 
@@ -185,41 +183,22 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    /**
-     * Handle action bar item clicks here. The action bar will
-     * automatically handle clicks on the Home/Up button, so long
-     * as you specify a parent activity in AndroidManifest.xml.
-     *
-     * @param item MenuItem
-     * @return resource has been consumed
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        /*
-        int id = item.getItemId();
-
-//        noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        */
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
-            case Permissions.PERMISSIONS_REQUEST_ALL_NECESSARY:
+            case Permissions.REQUEST_ALL_NECESSARY:
                 if (!Permissions.permissionsGranted(grantResults))
                     Permissions.buildDialog(this).show();
         }
     }
 
 
+    /**
+     * https://developer.android.com/guide/topics/location/strategies.html#BestPerformance
+     */
     private void tryToInitLocationService() {
-        if (this.havePermissionForFineLocation && this.havePermissionForCoarseLocation)
-            this.locationService = new LocationService(this);
+        if (havePermissionsForLocation)
+            locationService = new LocationService(this);
     }
 
     public void updateTime() {
@@ -287,16 +266,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void pauseTimer(){
-            timerRunning = false;
-            ringtone.stop();
-            pauseButton.setVisibility(View.INVISIBLE);
-            resumeButton.setVisibility(View.VISIBLE);
-            progressCircle.setVisibility(View.INVISIBLE);
-            stopButton.setText(R.string.reset);
+    private void pauseTimer() {
+        timerRunning = false;
+        ringtone.stop();
+        pauseButton.setVisibility(View.INVISIBLE);
+        resumeButton.setVisibility(View.VISIBLE);
+        progressCircle.setVisibility(View.INVISIBLE);
+        stopButton.setText(R.string.reset);
     }
 
-    private void resumeTimer(){
+    private void resumeTimer() {
         timerRunning = true;
         resumeButton.setVisibility(View.INVISIBLE);
         pauseButton.setVisibility(View.VISIBLE);
@@ -340,12 +319,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void setRingVolumeMax(){
+    private void setRingVolumeMax() {
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        am.setStreamVolume(
-            AudioManager.STREAM_RING,
-            am.getStreamMaxVolume(AudioManager.STREAM_RING),
-            0);
+
+        if (am != null) am.setStreamVolume(
+                AudioManager.STREAM_RING,
+                am.getStreamMaxVolume(AudioManager.STREAM_RING),
+                0);
     }
 
     private Runnable getTimer() {
@@ -353,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
         return new Runnable() {
 
             public void run() {
-                if(timerRunning) {
+                if (timerRunning) {
                     timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
 
                     updatedTime = timeSwapBuff + timeInMilliseconds;

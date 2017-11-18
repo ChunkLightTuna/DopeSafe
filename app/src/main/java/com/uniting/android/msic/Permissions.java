@@ -16,24 +16,39 @@ import android.support.v7.app.AlertDialog;
  */
 
 class Permissions {
-    static final int PERMISSIONS_REQUEST_ALL_NECESSARY = 15423;
+    static final int REQUEST_ALL_NECESSARY = 1;
+    static final int REQUEST_LOCATION = 2;
+    static final int REQUEST_SMS = 3;
+    private static final int GRANTED = PackageManager.PERMISSION_GRANTED;
+    private static final String COARSE = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final String FINE = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String SMS = Manifest.permission.SEND_SMS;
 
-    static void getPermissions(Activity activity) {
-        String[] permissions = new String[]{Manifest.permission.SEND_SMS,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION};
+
+    static void getAll(Activity activity) {
+        String[] permissions = new String[]{SMS, COARSE, FINE};
 
         if (!allPermissionsAreGranted(activity))
-            ActivityCompat.requestPermissions(activity, permissions, PERMISSIONS_REQUEST_ALL_NECESSARY);
+            ActivityCompat.requestPermissions(activity, permissions, REQUEST_ALL_NECESSARY);
+    }
+
+    static void getLocation(Activity activity) {
+        String[] permissions = new String[]{COARSE, FINE};
+
+        if (!locationPermissionsGranted(activity)) {
+            ActivityCompat.requestPermissions(activity, permissions, REQUEST_LOCATION);
+        }
+    }
+
+    private static boolean locationPermissionsGranted(Context context) {
+        return ContextCompat.checkSelfPermission(context, COARSE) == GRANTED &&
+                ContextCompat.checkSelfPermission(context, FINE) == GRANTED;
     }
 
     private static boolean allPermissionsAreGranted(Context context) {
-        return !(ContextCompat.checkSelfPermission(context,
-                Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(context,
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(context,
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED);
+        return ContextCompat.checkSelfPermission(context, SMS) == GRANTED &&
+                ContextCompat.checkSelfPermission(context, COARSE) == GRANTED &&
+                ContextCompat.checkSelfPermission(context, FINE) == GRANTED;
     }
 
     static AlertDialog.Builder buildDialog(Activity activity) {
@@ -41,7 +56,6 @@ class Permissions {
                 .setTitle(R.string.permissions_dialog_title)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                     //
-
                 })
                 .setNegativeButton(R.string.settings, ((dialog, which) -> {
                     Intent intent = new Intent();
@@ -50,7 +64,7 @@ class Permissions {
                     intent.setData(uri);
                     activity.startActivity(intent);
                 }))
-                .setOnDismissListener(dialog -> Permissions.getPermissions(activity));
+                .setOnDismissListener(dialog -> Permissions.getAll(activity));
     }
 
     static boolean permissionsGranted(int[] grantResults) {
@@ -58,7 +72,7 @@ class Permissions {
             return false;
         else
             for (int result : grantResults)
-                if (result != PackageManager.PERMISSION_GRANTED)
+                if (result != GRANTED)
                     return false;
 
         return true;
