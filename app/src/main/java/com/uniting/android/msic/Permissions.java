@@ -36,9 +36,8 @@ class Permissions {
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED);
     }
 
-    static AlertDialog buildDialog(Activity activity) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        return builder.setMessage(R.string.permissions_dialog_message)
+    static AlertDialog.Builder buildDialog(Activity activity) {
+        return new AlertDialog.Builder(activity).setMessage(R.string.permissions_dialog_message)
                 .setTitle(R.string.permissions_dialog_title)
                 .setPositiveButton(R.string.ok, (dialog, which) -> {
                     //
@@ -51,8 +50,7 @@ class Permissions {
                     intent.setData(uri);
                     activity.startActivity(intent);
                 }))
-                .setOnDismissListener(dialog -> Permissions.getPermissions(activity))
-                .create();
+                .setOnDismissListener(dialog -> Permissions.getPermissions(activity));
     }
 
     static boolean permissionsGranted(int[] grantResults) {
