@@ -183,7 +183,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             int id = item.getItemId();
             if (id == R.id.enable_location_pref) {
 
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                if(Permissions.locationGranted(this.getContext())) {
+                    return true;
+                } else {
+                    Permissions.requestLocation(this.getActivity());
+                }
+
                 return true;
             }
             return super.onOptionsItemSelected(item);

@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private int seconds = 0;
     private int minutes = 0;
     private boolean alarm = false;
-    private boolean havePermissionsForLocation = false;
     private boolean timerRunning = false;
 
     private Handler handler = new Handler();
@@ -57,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private Ringtone ringtone;
     private Vibrator vibrator;
     private LocationService locationService;
+
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,14 +156,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new SettingsMenu(this, prefs));
 
-        Permissions.getAll(this);
-        locationService = new LocationService(this);
+        Permissions.requestSMS(this);
+//        locationService = new LocationService(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause() called");
         setSharedPrefs();
     }
 
@@ -185,19 +185,33 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case Permissions.REQUEST_ALL_NECESSARY:
-                if (!Permissions.permissionsGranted(grantResults))
-                    Permissions.buildDialog(this).show();
+        AlertDialog alertDialog = Permissions.dealWithIt(this, requestCode, grantResults);
+        if (alertDialog != null) {
+            alertDialog.show();
+            this.alertDialog = alertDialog;
         }
     }
 
+    @Override
+    protected void onResume() {
+
+        if (alertDialog != null) {
+            TextView textView = alertDialog.findViewById(android.R.id.message);
+            if (textView != null && textView.getText() == getString(R.string.sms_permissions_dialog_message) && Permissions.smsGranted(this)) {
+                alertDialog.dismiss();
+                alertDialog = null;
+            }
+        }
+
+        super.onResume();
+    }
 
     /**
      * https://developer.android.com/guide/topics/location/strategies.html#BestPerformance
      */
     private void tryToInitLocationService() {
-        if (havePermissionsForLocation)
+
+        if (Permissions.locationGranted(this))
             locationService = new LocationService(this);
     }
 
