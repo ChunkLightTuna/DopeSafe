@@ -4,6 +4,7 @@ package com.uniting.android.msic;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -183,10 +184,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             int id = item.getItemId();
             if (id == R.id.enable_location_pref) {
 
-                if(Permissions.locationGranted(this.getContext())) {
-                    return true;
+                if(Permissions.locationGranted(getContext())) {
+                    return super.onOptionsItemSelected(item);
                 } else {
-                    Permissions.requestLocation(this.getActivity());
+                    Permissions.requestLocation(getActivity());
+                    SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
                 }
 
                 return true;
@@ -194,6 +196,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
+
+
 
     /**
      * This fragment shows notification preferences only. It is used when the

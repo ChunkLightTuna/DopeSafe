@@ -185,16 +185,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        AlertDialog alertDialog = Permissions.dealWithIt(this, requestCode, grantResults);
+        alertDialog = Permissions.dealWithIt(this, requestCode, grantResults);
         if (alertDialog != null) {
             alertDialog.show();
-            this.alertDialog = alertDialog;
         }
     }
 
     @Override
     protected void onResume() {
-
+//        if user enabled SMS through OS app settings dismiss the box
         if (alertDialog != null) {
             TextView textView = alertDialog.findViewById(android.R.id.message);
             if (textView != null && textView.getText() == getString(R.string.sms_permissions_dialog_message) && Permissions.smsGranted(this)) {
@@ -202,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
                 alertDialog = null;
             }
         }
-
         super.onResume();
     }
 
