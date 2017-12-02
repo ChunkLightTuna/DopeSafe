@@ -295,6 +295,8 @@ public class MainActivity extends AppCompatActivity {
         pauseButton.setVisibility(View.VISIBLE);
         progressCircle.setVisibility(View.VISIBLE);
         stopButton.setText(R.string.stop);
+        if(alarm)
+            ringtone.play();
     }
 
     private void confirmInitializeOfSession() {
