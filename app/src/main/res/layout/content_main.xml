@@ -35,7 +35,25 @@
         app:layout_constraintRight_toRightOf="@+id/progress_bar"
         app:layout_constraintTop_toTopOf="@+id/progress_bar" />
 
-    <Button
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/logo_small"
+        app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="@+id/progress_bar"
+        app:layout_constraintRight_toRightOf="@+id/progress_bar"
+        app:layout_constraintTop_toTopOf="@+id/progress_bar" />
+
+    <ImageButton
         android:id="@+id/pause_button"
         android:layout_width="275dp"
         android:layout_height="260dp"
@@ -55,9 +73,10 @@
         app:layout_constraintLeft_toLeftOf="@+id/logo"
         app:layout_constraintRight_toRightOf="@+id/progress_bar"
         app:layout_constraintTop_toTopOf="@+id/progress_bar"
+        app:srcCompat="@drawable/ic_pause_white_24dp"
         />
 
-    <Button
+    <ImageButton
         android:id="@+id/resume_button"
         android:layout_width="275dp"
         android:layout_height="260dp"
@@ -77,6 +96,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/logo"
         app:layout_constraintRight_toRightOf="@+id/progress_bar"
         app:layout_constraintTop_toTopOf="@+id/progress_bar"
+        app:srcCompat="@drawable/ic_play_arrow_white_24dp"
         />
 
 
@@ -152,24 +172,6 @@
         app:layout_constraintRight_toRightOf="parent"
         style="?android:attr/progressBarStyleHorizontal"
         app:layout_constraintTop_toBottomOf="@+id/time" />
-
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/logo_small"
-        app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="@+id/progress_bar"
-        app:layout_constraintRight_toRightOf="@+id/progress_bar"
-        app:layout_constraintTop_toTopOf="@+id/progress_bar" />
 
 
 </android.support.constraint.ConstraintLayout>

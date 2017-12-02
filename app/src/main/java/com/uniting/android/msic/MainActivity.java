@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -35,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView time;
     private Button startButton;
-    private Button pauseButton;
-    private Button resumeButton;
+    private ImageButton pauseButton;
+    private ImageButton resumeButton;
     private Switch stopButton;
     private ProgressBar progressCircle;
 
@@ -359,7 +360,6 @@ public class MainActivity extends AppCompatActivity {
                     minutes = seconds / 60;
                     seconds = seconds % 60;
 
-                    Log.d(TAG, "Seconds: " + seconds);
 
                     //times up
                     if (minutes == prefs.getTime()) {
