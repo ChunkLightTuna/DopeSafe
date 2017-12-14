@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -35,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView time;
     private Button startButton;
-    private Button pauseButton;
-    private Button resumeButton;
+    private ImageButton pauseButton;
+    private ImageButton resumeButton;
     private Switch stopButton;
     private ProgressBar progressCircle;
 
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
         progressCircle = findViewById(R.id.progress_bar);
         if (progressCircle != null) {
             progressCircle.setProgress(0);
+            progressCircle.setIndeterminate(false);
             progressCircle.setVisibility(View.INVISIBLE);
         }
 
@@ -283,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
         ringtone.stop();
         pauseButton.setVisibility(View.INVISIBLE);
         resumeButton.setVisibility(View.VISIBLE);
-        progressCircle.setVisibility(View.INVISIBLE);
+        //progressCircle.setVisibility(View.INVISIBLE);
         stopButton.setText(R.string.reset);
     }
 
@@ -291,8 +293,10 @@ public class MainActivity extends AppCompatActivity {
         timerRunning = true;
         resumeButton.setVisibility(View.INVISIBLE);
         pauseButton.setVisibility(View.VISIBLE);
-        progressCircle.setVisibility(View.VISIBLE);
+        //progressCircle.setVisibility(View.VISIBLE);
         stopButton.setText(R.string.stop);
+        if(alarm)
+            ringtone.play();
     }
 
     private void confirmInitializeOfSession() {
@@ -354,6 +358,7 @@ public class MainActivity extends AppCompatActivity {
                     minutes = seconds / 60;
                     seconds = seconds % 60;
 
+
                     //times up
                     if (minutes == prefs.getTime()) {
                         sendSMS(prefs.getPhone(), prefs.getMsg(), locationService.getLocation());
@@ -380,8 +385,12 @@ public class MainActivity extends AppCompatActivity {
                         if (minutes != 0 || seconds != 0) {
                             time.setText(String.format(getString(com.uniting.android.msic.R.string.display_time), (prefs.getTime() - minutes - 1), (60 - seconds)));
                         }
-                        long p = updatedTime / prefs.getTime();
-                        progressCircle.setProgress((int) p);
+
+                        double currentSeconds = ((prefs.getTime() - minutes - 1) * 60) + (60-seconds);
+                        double definedSeconds = (prefs.getTime()*60);
+                        double p = (100) - (currentSeconds/definedSeconds)*100;
+                        progressCircle.setProgress(0);
+                        progressCircle.setProgress((int)p);
                     }
                 }
                 handler.postDelayed(this, 0);
