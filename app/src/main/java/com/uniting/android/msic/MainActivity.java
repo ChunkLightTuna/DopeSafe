@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressCircle;
 
     private long startTime = 0L;
+    private long pauseTime = 0L;
     private long timeInMilliseconds = 0L;
     private long timeSwapBuff = 0L;
     private long updatedTime = 0L;
@@ -204,7 +205,6 @@ public class MainActivity extends AppCompatActivity {
                 alertDialog = null;
             }
         }
-
         super.onResume();
     }
 
@@ -284,6 +284,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void pauseTimer() {
         timerRunning = false;
+        pauseTime = SystemClock.uptimeMillis();
         ringtone.stop();
         pauseButton.setVisibility(View.INVISIBLE);
         resumeButton.setVisibility(View.VISIBLE);
@@ -295,6 +296,8 @@ public class MainActivity extends AppCompatActivity {
         timerRunning = true;
         resumeButton.setVisibility(View.INVISIBLE);
         pauseButton.setVisibility(View.VISIBLE);
+        startTime = startTime + (SystemClock.uptimeMillis() - pauseTime);
+        pauseTime = 0L;
         //progressCircle.setVisibility(View.VISIBLE);
         stopButton.setText(R.string.stop);
         if(alarm)
@@ -352,14 +355,13 @@ public class MainActivity extends AppCompatActivity {
 
             public void run() {
                 if (timerRunning) {
-                    timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
 
+                    timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
                     updatedTime = timeSwapBuff + timeInMilliseconds;
 
                     seconds = (int) (updatedTime / 1000);
                     minutes = seconds / 60;
                     seconds = seconds % 60;
-
 
                     //times up
                     if (minutes == prefs.getTime()) {
@@ -396,7 +398,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 handler.postDelayed(this, 0);
-
             }
         };
     }
