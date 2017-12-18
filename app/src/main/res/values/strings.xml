@@ -144,11 +144,15 @@
     <string name="disclaimer_dialog_pos_button_text">Accept</string>
     <string name="drug_safety_information">Drug Safety Information</string>
     <string name="how_to_use_the_app">How to use the app</string>
-
+    <string name="setup_dialog_message">
+      We will now ask you to enter some information so that you can proceed safely.
+    </string>
+  <string name="dummy_button">Dummy Button</string>
+  <string name="dummy_content">DUMMY\nCONTENT</string>
+  <string name="pause_button_text">&#9612;&#9612;</string>
     <string name="title_activity_loading">LoadingActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="pause_button_text">&#9612;&#9612;</string>
     <string name="resume_button_text">&#9654;</string>
     <string name="reset">RESET</string>
+  <string name="cont">Continue</string>
+  <string name="exit">Exit</string>
 </resources>
