@@ -1,0 +1,39 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:id="@+id/emergency_message_pref"
+        android:capitalize="words"
+        android:defaultValue="@string/pref_default_emergency_message"
+        android:inputType="textMultiLine"
+        android:key="@string/emergency_message_key"
+        android:maxLines="4"
+        android:lines="4"
+        android:selectAllOnFocus="true"
+        android:summary="@string/pref_default_emergency_message"
+        android:title="@string/pref_title_emergency_message" />
+
+    <EditTextPreference
+        android:id="@+id/emergency_contact_pref"
+        android:phoneNumber="true"
+        android:defaultValue="@string/pref_default_contact"
+        android:inputType="phone"
+        android:key="@string/emergency_contact_key"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:summary="@string/pref_default_contact"
+        android:title="@string/emergency_contact" />
+
+    <SwitchPreference
+        android:id="@+id/enable_location_pref"
+        android:defaultValue="false"
+        android:key="enable_location"
+        android:title="@string/pref_enable_location" />
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/pref_general_countdown_titles"
+        android:entryValues="@array/pref_general_countdown_values"
+        android:key="countdown_timer_pref"
+        android:title="@string/count_down" />
+
+</PreferenceScreen>

@@ -6,7 +6,7 @@
             android:title="@string/emergency_contact" />
         <item
             android:id="@+id/time_out"
-            android:title="@string/time_out" />
+            android:title="@string/count_down" />
         <item
             android:id="@+id/settings"
             android:title="@string/settings" />

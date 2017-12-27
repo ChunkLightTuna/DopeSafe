@@ -1,10 +1,8 @@
 package com.uniting.android.msic;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -12,36 +10,34 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.SEND_SMS;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 /**
  * Static permission logix.
  */
-
 class Permissions {
     private static final int REQUEST_LOCATION = 1;
     private static final int REQUEST_SMS = 2;
-    private static final int GRANTED = PackageManager.PERMISSION_GRANTED;
-    private static final String COARSE = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final String FINE = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String SMS = Manifest.permission.SEND_SMS;
 
     static void requestLocation(Activity activity) {
-        ActivityCompat.requestPermissions(activity, new String[]{COARSE, FINE}, REQUEST_LOCATION);
+        ActivityCompat.requestPermissions(activity, new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
     }
 
     static void requestSMS(Activity activity) {
-        ActivityCompat.requestPermissions(activity, new String[]{SMS}, REQUEST_SMS);
+        ActivityCompat.requestPermissions(activity, new String[]{SEND_SMS}, REQUEST_SMS);
     }
 
     static boolean locationGranted(Context context) {
-        return granted(context, new String[]{COARSE, FINE});
+        return granted(context, new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION});
     }
 
     static boolean smsGranted(Context context) {
-        return granted(context, new String[]{SMS});
+        return granted(context, new String[]{SEND_SMS});
     }
 
-
-//    static void noRealyDealWithIt(Activity activity, a)
     static AlertDialog dealWithIt(Activity activity, int requestCode, @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_LOCATION:
@@ -60,7 +56,7 @@ class Permissions {
                                 activity.startActivity(intent);
                             });
 
-                    return dialogBuilder.create();
+                    return dialogBuilder.show();
                 }
                 break;
 
@@ -70,7 +66,7 @@ class Permissions {
                     dialogBuilder
                             .setMessage(R.string.sms_permissions_dialog_message)
                             .setCancelable(false);
-                    if (activity.shouldShowRequestPermissionRationale(SMS)) {
+                    if (activity.shouldShowRequestPermissionRationale(SEND_SMS)) {
                         dialogBuilder
                                 .setPositiveButton(R.string.ok, (dialog, which) -> requestSMS(activity));
                     } else {
@@ -83,9 +79,8 @@ class Permissions {
                                     activity.startActivity(intent);
                                 })
                                 .setOnDismissListener(dialog -> requestSMS(activity));
-                    }
-
-                    return dialogBuilder.create();
+                                }
+                    return dialogBuilder.show();
                 }
                 break;
         }
@@ -97,7 +92,7 @@ class Permissions {
             return false;
         else
             for (int result : grantResults)
-                if (result != GRANTED)
+                if (result != PERMISSION_GRANTED)
                     return false;
 
         return true;
@@ -105,7 +100,7 @@ class Permissions {
 
     private static boolean granted(Context context, String[] permissions) {
         for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(context, permission) != GRANTED) {
+            if (ContextCompat.checkSelfPermission(context, permission) != PERMISSION_GRANTED) {
                 return false;
             }
         }

@@ -1,6 +1,5 @@
 package com.uniting.android.msic;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -22,14 +21,14 @@ import java.util.concurrent.Callable;
  * <p/>
  * Attaches alert dialogs to settings menu
  */
-class SettingsMenu implements NavigationView.OnNavigationItemSelectedListener {
+class SideMenuLogic implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "SettingsMenu";
+    private static final String TAG = "SideMenuLogic";
     private MainActivity activity;
     private UserPrefs prefs;
     private SettingsDialog settingsDialog;
 
-    SettingsMenu(MainActivity activity, UserPrefs prefs) {
+    SideMenuLogic(MainActivity activity, UserPrefs prefs) {
         this.activity = activity;
         this.prefs = prefs;
         this.settingsDialog = new SettingsDialog(prefs, activity);
@@ -54,6 +53,8 @@ class SettingsMenu implements NavigationView.OnNavigationItemSelectedListener {
         } else if (id == R.id.settings) {
             Intent intent = new Intent(activity, SettingsActivity.class);
             activity.startActivity(intent);
+
+
         } else {
             settingsDialog.showDialog(id);
         }

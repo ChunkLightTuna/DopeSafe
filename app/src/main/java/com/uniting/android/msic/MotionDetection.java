@@ -21,6 +21,7 @@ class MotionDetection implements SensorEventListener {
     private float[] v = new float[3];
     private float[] vOld = new float[3];
     private long lastUpdate;
+    private static boolean motionSupported;
 
     private MotionDetection() {
     }
@@ -32,9 +33,13 @@ class MotionDetection implements SensorEventListener {
         }
 
         SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        if (sensor != null) {
+
+        if (sensorManager == null) {
+            motionSupported = false;
+        } else {
+            Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             sensorManager.registerListener(motionDetection, sensor, SensorManager.SENSOR_DELAY_GAME);
+            motionSupported = true;
         }
 
         return motionDetection;

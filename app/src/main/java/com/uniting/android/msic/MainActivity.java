@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.d(TAG, "onCreate called");
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         timer = getTimer();
 
         ringtone = RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+        setVolumeControlStream(AudioManager.STREAM_ALARM);
 
         if (ringtone == null) {
             Log.d(TAG, "volume is muted, might want to fix that!");
@@ -94,59 +93,55 @@ public class MainActivity extends AppCompatActivity {
         updateTime();
 
         startButton = findViewById(R.id.start_button);
-        if (startButton != null)
-            startButton.setOnClickListener(v -> confirmInitializeOfSession());
+        startButton.setOnClickListener(v -> confirmInitializeOfSession());
 
 
         pauseButton = findViewById(R.id.pause_button);
-        if (pauseButton != null)
-            pauseButton.setOnClickListener(v -> pauseTimer());
+        pauseButton.setOnClickListener(v -> pauseTimer());
 
 
         resumeButton = findViewById(R.id.resume_button);
-        if (resumeButton != null)
-            resumeButton.setOnClickListener(view -> resumeTimer());
+        resumeButton.setOnClickListener(view -> resumeTimer());
 
         stopButton = findViewById(R.id.stop_button);
-        if (stopButton != null) {
-            stopButton.setVisibility(View.INVISIBLE);
-            stopButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                Log.d(TAG, "onCheckedChanged() called with: " + "buttonView = [" + buttonView + "], isChecked = [" + isChecked + "]");
-                if (isChecked) {
-                    // The toggle is enabled
-                    stopButton.setVisibility(View.INVISIBLE);
-                    pauseButton.setVisibility(View.INVISIBLE);
-                    resumeButton.setVisibility(View.INVISIBLE);
-                    startButton.setVisibility(View.VISIBLE);
-                    progressCircle.setProgress(0);
-                    progressCircle.setVisibility(View.INVISIBLE);
 
-                    //stop the timer
-                    startTime = 0L;
-                    timeInMilliseconds = 0L;
-                    timeSwapBuff = 0L;
-                    updatedTime = 0L;
-                    seconds = 0;
-                    minutes = 0;
-                    handler.removeCallbacks(timer);
-                    updateTime();
-                    time.setTextColor(Color.WHITE);
+        stopButton.setVisibility(View.INVISIBLE);
+        stopButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.d(TAG, "onCheckedChanged() called with: " + "buttonView = [" + buttonView + "], isChecked = [" + isChecked + "]");
+            if (isChecked) {
+                // The toggle is enabled
+                stopButton.setVisibility(View.INVISIBLE);
+                pauseButton.setVisibility(View.INVISIBLE);
+                resumeButton.setVisibility(View.INVISIBLE);
+                startButton.setVisibility(View.VISIBLE);
+                progressCircle.setProgress(0);
+                progressCircle.setVisibility(View.INVISIBLE);
 
-                    alarm = false;
-                    ringtone.stop();
-                    vibrator.cancel();
-                    t = true;
+                //stop the timer
+                startTime = 0L;
+                timeInMilliseconds = 0L;
+                timeSwapBuff = 0L;
+                updatedTime = 0L;
+                seconds = 0;
+                minutes = 0;
+                handler.removeCallbacks(timer);
+                updateTime();
+                time.setTextColor(Color.WHITE);
 
-                    //reset the toggle button
-                    stopButton.setChecked(false);
+                alarm = false;
+                ringtone.stop();
+                vibrator.cancel();
+                t = true;
 
-                } else {
-                    // The toggle is disabled
-                    Log.wtf(TAG, "onCheckedChanged: this shouldn't have happened!");
-                    stopButton.setVisibility(View.VISIBLE);
-                }
-            });
-        }
+                //reset the toggle button
+                stopButton.setChecked(false);
+
+            } else {
+                // The toggle is disabled
+                Log.wtf(TAG, "onCheckedChanged: this shouldn't have happened!");
+                stopButton.setVisibility(View.VISIBLE);
+            }
+        });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -157,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new SettingsMenu(this, prefs));
+        navigationView.setNavigationItemSelectedListener(new SideMenuLogic(this, prefs));
 
         Permissions.requestSMS(this);
 //        locationService = new LocationService(this);
@@ -189,17 +184,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         alertDialog = Permissions.dealWithIt(this, requestCode, grantResults);
-        if (alertDialog != null) {
-            alertDialog.show();
-        }
     }
 
     @Override
     protected void onResume() {
 //        if user enabled SMS through OS app settings dismiss the box
         if (alertDialog != null) {
-            TextView textView = alertDialog.findViewById(android.R.id.message);
-            if (textView != null && textView.getText() == getString(R.string.sms_permissions_dialog_message) && Permissions.smsGranted(this)) {
+            TextView message = alertDialog.findViewById(android.R.id.message);
+            if (message != null && message.getText() == getString(R.string.sms_permissions_dialog_message) && Permissions.smsGranted(this)) {
                 alertDialog.dismiss();
                 alertDialog = null;
             }
@@ -217,14 +209,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateTime() {
-        time.setText(String.format(getString(com.uniting.android.msic.R.string.display_time), prefs.getTime(), 0));
+        time.setText(String.format(getString(com.uniting.android.msic.R.string.time_format), prefs.getTime(), 0));
     }
 
 
     private void getSharedPrefs(SharedPreferences sharedPref) {
         Log.d(TAG, "getSharedPrefs() called with: " + "sharedPref = [" + sharedPref + "]");
 
-        String phone = getString(com.uniting.android.msic.R.string.default_phone);
+        String phone = getString(com.uniting.android.msic.R.string.pref_default_contact);
         String message = getString(com.uniting.android.msic.R.string.default_message);
         int timeout = 1;
 
@@ -237,21 +229,9 @@ public class MainActivity extends AppCompatActivity {
         prefs.setMsg(message);
         prefs.setPhone(phone);
         prefs.setTime(timeout);
-
-        Log.d(TAG, "getSharedPrefs() msg: " + prefs.getMsg());
-        Log.d(TAG, "getSharedPrefs() phone: " + prefs.getPhone());
-        Log.d(TAG, "getSharedPrefs() time: " + prefs.getTime());
-        Log.d(TAG, "getSharedPrefs() motion: " + prefs.isMotion());
-        Log.d(TAG, "getSharedPrefs() loc: " + prefs.isLoc());
     }
 
     private void setSharedPrefs() {
-        Log.d(TAG, "setSharedPrefs() msg: " + prefs.getMsg());
-        Log.d(TAG, "setSharedPrefs() phone: " + prefs.getPhone());
-        Log.d(TAG, "setSharedPrefs() time: " + prefs.getTime());
-        Log.d(TAG, "setSharedPrefs() motion: " + prefs.isMotion());
-        Log.d(TAG, "setSharedPrefs() loc: " + prefs.isLoc());
-
         SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("message", prefs.getMsg());
@@ -339,6 +319,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * https://developer.android.com/guide/topics/media-apps/volume-and-earphones.html
+     */
     private void setRingVolumeMax() {
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -365,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
                     //times up
                     if (minutes == prefs.getTime()) {
                         sendSMS(prefs.getPhone(), prefs.getMsg(), locationService.getLocation());
-                        time.setText(String.format(getString(com.uniting.android.msic.R.string.display_time), 0, 0));
+                        time.setText(String.format(getString(com.uniting.android.msic.R.string.time_format), 0, 0));
                         time.setTextColor(Color.RED);
                     } else {
 
@@ -386,7 +370,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         if (minutes != 0 || seconds != 0) {
-                            time.setText(String.format(getString(com.uniting.android.msic.R.string.display_time), (prefs.getTime() - minutes - 1), (60 - seconds)));
+                            time.setText(String.format(getString(com.uniting.android.msic.R.string.time_format), (prefs.getTime() - minutes - 1), (60 - seconds)));
                         }
 
                         double currentSeconds = ((prefs.getTime() - minutes - 1) * 60) + (60-seconds);

@@ -1,13 +1,11 @@
 package com.uniting.android.msic;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 /**
@@ -27,16 +25,16 @@ public class LocationService implements LocationListener {
         init(context);
     }
 
+    @SuppressLint("MissingPermission")
     private void init(Context context) {
         Log.d(TAG, "LocationService Initialized");
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (Permissions.locationGranted(context) && locationManager != null) {
             Log.d(TAG, "We have permission");
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BETWEEN_UPDATES,
-                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BETWEEN_UPDATES,
-                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+                    MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
         } else {
             Log.d(TAG, "This won't work!!!");
         }
@@ -88,7 +86,7 @@ public class LocationService implements LocationListener {
 
         // Check if the old and new location are from the same provider
         boolean isFromSameProvider = isSameProvider(location.getProvider(),
-            currentBestLocation.getProvider());
+                currentBestLocation.getProvider());
 
         // Determine location quality using a combination of timeliness and accuracy
         if (isMoreAccurate) {
