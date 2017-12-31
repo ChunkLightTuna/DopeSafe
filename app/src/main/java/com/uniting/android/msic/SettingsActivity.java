@@ -88,6 +88,9 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
+
+            addPreferencesFromResource(com.uniting.android.msic.R.xml.prefs);
+
             getPreferenceScreen().addPreference(new EditTextWithCountdown(
                     getContext(),
                     144,
@@ -96,8 +99,6 @@ public class SettingsActivity extends AppCompatActivity {
                     getString(R.string.emergency_message_key),
                     "asdfasdf")
             );
-
-            addPreferencesFromResource(com.uniting.android.msic.R.xml.prefs);
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are

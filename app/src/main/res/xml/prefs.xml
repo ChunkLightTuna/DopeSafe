@@ -12,17 +12,6 @@
     <!--android:summary="@string/pref_default_emergency_message"-->
     <!--android:title="@string/pref_title_emergency_message" />-->
 
-    <EditTextPreference
-        android:id="@+id/emergency_contact_pref"
-        android:defaultValue="@string/pref_default_contact"
-        android:inputType="phone"
-        android:key="@string/emergency_contact_key"
-        android:maxLines="1"
-        android:phoneNumber="true"
-        android:selectAllOnFocus="true"
-        android:summary="@string/pref_default_contact"
-        android:title="@string/emergency_contact" />
-
     <SwitchPreference
         android:id="@+id/enable_location_pref"
         android:defaultValue="false"
@@ -35,5 +24,16 @@
         android:entryValues="@array/pref_general_countdown_values"
         android:key="countdown_timer_pref"
         android:title="@string/count_down" />
+
+    <EditTextPreference
+        android:id="@+id/emergency_contact_pref"
+        android:defaultValue="@string/pref_default_contact"
+        android:inputType="phone"
+        android:key="@string/emergency_contact_key"
+        android:maxLines="1"
+        android:phoneNumber="true"
+        android:selectAllOnFocus="true"
+        android:summary="@string/pref_default_contact"
+        android:title="@string/emergency_contact" />
 
 </PreferenceScreen>
