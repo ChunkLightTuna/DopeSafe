@@ -27,8 +27,9 @@ public class EditTextWithCountdown extends EditTextPreference {
     /**
      * for now we're only instantiating this programmatically, but to do it proper through XML would require this method
      * https://developer.android.com/training/custom-views/create-view.html
+     *
      * @param context Context
-     * @param attrs AttributeSet
+     * @param attrs   AttributeSet
      */
     public EditTextWithCountdown(Context context, AttributeSet attrs) {
         super(context, attrs);
