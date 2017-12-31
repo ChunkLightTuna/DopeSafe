@@ -49,7 +49,8 @@ public class EditTextWithCountdown extends EditTextPreference {
         getEditText().setMaxLines(6);
         getEditText().setSelectAllOnFocus(true);
         getEditText().setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxChars)});
-        setText(title);
+//        setText(title);
+        setTitle(title);
         setSummary(summary);
 
         textCounter.setText(String.format(Locale.getDefault(), REMAINING_FORMAT, getSummary().length(), maxChars));
