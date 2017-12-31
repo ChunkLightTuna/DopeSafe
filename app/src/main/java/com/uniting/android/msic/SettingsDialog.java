@@ -13,7 +13,7 @@ import android.widget.NumberPicker;
 import java.util.concurrent.Callable;
 
 /**
- * Created by jeep on 12/17/17.
+ * Bastardized by jeep on 12/17/17.
  */
 
 public class SettingsDialog {
