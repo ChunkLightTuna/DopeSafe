@@ -45,7 +45,7 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"
+            android:label="@string/settings"
             android:screenOrientation="portrait"
             android:theme="@style/MsicTheme">
             <meta-data
