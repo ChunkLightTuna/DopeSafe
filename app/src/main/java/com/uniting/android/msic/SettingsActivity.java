@@ -1,8 +1,6 @@
 package com.uniting.android.msic;
 
-
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.support.v7.app.ActionBar;
@@ -89,15 +87,17 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
+            getPreferenceScreen().addPreference(new EditTextWithCountdown(
+                    getContext(),
+                    144,
+                    getString(R.string.pref_title_emergency_message),
+                    getString(R.string.pref_default_emergency_message),
+                    getString(R.string.emergency_message_key),
+                    "asdfasdf")
+            );
+
             addPreferencesFromResource(com.uniting.android.msic.R.xml.prefs);
-
-            EditTextPreference emergency_message = ((EditTextPreference) findPreference(getString(R.string.emergency_message_key)));
-
-
-//            emergency_message.getDialog().addContentView(textCounter, textCounter.getLayoutParams());
-
-            getPreferenceScreen().addPreference(new EditTextWithTimedown(getContext()));
-
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are

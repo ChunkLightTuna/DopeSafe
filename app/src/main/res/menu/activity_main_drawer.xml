@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group>
+        <!--JOHN USED THE IDS IN UNRELATED CODE BECAUSE HE'S A BAD MAN SO FOR NOW THEY STAY BUT ARE MADE INVISIBLE-->
         <item
             android:id="@+id/emergency_contact"
-            android:title="@string/emergency_contact" />
+            android:title="@string/emergency_contact"
+            android:visible="false"/>
         <item
             android:id="@+id/time_out"
+            android:visible="false"
             android:title="@string/count_down" />
         <item
             android:id="@+id/settings"
             android:title="@string/settings" />
         <item
             android:id="@+id/message"
+            android:visible="false"
             android:title="@string/message" />
         <item
             android:id="@+id/motion_detection"
+            android:visible="false"
             android:title="@string/motion_detection" />
         <item
             android:id="@+id/location"
+            android:visible="false"
             android:title="@string/location" />
         <item
             android:id="@+id/get_help"

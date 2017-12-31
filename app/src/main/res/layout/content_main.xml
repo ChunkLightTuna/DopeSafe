@@ -142,7 +142,7 @@
         android:layout_marginRight="8dp"
         android:background="@color/colorDarkGray"
         android:switchMinWidth="150dp"
-        android:text="@string/stop_button_text"
+        android:text="@string/stop"
         android:textColor="@color/colorMaterialGrey300"
         android:textOff="@string/stop"
         android:textOn=""

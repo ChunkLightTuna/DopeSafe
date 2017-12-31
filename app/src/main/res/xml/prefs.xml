@@ -1,16 +1,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
-        android:id="@+id/emergency_message_pref"
-        android:capitalize="words"
-        android:defaultValue="@string/pref_default_emergency_message"
-        android:inputType="textMultiLine"
-        android:key="@string/emergency_message_key"
-        android:maxLines="4"
-        android:lines="4"
-        android:selectAllOnFocus="true"
-        android:summary="@string/pref_default_emergency_message"
-        android:title="@string/pref_title_emergency_message" />
+    <!--<EditTextPreference-->
+        <!--android:id="@+id/emergency_message_pref"-->
+        <!--android:capitalize="words"-->
+        <!--android:defaultValue="@string/pref_default_emergency_message"-->
+        <!--android:inputType="textMultiLine"-->
+        <!--android:key="@string/emergency_message_key"-->
+        <!--android:maxLines="4"-->
+        <!--android:lines="4"-->
+        <!--android:selectAllOnFocus="true"-->
+        <!--android:summary="@string/pref_default_emergency_message"-->
+        <!--android:title="@string/pref_title_emergency_message" />-->
 
     <EditTextPreference
         android:id="@+id/emergency_contact_pref"
