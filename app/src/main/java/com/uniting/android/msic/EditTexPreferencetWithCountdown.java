@@ -19,8 +19,8 @@ import java.util.Locale;
  * Created by Chris.Oelerich on 11/25/2017.
  */
 
-public class EditTextWithCountdown extends EditTextPreference {
-    private static final String TAG = "EditTextWithCountdown";
+public class EditTexPreferencetWithCountdown extends EditTextPreference {
+    private static final String TAG = "EditTexPreferencetWithCountdown";
     private int maxChars;
     private static final String REMAINING_FORMAT = "%1$d/%2$d";
 
@@ -31,16 +31,16 @@ public class EditTextWithCountdown extends EditTextPreference {
      * @param context Context
      * @param attrs   AttributeSet
      */
-    public EditTextWithCountdown(Context context, AttributeSet attrs) {
+    public EditTexPreferencetWithCountdown(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    EditTextWithCountdown(Context context, int maxChars, String title, String defaultValue, String key, String summary) {
+    EditTexPreferencetWithCountdown(Context context, int maxChars, String title, String defaultValue, String key, String summary) {
         super(context);
         this.maxChars = maxChars;
 
         getEditText().setId(View.generateViewId());
-        Log.wtf(TAG, "EditTextWithCountdown: " + getEditText().getId());
+        Log.wtf(TAG, "EditTexPreferencetWithCountdown: " + getEditText().getId());
 
         setDefaultValue(defaultValue);
         setKey(key);
@@ -61,6 +61,9 @@ public class EditTextWithCountdown extends EditTextPreference {
         textCounter.setText(String.format(Locale.getDefault(), REMAINING_FORMAT, getSummary().length(), maxChars));
 
         final LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+        params.setMargins(params.leftMargin + 4, params.topMargin + 4, params.rightMargin, params.bottomMargin);
+
         getDialog().addContentView(textCounter, params);
 
         getEditText().addTextChangedListener(new TextWatcher() {

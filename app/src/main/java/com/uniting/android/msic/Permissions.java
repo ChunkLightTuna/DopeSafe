@@ -1,9 +1,11 @@
 package com.uniting.android.msic;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -28,6 +30,20 @@ class Permissions {
 
     static void requestSMS(Activity activity) {
         ActivityCompat.requestPermissions(activity, new String[]{SEND_SMS}, REQUEST_SMS);
+    }
+
+    static void requestNotificationPolicy(Context context) {
+        NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && nm != null && !nm.isNotificationPolicyAccessGranted()) {
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.DND_alert_title)
+                    .setMessage(R.string.DND_alert_message)
+                    .setPositiveButton(R.string.ok, (dialog, which) -> context.startActivity(new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)))
+                    .setNegativeButton(R.string.no, (dialog, which) -> {
+                    })
+                    .show();
+        }
     }
 
     static boolean locationGranted(Context context) {
@@ -79,7 +95,7 @@ class Permissions {
                                     activity.startActivity(intent);
                                 })
                                 .setOnDismissListener(dialog -> requestSMS(activity));
-                                }
+                    }
                     return dialogBuilder.show();
                 }
                 break;

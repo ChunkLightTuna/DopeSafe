@@ -27,6 +27,7 @@
             android:title="@string/location" />
         <item
             android:id="@+id/get_help"
+            android:visible="false"
             android:title="@string/get_help" />
         <item
             android:id="@+id/disclaimer"

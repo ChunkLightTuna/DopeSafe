@@ -1,8 +1,13 @@
 package com.uniting.android.msic;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceScreen;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -10,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 public class SettingsActivity extends AppCompatActivity {
-    private static final String TAG = "SettingsActivity";
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -84,14 +88,32 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static class PrefsFrag extends PreferenceFragment {
 
+        PreferenceScreen preferenceScreen;
+        Preference notificationPref;
+
+        @Override
+        public void onResume() {
+            super.onResume();
+
+
+            //remove option to enable notification permission on return from notificaiton permission menu
+            NotificationManager nm = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N &&
+                    nm != null &&
+                    nm.isNotificationPolicyAccessGranted() &&
+                    preferenceScreen != null &&
+                    notificationPref != null
+                    )
+                preferenceScreen.removePreference(notificationPref);
+        }
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-
             addPreferencesFromResource(com.uniting.android.msic.R.xml.prefs);
-
-            getPreferenceScreen().addPreference(new EditTextWithCountdown(
+            preferenceScreen = getPreferenceScreen();
+            preferenceScreen.addPreference(new EditTexPreferencetWithCountdown(
                     getContext(),
                     144,
                     getString(R.string.pref_title_emergency_message),
@@ -99,6 +121,19 @@ public class SettingsActivity extends AppCompatActivity {
                     getString(R.string.emergency_message_key),
                     "asdfasdf")
             );
+
+            NotificationManager nm = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N && nm != null && !nm.isNotificationPolicyAccessGranted()) {
+                notificationPref = new Preference(getContext());
+                notificationPref.setTitle("Grant Volume Override");
+                notificationPref.setOnPreferenceClickListener(preference -> {
+                    getContext().startActivity(new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS));
+                    return true;
+                });
+
+                preferenceScreen.addPreference(notificationPref);
+            }
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are

@@ -1,5 +1,6 @@
 package com.uniting.android.msic;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private int minutes = 0;
     private boolean alarm = false;
     private boolean timerRunning = false;
+    private int priorRingVolume;
 
     private Handler handler = new Handler();
     private Runnable timer;
@@ -155,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new SideMenuLogic(this, prefs));
 
         Permissions.requestSMS(this);
+        Permissions.requestNotificationPolicy(this);
 //        locationService = new LocationService(this);
     }
 
@@ -199,11 +202,23 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if(am != null) {
+            am.setStreamVolume(
+                    AudioManager.STREAM_RING,
+                    priorRingVolume,
+                    0);
+        }
+    }
+
     /**
      * https://developer.android.com/guide/topics/location/strategies.html#BestPerformance
      */
     private void tryToInitLocationService() {
-
         if (Permissions.locationGranted(this))
             locationService = new LocationService(this);
     }
@@ -279,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
         pauseTime = 0L;
         //progressCircle.setVisibility(View.VISIBLE);
         stopButton.setText(R.string.stop);
-        if(alarm)
+        if (alarm)
             ringtone.play();
     }
 
@@ -296,10 +311,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void sendSMS(String number, String message, Location location) {
+    void sendSMS(String number, String message, Location location) {
+        sendSMS(number, message + "\n" + getGoogleMapsUrl(location));
+    }
+
+    void sendSMS(String number, String message) {
         try {
             SmsManager smsManager = SmsManager.getDefault();
-            message += "\n" + getGoogleMapsUrl(location);
             smsManager.sendTextMessage(number, null, message, null, null);
             Log.d(TAG, "sendSMS() called with: " + "number = [" + number + "], message = [" + message + "]");
         } catch (Exception e) {
@@ -326,10 +344,14 @@ public class MainActivity extends AppCompatActivity {
     private void setRingVolumeMax() {
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-        if (am != null) am.setStreamVolume(
-                AudioManager.STREAM_RING,
-                am.getStreamMaxVolume(AudioManager.STREAM_RING),
-                0);
+        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (am != null && nm != null && nm.isNotificationPolicyAccessGranted()) {
+            priorRingVolume = am.getStreamVolume(AudioManager.STREAM_RING);
+            am.setStreamVolume(
+                    AudioManager.STREAM_RING,
+                    am.getStreamMaxVolume(AudioManager.STREAM_RING),
+                    0);
+        }
     }
 
     private Runnable getTimer() {
@@ -348,7 +370,14 @@ public class MainActivity extends AppCompatActivity {
 
                     //times up
                     if (minutes == prefs.getTime()) {
-                        sendSMS(prefs.getPhone(), prefs.getMsg(), locationService.getLocation());
+
+                        //TODO ask for location permissions
+                        if(locationService != null ) {
+                            sendSMS(prefs.getPhone(), prefs.getMsg(), locationService.getLocation());
+                        }else {
+                            sendSMS(prefs.getPhone(), prefs.getMsg());
+                        }
+
                         time.setText(String.format(getString(com.uniting.android.msic.R.string.time_format), 0, 0));
                         time.setTextColor(Color.RED);
                     } else {
@@ -373,11 +402,11 @@ public class MainActivity extends AppCompatActivity {
                             time.setText(String.format(getString(com.uniting.android.msic.R.string.time_format), (prefs.getTime() - minutes - 1), (60 - seconds)));
                         }
 
-                        double currentSeconds = ((prefs.getTime() - minutes - 1) * 60) + (60-seconds);
-                        double definedSeconds = (prefs.getTime()*60);
-                        double p = (100) - (currentSeconds/definedSeconds)*100;
+                        double currentSeconds = ((prefs.getTime() - minutes - 1) * 60) + (60 - seconds);
+                        double definedSeconds = (prefs.getTime() * 60);
+                        double p = (100) - (currentSeconds / definedSeconds) * 100;
                         progressCircle.setProgress(0);
-                        progressCircle.setProgress((int)p);
+                        progressCircle.setProgress((int) p);
                     }
                 }
                 handler.postDelayed(this, 0);

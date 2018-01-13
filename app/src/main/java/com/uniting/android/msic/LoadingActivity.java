@@ -67,14 +67,14 @@ public class LoadingActivity extends AppCompatActivity {
                 .show();
     }
 
-    private void showSetupMessageDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.setup_dialog_message)
-                .setPositiveButton(R.string.cont, (dialogInterface, i) -> getNextStep())
-                .setNegativeButton(R.string.exit, (dialogInterface, i) -> handleSetUpDenied())
-                .create()
-                .show();
-    }
+//    private void showSetupMessageDialog(){
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setMessage(R.string.setup_dialog_message)
+//                .setPositiveButton(R.string.cont, (dialogInterface, i) -> getNextStep())
+//                .setNegativeButton(R.string.exit, (dialogInterface, i) -> handleSetUpDenied())
+//                .create()
+//                .show();
+//    }
 
     private void getNextStep(){
         if(userPrefs.getPhone() == null) {
@@ -90,12 +90,9 @@ public class LoadingActivity extends AppCompatActivity {
             });
             settingsDialog.showDialog(R.id.time_out);
         }else if(userPrefs.getMsg() == null) {
-            settingsDialog.setMessageCallBack(new Callable<Void>() {
-                @Override
-                public Void call() throws Exception {
-                    getNextStep();
-                    return null;
-                }
+            settingsDialog.setMessageCallBack(() -> {
+                getNextStep();
+                return null;
             });
             settingsDialog.showDialog(R.id.message);
         }
@@ -111,7 +108,8 @@ public class LoadingActivity extends AppCompatActivity {
     private void handleDisclaimerAccepted() {
         Log.d(TAG, "disclaimer accepted");
         setDisclaimerAccepted(true);
-        showSetupMessageDialog();
+        getNextStep();
+//        showSetupMessageDialog();
     }
 
     private void handleDisclaimerDenied() {

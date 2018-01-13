@@ -45,6 +45,7 @@
     <string name="pref_default_emergency_message">Urgent medical emergency. Cannot breathe, please call 911.</string>
     <string name="pref_enable_location">Location</string>
     <string name="ok">Ok</string>
+    <string name="no">No</string>
 
     <string name="lone_opiate_user_app">Lone Opiate User App</string>
 
@@ -60,6 +61,9 @@
     <string name="permissions_dialog_title">Error</string>
     <string name="sms_permissions_dialog_message">SMS permissions are required for the application to work.</string>
     <string name="location_permissions_dialog_message">location permissions are required for location tracking to work.</string>
+
+    <string name="notification_permissions_dialog_message">This gives the app permission to set ringer volume to max.</string>
+
     <string name="disclaimer_header">By clicking accept, the application user acknowledges that he/she
     understands and accepts the following conditions:\n\n
   </string>
@@ -100,6 +104,7 @@
 
     <string name="dummy_content">johnnnnnnnnnnnnnn</string>
     <string name="dummy_button">Dummy Button</string>
+
     <string name="pause_button_text">&#9612;&#9612;</string>
     <string name="title_activity_loading">LoadingActivity</string>
     <string name="resume_button_text">&#9654;</string>
@@ -110,6 +115,8 @@
     <string name="emergency_message_key">emergency_message</string>
     <string name="emergency_contact_key">emergency_contact</string>
 
+    <string name="DND_alert_title">Override Do Not Disturb?</string>
+    <string name="DND_alert_message">Enabling this ensures the alarm will sound even when the phone is in Do Not Disturb mode.</string>
 
 
 </resources>
