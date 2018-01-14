@@ -3,6 +3,7 @@ package com.uniting.android.msic;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -12,7 +13,10 @@ import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+
+import java.util.Map;
 
 public class SettingsActivity extends AppCompatActivity {
     /**
@@ -87,6 +91,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class PrefsFrag extends PreferenceFragment {
+        private static final String TAG = "PrefsFrag";
 
         PreferenceScreen preferenceScreen;
         Preference notificationPref;
@@ -113,13 +118,13 @@ public class SettingsActivity extends AppCompatActivity {
 
             addPreferencesFromResource(com.uniting.android.msic.R.xml.prefs);
             preferenceScreen = getPreferenceScreen();
-            preferenceScreen.addPreference(new EditTexPreferencetWithCountdown(
+
+            preferenceScreen.addPreference(EditTexPreferencetWithCountdown.newInstance(
                     getContext(),
-                    144,
+                    "enable_location",
                     getString(R.string.pref_title_emergency_message),
                     getString(R.string.pref_default_emergency_message),
-                    getString(R.string.emergency_message_key),
-                    "asdfasdf")
+                    getString(R.string.emergency_message_key))
             );
 
             NotificationManager nm = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
