@@ -30,6 +30,9 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.ebanx.swipebtn.OnStateChangeListener;
+import com.ebanx.swipebtn.SwipeButton;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
@@ -37,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView time;
     private Button startButton;
-    private ImageButton pauseButton;
-    private ImageButton resumeButton;
-    private Switch stopButton;
+    private Button pauseButton;
+    private Button resumeButton;
+    //private Switch stopButton;
     private ProgressBar progressCircle;
-
+    SwipeButton stopButton;
     private long startTime = 0L;
     private long pauseTime = 0L;
     private long timeInMilliseconds = 0L;
@@ -108,41 +111,9 @@ public class MainActivity extends AppCompatActivity {
         stopButton = findViewById(R.id.stop_button);
 
         stopButton.setVisibility(View.INVISIBLE);
-        stopButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Log.d(TAG, "onCheckedChanged() called with: " + "buttonView = [" + buttonView + "], isChecked = [" + isChecked + "]");
-            if (isChecked) {
-                // The toggle is enabled
-                stopButton.setVisibility(View.INVISIBLE);
-                pauseButton.setVisibility(View.INVISIBLE);
-                resumeButton.setVisibility(View.INVISIBLE);
-                startButton.setVisibility(View.VISIBLE);
-                progressCircle.setProgress(0);
-                progressCircle.setVisibility(View.INVISIBLE);
-
-                //stop the timer
-                startTime = 0L;
-                timeInMilliseconds = 0L;
-                timeSwapBuff = 0L;
-                updatedTime = 0L;
-                seconds = 0;
-                minutes = 0;
-                handler.removeCallbacks(timer);
-                updateTime();
-                time.setTextColor(Color.WHITE);
-
-                alarm = false;
-                ringtone.stop();
-                vibrator.cancel();
-                t = true;
-
-                //reset the toggle button
-                stopButton.setChecked(false);
-
-            } else {
-                // The toggle is disabled
-                Log.wtf(TAG, "onCheckedChanged: this shouldn't have happened!");
-                stopButton.setVisibility(View.VISIBLE);
-            }
+        stopButton.setOnStateChangeListener(active -> {
+            if(active)
+                stopTimer();
         });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -283,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
         pauseButton.setVisibility(View.INVISIBLE);
         resumeButton.setVisibility(View.VISIBLE);
         //progressCircle.setVisibility(View.INVISIBLE);
-        stopButton.setText(R.string.reset);
+        stopButton.setText(getResources().getString(R.string.reset));
     }
 
     private void resumeTimer() {
@@ -293,9 +264,30 @@ public class MainActivity extends AppCompatActivity {
         startTime = startTime + (SystemClock.uptimeMillis() - pauseTime);
         pauseTime = 0L;
         //progressCircle.setVisibility(View.VISIBLE);
-        stopButton.setText(R.string.stop);
-        if (alarm)
-            ringtone.play();
+        stopButton.setText(getResources().getString(R.string.stop));
+    }
+
+    private void stopTimer(){
+        stopButton.setVisibility(View.INVISIBLE);
+        pauseButton.setVisibility(View.INVISIBLE);
+        resumeButton.setVisibility(View.INVISIBLE);
+        startButton.setVisibility(View.VISIBLE);
+        progressCircle.setProgress(0);
+        progressCircle.setVisibility(View.INVISIBLE);
+        startTime = 0L;
+        timeInMilliseconds = 0L;
+        timeSwapBuff = 0L;
+        updatedTime = 0L;
+        seconds = 0;
+        minutes = 0;
+        handler.removeCallbacks(timer);
+        updateTime();
+        time.setTextColor(Color.WHITE);
+
+        alarm = false;
+        ringtone.stop();
+        vibrator.cancel();
+        t = true;
     }
 
     private void confirmInitializeOfSession() {
