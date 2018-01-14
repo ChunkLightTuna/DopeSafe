@@ -1,5 +1,6 @@
 package com.uniting.android.msic;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -55,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
     private int minutes = 0;
     private boolean alarm = false;
     private boolean timerRunning = false;
-    private int priorRingVolume;
 
     private Handler handler = new Handler();
     private Runnable timer;
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         prefs = UserPrefs.getInstance();
-        getSharedPrefs(getPreferences(Context.MODE_PRIVATE));
+        getSharedPrefs();
 
         timer = getTimer();
 
@@ -173,19 +173,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        if(am != null) {
-            am.setStreamVolume(
-                    AudioManager.STREAM_RING,
-                    priorRingVolume,
-                    0);
-        }
-    }
-
     /**
      * https://developer.android.com/guide/topics/location/strategies.html#BestPerformance
      */
@@ -199,8 +186,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void getSharedPrefs(SharedPreferences sharedPref) {
-        Log.d(TAG, "getSharedPrefs() called with: " + "sharedPref = [" + sharedPref + "]");
+    private void getSharedPrefs() {
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
 
         String phone = getString(com.uniting.android.msic.R.string.pref_default_contact);
         String message = getString(com.uniting.android.msic.R.string.default_message);
@@ -317,16 +304,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     public String getGoogleMapsUrl(Location location) {
-        try {
-            return "google.com/maps?q=" +
-                    location.getLatitude() +
-                    "," +
-                    location.getLongitude();
-        } catch (NullPointerException e) {
-            Log.e(TAG, "unable to get location string(Probably because emulator is being used and location was not sent.)", e);
-            return "Location unavailable";
-        }
+        String latitude = String.format("%1$,.6f", location.getLatitude());
+        String longitude = String.format("%1$,.6f", location.getLongitude());
+        return "google.com/maps?q=" + latitude + "," + longitude;
     }
 
 
@@ -335,10 +317,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setRingVolumeMax() {
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         if (am != null && nm != null && nm.isNotificationPolicyAccessGranted()) {
-            priorRingVolume = am.getStreamVolume(AudioManager.STREAM_RING);
             am.setStreamVolume(
                     AudioManager.STREAM_RING,
                     am.getStreamMaxVolume(AudioManager.STREAM_RING),
