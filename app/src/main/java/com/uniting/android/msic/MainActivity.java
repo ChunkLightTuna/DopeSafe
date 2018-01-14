@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
         stopButton.setVisibility(View.INVISIBLE);
         stopButton.setOnStateChangeListener(active -> {
-            if(active)
+            if (active)
                 stopTimer();
         });
 
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
         stopButton.setText(getResources().getString(R.string.stop));
     }
 
-    private void stopTimer(){
+    private void stopTimer() {
         stopButton.setVisibility(View.INVISIBLE);
         pauseButton.setVisibility(View.INVISIBLE);
         resumeButton.setVisibility(View.INVISIBLE);
@@ -321,8 +321,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (am != null && nm != null && nm.isNotificationPolicyAccessGranted()) {
             am.setStreamVolume(
-                    AudioManager.STREAM_RING,
-                    am.getStreamMaxVolume(AudioManager.STREAM_RING),
+                    AudioManager.STREAM_ALARM,
+//                    AudioManager.STREAM_RING,
+                    am.getStreamMaxVolume(AudioManager.STREAM_ALARM),
                     0);
         }
     }
@@ -345,9 +346,9 @@ public class MainActivity extends AppCompatActivity {
                     if (minutes == prefs.getTime()) {
 
                         //TODO ask for location permissions
-                        if(locationService != null ) {
+                        if (locationService != null) {
                             sendSMS(prefs.getPhone(), prefs.getMsg(), locationService.getLocation());
-                        }else {
+                        } else {
                             sendSMS(prefs.getPhone(), prefs.getMsg());
                         }
 
