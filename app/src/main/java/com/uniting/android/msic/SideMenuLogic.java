@@ -25,17 +25,17 @@ class SideMenuLogic implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "SideMenuLogic";
     private MainActivity activity;
-    private UserPrefs prefs;
-    private SettingsDialog settingsDialog;
+//    private UserPrefs prefs;
+//    private SettingsDialog settingsDialog;
 
-    SideMenuLogic(MainActivity activity, UserPrefs prefs) {
+    SideMenuLogic(MainActivity activity/*, UserPrefs prefs*/) {
         this.activity = activity;
-        this.prefs = prefs;
-        this.settingsDialog = new SettingsDialog(prefs, activity);
-        settingsDialog.setTimeoutCallback(() -> {
-            activity.updateTime();
-            return null;
-        });
+//        this.prefs = prefs;
+//        this.settingsDialog = new SettingsDialog(prefs, activity);
+//        settingsDialog.setTimeoutCallback(() -> {
+//            activity.updateTime();
+//            return null;
+//        });
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -46,17 +46,15 @@ class SideMenuLogic implements NavigationView.OnNavigationItemSelectedListener {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.get_help) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(activity.getResources().getString(R.string.help_website)));
-            activity.startActivity(intent);
-        } else if (id == R.id.settings) {
+//        if (id == R.id.get_help) {
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setData(Uri.parse(activity.getResources().getString(R.string.help_website)));
+//            activity.startActivity(intent);
+//        } else
+
+        if (id == R.id.settings) {
             Intent intent = new Intent(activity, SettingsActivity.class);
             activity.startActivity(intent);
-
-
-        } else {
-            settingsDialog.showDialog(id);
         }
 
         DrawerLayout drawer = activity.getWindow().getDecorView().findViewById(R.id.drawer_layout);

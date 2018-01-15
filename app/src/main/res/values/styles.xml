@@ -3,9 +3,10 @@
 
     <style name="MsicTheme" parent="Theme.AppCompat.Light.DarkActionBar">
 
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/unitingPurple</item>
+        <!--<item name="colorPrimaryDark">@color/unitingPurple</item>-->
+        <item name="colorPrimaryDark">@color/unitingPurpleDark</item>
+        <item name="colorAccent">@color/unitingYellow</item>
     </style>
 
     <style name="MsicTheme.NoActionBar">

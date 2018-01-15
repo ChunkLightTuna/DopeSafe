@@ -4,13 +4,13 @@
         android:defaultValue="1"
         android:entries="@array/pref_general_countdown_titles"
         android:entryValues="@array/pref_general_countdown_values"
-        android:key="countdown_timer_pref"
+        android:key="@string/countdown_time_key"
         android:title="@string/count_down" />
 
     <SwitchPreference
         android:id="@+id/enable_location_pref"
         android:defaultValue="false"
-        android:key="enable_location"
+        android:key="@string/enable_location_key"
         android:title="@string/pref_enable_location" />
 
     <EditTextPreference

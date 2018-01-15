@@ -11,8 +11,6 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
@@ -23,10 +21,10 @@ import java.util.Locale;
  * Created by Chris.Oelerich on 11/25/2017.
  */
 
-public class EditTexPreferencetWithCountdown extends EditTextPreference {
+public class SmsMessagePreference extends EditTextPreference {
     private static final String REMAINING_FORMAT = "%1$d/%2$d";
-    private static final String TAG = "EditTexPreferencetWithC";
-    private String prefKey;
+    private static final String TAG = "SmsMessagePreference";
+    private String locationEnabledPrefKey;
 
     /**
      * for now we're only instantiating this programmatically, but to do it proper through XML would require this method
@@ -35,15 +33,15 @@ public class EditTexPreferencetWithCountdown extends EditTextPreference {
      * @param context Context
      * @param attrs   AttributeSet
      */
-    public EditTexPreferencetWithCountdown(Context context, AttributeSet attrs) {
+    public SmsMessagePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    static EditTexPreferencetWithCountdown newInstance(Context context, String prefKey, String title, String defaultValue, String key) {
+    static SmsMessagePreference newInstance(Context context, String locationEnabledPrefKey, String title, String defaultValue, String key) {
 
-        EditTexPreferencetWithCountdown ed = new EditTexPreferencetWithCountdown(context, null);
+        SmsMessagePreference ed = new SmsMessagePreference(context, null);
 
-        ed.prefKey = prefKey;
+        ed.locationEnabledPrefKey = locationEnabledPrefKey;
         ed.setDefaultValue(defaultValue);
         ed.setKey(key);
         ed.setTitle(title);
@@ -60,7 +58,7 @@ public class EditTexPreferencetWithCountdown extends EditTextPreference {
         super.showDialog(state);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        int maxChars = prefs.getBoolean(prefKey, false) ? 120 : 160;
+        int maxChars = prefs.getBoolean(locationEnabledPrefKey, false) ? 120 : 160;
 
         TextView textCounter = new TextView(getContext());
         textCounter.setText(String.format(Locale.getDefault(), REMAINING_FORMAT, getSummary().length(), maxChars));

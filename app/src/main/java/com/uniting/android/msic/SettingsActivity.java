@@ -2,8 +2,6 @@ package com.uniting.android.msic;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -13,10 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
-
-import java.util.Map;
 
 public class SettingsActivity extends AppCompatActivity {
     /**
@@ -119,26 +114,13 @@ public class SettingsActivity extends AppCompatActivity {
             addPreferencesFromResource(com.uniting.android.msic.R.xml.prefs);
             preferenceScreen = getPreferenceScreen();
 
-            preferenceScreen.addPreference(EditTexPreferencetWithCountdown.newInstance(
+            preferenceScreen.addPreference(SmsMessagePreference.newInstance(
                     getContext(),
-                    "enable_location",
+                    getString(R.string.enable_location_key),
                     getString(R.string.pref_title_emergency_message),
                     getString(R.string.pref_default_emergency_message),
                     getString(R.string.emergency_message_key))
             );
-
-            NotificationManager nm = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N && nm != null && !nm.isNotificationPolicyAccessGranted()) {
-                notificationPref = new Preference(getContext());
-                notificationPref.setTitle("Grant Volume Override");
-                notificationPref.setOnPreferenceClickListener(preference -> {
-                    getContext().startActivity(new Intent(android.provider.Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS));
-                    return true;
-                });
-
-                preferenceScreen.addPreference(notificationPref);
-            }
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are

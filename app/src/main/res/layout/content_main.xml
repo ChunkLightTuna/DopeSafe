@@ -24,7 +24,7 @@
         android:background="@drawable/circle"
         android:text="@string/start_button_text"
         android:textColor="@color/unitingYellow"
-        android:textSize="40sp"
+        android:textSize="36sp"
         android:textStyle="bold"
         android:typeface="normal"
         android:visibility="visible"

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">MSIC</string>
-    <string name="default_message">Urgent medical emergency. Cannot breathe, please call 911.</string>
     <string name="pref_default_contact">0000000000</string>
     <string name="help_website">http://www.hopefornhrecovery.org/</string>
 
@@ -114,9 +113,8 @@
 
     <string name="emergency_message_key">emergency_message</string>
     <string name="emergency_contact_key">emergency_contact</string>
-
-    <string name="DND_alert_title">Override Do Not Disturb?</string>
-    <string name="DND_alert_message">Enabling this ensures the alarm will sound even when the phone is in Do Not Disturb mode.</string>
+    <string name="enable_location_key">enable_location</string>
+    <string name="countdown_time_key">countdown_timer_pref</string>
 
 
 </resources>

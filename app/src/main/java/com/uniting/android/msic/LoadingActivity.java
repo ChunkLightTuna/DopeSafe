@@ -18,54 +18,55 @@ public class LoadingActivity extends AppCompatActivity {
 
     private static final String TAG = "LoadingActivity";
 
-    private SharedPreferences prefs;
+//    private SharedPreferences prefs;
 
-    private UserPrefs userPrefs;
+//    private UserPrefs userPrefs;
 
-    private SettingsDialog settingsDialog;
+//    private SettingsDialog settingsDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        startMainActivity();
 //    setContentView(R.layout.activity_loading);
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        prefs = getPreferences(Context.MODE_PRIVATE);
-        userPrefs = UserPrefs.getInstance();
-        settingsDialog = new SettingsDialog(userPrefs, this);
-        checkDisclaimerAcceptance();
+//        prefs = getPreferences(Context.MODE_PRIVATE);
+//        userPrefs = UserPrefs.getInstance();
+//        settingsDialog = new SettingsDialog(userPrefs, this);
+//        checkDisclaimerAcceptance();
     }
 
 
-    private void checkDisclaimerAcceptance() {
-        if (isDisclaimerAccepted())
-            startMainActivity();
-        else
-            showDisclaimerDialog();
-    }
-
-    private boolean isDisclaimerAccepted() {
-        return prefs.getBoolean("disclaimer_accepted", false);
-    }
-
-    private void showDisclaimerDialog() {
-        String header = getString(R.string.disclaimer_header)
-                .replace("\n", "<br />");
-        String conditions = getString(R.string.conditions)
-                .replace("\n", "<br />");
-        Spanned boldHeader = Html.fromHtml("<b>" + header + "</b>" + conditions);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(boldHeader)
-                .setTitle(R.string.disclaimer_dialog_title)
-                .setPositiveButton(R.string.disclaimer_dialog_pos_button_text,
-                        (dialogInterface, i) -> LoadingActivity.this.handleDisclaimerAccepted())
-                .setNegativeButton(R.string.disclaimer_dialog_neg_button_text,
-                        (dialogInterface, i) -> LoadingActivity.this.handleDisclaimerDenied())
-                .create()
-                .show();
-    }
+//    private void checkDisclaimerAcceptance() {
+//        if (isDisclaimerAccepted())
+//            startMainActivity();
+//        else
+//            showDisclaimerDialog();
+//    }
+//
+//    private boolean isDisclaimerAccepted() {
+//        return prefs.getBoolean("disclaimer_accepted", false);
+//    }
+//
+//    private void showDisclaimerDialog() {
+//        String header = getString(R.string.disclaimer_header)
+//                .replace("\n", "<br />");
+//        String conditions = getString(R.string.conditions)
+//                .replace("\n", "<br />");
+//        Spanned boldHeader = Html.fromHtml("<b>" + header + "</b>" + conditions);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setMessage(boldHeader)
+//                .setTitle(R.string.disclaimer_dialog_title)
+//                .setPositiveButton(R.string.disclaimer_dialog_pos_button_text,
+//                        (dialogInterface, i) -> LoadingActivity.this.handleDisclaimerAccepted())
+//                .setNegativeButton(R.string.disclaimer_dialog_neg_button_text,
+//                        (dialogInterface, i) -> LoadingActivity.this.handleDisclaimerDenied())
+//                .create()
+//                .show();
+//    }
 
 //    private void showSetupMessageDialog(){
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -76,68 +77,68 @@ public class LoadingActivity extends AppCompatActivity {
 //                .show();
 //    }
 
-    private void getNextStep(){
-        if(userPrefs.getPhone() == null) {
-            settingsDialog.setEmergencyContactCallback(() -> {
-                getNextStep();
-                return null;
-            });
-            settingsDialog.showDialog(R.id.emergency_contact);
-        }else if(userPrefs.getTime() == 0){
-            settingsDialog.setTimeoutCallback(() -> {
-                getNextStep();
-                return null;
-            });
-            settingsDialog.showDialog(R.id.time_out);
-        }else if(userPrefs.getMsg() == null) {
-            settingsDialog.setMessageCallBack(() -> {
-                getNextStep();
-                return null;
-            });
-            settingsDialog.showDialog(R.id.message);
-        }
-        else
-            showSetupCompleteDialog();
-    }
-
-    private void showSetupCompleteDialog(){
-        Log.d(TAG, "showing setup complete dialog");
-        handleSetUpCompleted();
-    }
-
-    private void handleDisclaimerAccepted() {
-        Log.d(TAG, "disclaimer accepted");
-        setDisclaimerAccepted(true);
-        getNextStep();
-//        showSetupMessageDialog();
-    }
-
-    private void handleDisclaimerDenied() {
-        Log.d(TAG, "disclaimer denied");
-        setDisclaimerAccepted(false);
-        exitApplication();
-    }
-
-    private void handleSetUpDenied(){
-        setSetupCompleted(false);
-        exitApplication();
-    }
-
-    private void handleSetUpCompleted(){
-        setSetupCompleted(true);
-        startMainActivity();
-    }
-    private void setDisclaimerAccepted(boolean accepted) {
-        prefs.edit().putBoolean("disclaimer_accepted", accepted).apply();
-    }
-
-    private void setSetupCompleted(boolean complete){
-        prefs.edit().putBoolean("setup_completed", complete).apply();
-    }
-
-    private void exitApplication() {
-        finishAndRemoveTask();
-    }
+//    private void getNextStep(){
+//        if(userPrefs.getPhone() == null) {
+//            settingsDialog.setEmergencyContactCallback(() -> {
+//                getNextStep();
+//                return null;
+//            });
+//            settingsDialog.showDialog(R.id.emergency_contact);
+//        }else if(userPrefs.getTime() == 0){
+//            settingsDialog.setTimeoutCallback(() -> {
+//                getNextStep();
+//                return null;
+//            });
+//            settingsDialog.showDialog(R.id.time_out);
+//        }else if(userPrefs.getMsg() == null) {
+//            settingsDialog.setMessageCallBack(() -> {
+//                getNextStep();
+//                return null;
+//            });
+//            settingsDialog.showDialog(R.id.message);
+//        }
+//        else
+//            showSetupCompleteDialog();
+//    }
+//
+//    private void showSetupCompleteDialog(){
+//        Log.d(TAG, "showing setup complete dialog");
+//        handleSetUpCompleted();
+//    }
+//
+//    private void handleDisclaimerAccepted() {
+//        Log.d(TAG, "disclaimer accepted");
+//        setDisclaimerAccepted(true);
+//        getNextStep();
+////        showSetupMessageDialog();
+//    }
+//
+//    private void handleDisclaimerDenied() {
+//        Log.d(TAG, "disclaimer denied");
+//        setDisclaimerAccepted(false);
+//        exitApplication();
+//    }
+//
+//    private void handleSetUpDenied(){
+//        setSetupCompleted(false);
+//        exitApplication();
+//    }
+//
+//    private void handleSetUpCompleted(){
+//        setSetupCompleted(true);
+//        startMainActivity();
+//    }
+//    private void setDisclaimerAccepted(boolean accepted) {
+//        prefs.edit().putBoolean("disclaimer_accepted", accepted).apply();
+//    }
+//
+//    private void setSetupCompleted(boolean complete){
+//        prefs.edit().putBoolean("setup_completed", complete).apply();
+//    }
+//
+//    private void exitApplication() {
+//        finishAndRemoveTask();
+//    }
 
     private void startMainActivity() {
         Log.d(TAG, "starting main activity");
