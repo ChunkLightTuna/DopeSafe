@@ -39,11 +39,85 @@
     </string-array>
 
 
+    <string-array name="how_to_titles">
+        <item><b>HOW TO USE THE APP</b></item>
+        <item><b>What to consider when choosing your CONTACT number</b></item>
+        <item><b>WHAT TO PUT IN YOUR MESSAGE/ HOW TO GET HELP TO YOU AS QUICKLY AS POSSIBLE</b></item>
+        <item><b>SETTING THE TIMER</b></item>
+        <item><b>SNOOZE FUNCTION</b></item>
+        <item><b>HOW TO CANCEL A MESSAGE</b></item>
+        <item><b>RESPONSE ALARM</b></item>
+    </string-array>
+
+    <string-array name="how_to_bodies">
+
+        <item>
+            The app will sound an alarm at a pre-determined time. If you do not stop or snooze the alarm, it will send an automated message to the contacts you have chosen. You get to write that message requesting emergency assistance.\n\n
+
+            <i>This assistance will depend on what you write in the message – see 2.2 below.\n\n
+
+            It could mean your contact calls an ambulance to the location you indicate or your contact attends in person to administer naloxone if they were nearby and had naloxone</i>\n\n
+
+            <b>Steps:\n
+                \t• Open the app\n
+                \t• Choose up to two contacts\n
+                \t• Write the message- enable GPS so this is added to your message and include as much detail about location\n
+                \t• Set off timer on app when commencing injection process</b>
+        </item>
+        <item>
+                \t• It is recommended that you explain this app to your contacts ahead of time. Explain to them the message they may receive so that they take it seriously.\n\n
+                \t• In this particular instance is your contact currently available and answering their phone? Maybe you should call first to check they are answering.\n\n
+                \t• It is recommended that you always choose a second contact in case your first contact does not answer.
+        </item>
+        <item>
+            You need to think about how help can get to you as quickly as possible. This means that the information you give is very important. SMS messages are limited to 160 characters so you need to be clear but succinct.\n\n
+
+            Your message is set from a settings menu and can be re-used. Each time you use the app you should review your message and update it as your location changes.\n\n
+
+                \t• Type out and save the message (first time use) or review and amend the message (subsequent use)\n
+                \t• You have the choice of enabling GPS. This is recommended as it gives further information of your location. If you use this option, a Google maps url with latitude and longitude of max 39 characters plus a space would be appended to the end of the message. This will limit the rest of your message to 120 characters\n
+                \t• As a precaution you should still be asked to include an indication of their location. Latitude and longitude are dependent on phone gps and may not be exact.\n
+                \t• Be clear about the actions you want them to take. E.g. “call 000, tell them to send an ambulance to Kellet lane, nearest crossroad Bayswater Rd, and that someone is not breathing.” OR “Call reception of my hotel on *** and tell them someone has stopped breathing in Room 1313.”\n
+                \t• Give as much information as possible about your location- is it a public toilet? a park? Are you behind a certain colour car? The more detail the better!\n
+                \t• If you are using a public toilet, do NOT lock the cubicle. At present, you cannot use 000 as your contact number as the ambulance service is unable to respond to these calls.
+        </item>
+        <item>
+            Think about how long it takes you to inject and set the timer accordingly. If you have no trouble finding a vein, you should be able to put on a tourniquet, find the vein, swab the site, and inject within a minute or so.\n\n
+            You have 15 seconds to turn off the alarm before the message is sent out.\n\n
+            Hit snooze if you need more time, for example, if you miss the vein and need to start injecting again.
+        </item>
+        <item>
+            Overdose can happen immediately or over a period of time depending on the situation and the individual.\n\n
+
+            Make sure you don't switch the app off unless you're fully awake and moving on.\n\n
+
+            If you wake up to the sound of the alarm, it is highly probably that you are still in the danger zone. We recommend you press the “snooze” button if the alarm woke you. This will reset the alarm to sound in a further 60 seconds time.\n\n
+
+            Continue hitting “snooze” for as long as you are falling asleep. Going on the nod on your own is an incredibly dangerous thing to do. If you are ever in this situation you should go find some people immediately.\n\n
+
+            Did the alarm wake you? Be safe and press snooze for another period of time.\n\n
+
+            Maybe you can call your contact and explain the situation. Tell them you are okay but you feel drowsy and you are worried you still might overdose and to please check for text messages for the next hour or so. Even better, could the person drop by and stay with you for a bit.
+        </item>
+
+        <item>
+            Messages cannot be cancelled once they are sent. If you need to cancel your text, you will need to phone or send a follow up text directly to your contacts.
+        </item>
+        <item>
+            You have the option of using the "response alarm." This is an alarm on your phone that will sound when the message is sent in order to attract the attention of anyone nearby who might be able to assist.\n\n
+
+            The 'response alarm' will continue until deactivated.\n\n
+
+            We recommend the response alarm is used each time.
+        </item>
+    </string-array>
+
+
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="pref_title_emergency_message">Emergency Message</string>
     <string name="pref_default_emergency_message">Urgent medical emergency. Cannot breathe, please call 911.</string>
     <string name="pref_enable_location">Location</string>
-    <string name="ok">Ok</string>
+    <string name="ok">@android:string/ok</string>
     <string name="no">No</string>
 
     <string name="lone_opiate_user_app">Lone Opiate User App</string>

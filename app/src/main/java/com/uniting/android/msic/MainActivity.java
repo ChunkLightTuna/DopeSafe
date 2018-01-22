@@ -12,7 +12,6 @@ import android.location.Location;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -262,16 +261,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void startTimer() {
-        Log.d(TAG, "startTimer() called with: " + "");
+        Log.d(TAG, "startTimer() called");
         if (timerStopped) {
             //timer will start
 
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
             ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) actionBar.hide();
 
             toggleHideyBar();
+
+
+//            Window window = getWindow();
+//
+//            // clear FLAG_TRANSLUCENT_STATUS flag:
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            }
+//            // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            }
+//
+//            // finally change the color
+//            window.setStatusBarColor(getColor(R.color.unitingPurpleDark));
 
 
             startButton.setVisibility(View.INVISIBLE);
@@ -325,12 +338,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void stopTimer() {
+        Log.d(TAG, "stopTimer() called");
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         toggleHideyBar();
-
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.show();
-
 
         stopButton.setVisibility(View.INVISIBLE);
         pauseButton.setVisibility(View.INVISIBLE);
@@ -496,9 +508,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            startActivity(intent);
 //        } else
 
-        if (id == R.id.settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
+        switch (id) {
+
+
+            case R.id.settings: {
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                break;
+            }
+
+            case R.id.disclaimer: {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.disclaimer)
+                        .setMessage(R.string.conditions)
+                        .setPositiveButton(R.string.ok, (dialog, which) -> {})
+                        .show();
+                break;
+            }
+
+            case R.id.drug_safety_information: {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.drug_safety_information)
+                        .setMessage("TODO")
+                        .setPositiveButton(R.string.ok, (dialog, which) -> {})
+                        .show();
+                break;
+            }
+
+            case R.id.how_to_use_the_app: {
+                Intent intent = new Intent(this, InfoTextActivity.class);
+                intent.putExtra("titles", getResources().getStringArray(R.array.how_to_titles));
+                intent.putExtra("bodies", getResources().getStringArray(R.array.how_to_bodies));
+                startActivity(intent);
+                break;
+            }
         }
 
         DrawerLayout drawer = getWindow().getDecorView().findViewById(R.id.drawer_layout);
