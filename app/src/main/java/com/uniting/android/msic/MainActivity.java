@@ -36,6 +36,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.ebanx.swipebtn.OnActiveListener;
+import com.ebanx.swipebtn.OnStateChangeListener;
 import com.ebanx.swipebtn.SwipeButton;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -112,11 +114,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         resumeButton.setOnClickListener(view -> resumeTimer());
 
         stopButton = findViewById(R.id.stop_button);
-
         stopButton.setVisibility(View.INVISIBLE);
-        stopButton.setOnStateChangeListener(active -> {
-            if (active)
+        stopButton.setOnActiveListener(new OnActiveListener() {
+            @Override
+            public void onActive() {
                 stopTimer();
+            }
         });
 
         drawer = findViewById(R.id.drawer_layout);
