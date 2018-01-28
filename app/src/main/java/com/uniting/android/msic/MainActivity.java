@@ -336,7 +336,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pauseButton.setVisibility(View.VISIBLE);
         startTime = startTime + (SystemClock.uptimeMillis() - pauseTime);
         pauseTime = 0L;
-        //progressCircle.setVisibility(View.VISIBLE);
         stopButton.setText(getResources().getString(R.string.stop));
     }
 
