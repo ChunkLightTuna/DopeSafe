@@ -25,19 +25,18 @@ class InfoTextActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info_text)
 
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.setHomeButtonEnabled(true)
-        }
+        val title = intent.extras.getString("title")
+        supportActionBar?.title = title
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
 
-
-        val recyclerView = findViewById<RecyclerView>(R.id.texty_recycler_view)
+        val recyclerView = findViewById<RecyclerView>(R.id.info_text_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(false)
 
         val titles = intent.extras.getStringArray("titles")
         val bodies = intent.extras.getStringArray("bodies")
-        recyclerView.adapter = InfoTextAdapter(titles, bodies)
+        val collapse = intent.extras.getBoolean("collapse")
+        recyclerView.adapter = InfoTextAdapter(titles, bodies, collapse)
     }
 }

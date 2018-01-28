@@ -54,7 +54,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".InfoTextActivity"></activity>
+
+        <activity
+            android:name=".InfoTextActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MsicTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+
     </application>
 
 </manifest>

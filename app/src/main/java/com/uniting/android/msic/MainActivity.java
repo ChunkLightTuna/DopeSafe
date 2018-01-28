@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         ringtone = RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
-//        setVolumeControlStream(AudioManager.STREAM_ALARM);
 
         if (ringtone == null) {
             Log.d(TAG, "volume is muted, might want to fix that!");
@@ -115,16 +114,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         stopButton = findViewById(R.id.stop_button);
         stopButton.setVisibility(View.INVISIBLE);
-        stopButton.setOnActiveListener(new OnActiveListener() {
-            @Override
-            public void onActive() {
-                stopTimer();
-            }
-        });
+        stopButton.setOnActiveListener(this::stopTimer);
 
         drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -193,37 +187,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int timeInMinutes = Integer.valueOf(sharedPreferences.getString(getString(R.string.countdown_time_key), "5"));
         timeDisplay.setText(String.format(getString(com.uniting.android.msic.R.string.time_format), timeInMinutes, 0));
     }
-
-
-//    private void getSharedPrefs() {
-//        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-//
-//        String phone = getString(com.uniting.android.msic.R.string.pref_default_contact);
-//        String message = getString(com.uniting.android.msic.R.string.pref_default_emergency_message);
-//        int timeout = 1;
-//
-//        if (sharedPref != null) {
-//            message = sharedPref.getString("message", message);
-//            phone = sharedPref.getString("phone", phone);
-//            timeout = sharedPref.getInt("timeDisplay", timeout);
-//        }
-//
-//        prefs.setMsg(message);
-//        prefs.setPhone(phone);
-//        prefs.setTime(timeout);
-//    }
-
-//    private void setSharedPrefs() {
-//        SharedPreferences preferences = getPreferences(Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = preferences.edit();
-//        editor.putString("message", prefs.getMsg());
-//        editor.putString("phone", prefs.getPhone());
-//        editor.putInt("timeDisplay", prefs.getTime());
-//        editor.putBoolean("motion", prefs.isMotion());
-//        editor.putBoolean("location", prefs.isLoc());
-//
-//        editor.apply();
-//    }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     public void toggleHideyBar() {
@@ -472,8 +435,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             }
                             setRingVolumeMax();
                             ringtone.play();
-
-                            //noinspection deprecation
                             vibrator.vibrate(200);
 
                             alarmStarted = true;
@@ -529,18 +490,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             case R.id.drug_safety_information: {
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.drug_safety_information)
-                        .setMessage("TODO")
-                        .setPositiveButton(R.string.ok, (dialog, which) -> {})
-                        .show();
+                Intent intent = new Intent(this, InfoTextActivity.class);
+                intent.putExtra("title", getResources().getString(R.string.drug_safety_information));
+                intent.putExtra("titles", getResources().getStringArray(R.array.drug_safety_titles));
+                intent.putExtra("bodies", getResources().getStringArray(R.array.drug_safety_bodies));
+                intent.putExtra("collapse", false);
+                startActivity(intent);
                 break;
             }
 
             case R.id.how_to_use_the_app: {
                 Intent intent = new Intent(this, InfoTextActivity.class);
+                intent.putExtra("title", getResources().getString(R.string.how_to_use_the_app));
                 intent.putExtra("titles", getResources().getStringArray(R.array.how_to_titles));
                 intent.putExtra("bodies", getResources().getStringArray(R.array.how_to_bodies));
+                intent.putExtra("collapse", true);
                 startActivity(intent);
                 break;
             }
