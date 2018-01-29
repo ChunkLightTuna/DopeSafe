@@ -236,7 +236,6 @@
     <string name="title_activity_loading">LoadingActivity</string>
     <string name="resume_button_text">&#9654;</string>
     <string name="reset">RESET</string>
-    <string name="cont">Continue</string>
     <string name="exit">Exit</string>
 
     <string name="emergency_message_key">emergency_message</string>
@@ -249,5 +248,6 @@
     <string name="setup_complete_key">setup_complete</string>
 
     <string name="confirmation_dialog_title">Confirmation Settings</string>
+    <string name="cont">Continue</string>
 
 </resources>

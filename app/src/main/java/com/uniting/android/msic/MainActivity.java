@@ -328,6 +328,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setNegativeButton(R.string.init_dialog_negative_button_text, (dialogInterface, i) -> {
                     //
                 })
+                .setCancelable(false)
                 .create()
                 .show();
     }

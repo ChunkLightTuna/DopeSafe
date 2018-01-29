@@ -1,12 +1,14 @@
 package com.uniting.android.msic;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
+import android.widget.ToggleButton;
 
 import java.util.concurrent.Callable;
 
@@ -66,7 +68,7 @@ public class SettingsDialog {
                 builder
                         .setTitle("Emergency Contact")
                         .setView(editText)
-                        .setPositiveButton("set", (dialog, which) -> {
+                        .setPositiveButton(R.string.cont, (dialog, which) -> {
                             Prefs.setPhone(context, editText.getText().toString());
                             SettingsDialog.this.executeCallback(emergencyContactCallback);
                         });
@@ -78,11 +80,17 @@ public class SettingsDialog {
                 String current = Prefs.isLoc(context) ? "enabled" : "disabled";
                 String action = Prefs.isLoc(context) ? "disable" : "enable";
                 builder
-                        .setTitle("Location currently " + current + ".")
-                        .setMessage("Would you like to " + action + " it?")
-                        .setPositiveButton(action, (dialog, which) -> {
-                            Prefs.setLoc(context, !Prefs.isLoc(context));
+                        .setTitle("Location Services")
+                        .setMessage("Location currently " + current + ".")
+                        .setPositiveButton(R.string.cont, (dialog, which) -> {
                             executeCallback(locationCallback);
+                        })
+                        .setNegativeButton(action, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Prefs.setLoc(context, !Prefs.isLoc(context));
+                                executeCallback(locationCallback);
+                            }
                         });
                 break;
             }
@@ -141,9 +149,7 @@ public class SettingsDialog {
             }
         }
         builder
-                .setNegativeButton("cancel", (dialog, which) -> {
-                    // User cancelled the dialog
-                })
+                .setCancelable(false)
                 .create()
                 .show();
     }

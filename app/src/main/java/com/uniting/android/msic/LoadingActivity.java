@@ -56,6 +56,7 @@ public class LoadingActivity extends AppCompatActivity {
                         (dialogInterface, i) -> LoadingActivity.this.handleDisclaimerAccepted())
                 .setNegativeButton(R.string.disclaimer_dialog_neg_button_text,
                         (dialogInterface, i) -> LoadingActivity.this.handleDisclaimerDenied())
+                .setCancelable(false)
                 .create()
                 .show();
     }
@@ -73,15 +74,6 @@ public class LoadingActivity extends AppCompatActivity {
                })
                .showDialog();
     }
-
-//    private void showSetupMessageDialog(){
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setMessage(R.string.setup_dialog_message)
-//                .setPositiveButton(R.string.cont, (dialogInterface, i) -> getNextStep())
-//                .setNegativeButton(R.string.exit, (dialogInterface, i) -> handleSetUpDenied())
-//                .create()
-//                .show();
-//    }
 
     private void getNextStep(){
         if(!phoneSet) {

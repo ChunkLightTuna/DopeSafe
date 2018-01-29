@@ -43,6 +43,7 @@ public class ConfirmationDialog {
                 .setView(getDialogContent())
                 .setPositiveButton("Continue", (dialog, which) -> ConfirmationDialog.this.executeCallback(continueCallback))
                 .setNegativeButton("Edit", (dialog, which) -> ConfirmationDialog.this.executeCallback(editCallback))
+                .setCancelable(false)
                 .create()
                 .show();
     }
