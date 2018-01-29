@@ -95,8 +95,7 @@ public class SettingsActivity extends AppCompatActivity {
         public void onResume() {
             super.onResume();
 
-
-            //remove option to enable notification permission on return from notificaiton permission menu
+            //remove option to enable notification permission on return from notification permission menu
             NotificationManager nm = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N &&
                     nm != null &&
@@ -127,6 +126,7 @@ public class SettingsActivity extends AppCompatActivity {
             // guidelines.
             bindPreferenceSummaryToValue(findPreference(getString(R.string.emergency_message_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.emergency_contact_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.emergency_contact_aux_key)));
 //            bindPreferenceSummaryToValue(findPreference("enable_location"));
 
             /*

@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">MSIC</string>
     <string name="pref_default_contact">0000000000</string>
-    <string name="help_website">http://www.hopefornhrecovery.org/</string>
 
     <string name="start_button_text">Be Safe</string>
     <string name="default_time">30:00</string>
@@ -80,10 +79,7 @@
 
             SAVE A FRIEND- LEARN RESUSCITATION
         </item>
-
-
     </string-array>
-
 
     <string-array name="how_to_titles">
         <item><b>Instructions</b></item>
@@ -97,7 +93,6 @@
     </string-array>
 
     <string-array name="how_to_bodies">
-
         <item>
             The app will sound an alarm at a pre-determined time. If you do not stop or snooze the alarm, it will send an automated message to the contacts you have chosen. You get to write that message requesting emergency assistance.\n\n
 
@@ -146,7 +141,6 @@
 
             Maybe you can call your contact and explain the situation. Tell them you are okay but you feel drowsy and you are worried you still might overdose and to please check for text messages for the next hour or so. Even better, could the person drop by and stay with you for a bit.
         </item>
-
         <item>
             Messages cannot be cancelled once they are sent. If you need to cancel your text, you will need to phone or send a follow up text directly to your contacts.
         </item>
@@ -166,7 +160,6 @@
         </item>
     </string-array>
 
-
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="pref_title_emergency_message">Emergency Message</string>
     <string name="pref_default_emergency_message">Urgent medical emergency. Cannot breathe, please call 911.</string>
@@ -180,9 +173,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="settings">Settings</string>
     <string name="init_dialog_title">Warning</string>
-    <string name="init_dialog_message">An overdoes can still occur for some time after
-    injection!
-  </string>
+    <string name="init_dialog_message">An overdoes can still occur for some time after injection!</string>
     <string name="init_dialog_positive_button_text">Continue</string>
     <string name="init_dialog_negative_button_text">Cancel</string>
     <string name="permissions_dialog_title">Error</string>
@@ -191,9 +182,7 @@
 
     <string name="notification_permissions_dialog_message">This gives the app permission to set ringer volume to max.</string>
 
-    <string name="disclaimer_header">By clicking accept, the application user acknowledges that he/she
-    understands and accepts the following conditions:\n\n
-  </string>
+    <string name="disclaimer_header">By clicking accept, the application user acknowledges that he/she understands and accepts the following conditions:\n\n </string>
     <string name="disclaimer">Disclaimer</string>
 
     <string-array name="conditions">
@@ -233,7 +222,7 @@
     8. That the app user may rely on the above acknowledgements and releases in any
     proceedings brought against it by the app user, his or her estate and his or her
     family members arising out of his or her injury or death.\n
-  </string>
+    </string>
     <string name="disclaimer_dialog_title">Accept Disclaimer To Continue</string>
     <string name="disclaimer_dialog_neg_button_text">Decline</string>
     <string name="disclaimer_dialog_pos_button_text">Accept</string>
@@ -242,9 +231,6 @@
     <string name="setup_dialog_message">
       We will now ask you to enter some information so that you can proceed safely.
     </string>
-
-    <string name="dummy_content">johnnnnnnnnnnnnnn</string>
-    <string name="dummy_button">Dummy Button</string>
 
     <string name="pause_button_text">&#9612;&#9612;</string>
     <string name="title_activity_loading">LoadingActivity</string>

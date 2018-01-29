@@ -35,17 +35,4 @@
         android:summary="@string/pref_default_contact"
         android:title="@string/emergency_contact_2" />
 
-
-    <!--<EditTextPreference-->
-    <!--android:id="@+id/emergency_message_pref"-->
-    <!--android:capitalize="words"-->
-    <!--android:defaultValue="@string/pref_default_emergency_message"-->
-    <!--android:inputType="textMultiLine"-->
-    <!--android:key="@string/emergency_message_key"-->
-    <!--android:maxLines="4"-->
-    <!--android:lines="4"-->
-    <!--android:selectAllOnFocus="true"-->
-    <!--android:summary="@string/pref_default_emergency_message"-->
-    <!--android:title="@string/pref_title_emergency_message" />-->
-
 </PreferenceScreen>
