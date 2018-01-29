@@ -43,7 +43,7 @@ import com.ebanx.swipebtn.SwipeButton;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
 
-//    private UserPrefs prefs;
+//    private Prefs prefs;
 
     private TextView timeDisplay;
     private Button startButton;

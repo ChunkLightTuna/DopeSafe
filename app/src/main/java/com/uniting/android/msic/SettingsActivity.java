@@ -116,7 +116,6 @@ public class SettingsActivity extends AppCompatActivity {
 
             preferenceScreen.addPreference(SmsMessagePreference.newInstance(
                     getContext(),
-                    getString(R.string.enable_location_key),
                     getString(R.string.pref_title_emergency_message),
                     getString(R.string.pref_default_emergency_message),
                     getString(R.string.emergency_message_key))

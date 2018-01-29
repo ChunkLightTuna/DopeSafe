@@ -1,10 +1,7 @@
 package com.uniting.android.msic;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
-import android.telecom.Call;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -64,13 +61,13 @@ public class SettingsDialog {
                 final EditText editText = new EditText(context);
 
                 editText.setInputType(InputType.TYPE_CLASS_PHONE);
-                editText.setText(UserPrefs.getInstance().getPhone());
+                editText.setText(Prefs.getPhone(context));
 
                 builder
                         .setTitle("Emergency Contact")
                         .setView(editText)
                         .setPositiveButton("set", (dialog, which) -> {
-                            UserPrefs.getInstance().setPhone(editText.getText().toString());
+                            Prefs.setPhone(context, editText.getText().toString());
                             SettingsDialog.this.executeCallback(emergencyContactCallback);
                         });
 
@@ -94,14 +91,14 @@ public class SettingsDialog {
                 numberPicker.setMinValue(1);
                 numberPicker.setMaxValue(12);
 
-                numberPicker.setValue(UserPrefs.getInstance().getTime() / 5);
+                numberPicker.setValue(Prefs.getTime(context) / 5);
 
                 builder
                         .setTitle("Time Out")
                         .setMessage("Set time out in minutes")
                         .setView(numberPicker)
                         .setPositiveButton("set", (dialog, which) -> {
-                            UserPrefs.getInstance().setTime(Integer.parseInt(minuteValues[numberPicker.getValue() - 1]));
+                            Prefs.setTime(context, Integer.parseInt(minuteValues[numberPicker.getValue() - 1]));
                             executeCallback(timeoutCallback);
                         });
 
@@ -111,7 +108,7 @@ public class SettingsDialog {
                 final EditText editText = new EditText(context);
 
                 editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                editText.setText(UserPrefs.getInstance().getMsg());
+                editText.setText(Prefs.getMsg(context));
 //                editText.setMinLines(5);
                 editText.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
@@ -119,7 +116,7 @@ public class SettingsDialog {
                         .setTitle("Message")
                         .setView(editText)
                         .setPositiveButton("set", (dialog, which) -> {
-                            UserPrefs.getInstance().setMsg(editText.getText().toString());
+                            Prefs.setMsg(context, editText.getText().toString());
                             executeCallback(messageCallBack);
                         });
 
@@ -128,13 +125,13 @@ public class SettingsDialog {
             }
             case R.id.enable_location_pref: {
 
-                String current = UserPrefs.getInstance().isLoc() ? "enabled" : "disabled";
-                String action = UserPrefs.getInstance().isLoc() ? "disable" : "enable";
+                String current = Prefs.isLoc(context) ? "enabled" : "disabled";
+                String action = Prefs.isLoc(context) ? "disable" : "enable";
                 builder
                         .setTitle("Location currently " + current + ".")
                         .setMessage("Would you like to " + action + " it?")
                         .setPositiveButton(action, (dialog, which) -> {
-                            UserPrefs.getInstance().setLoc(!UserPrefs.getInstance().isLoc());
+                            Prefs.setLoc(context, !Prefs.isLoc(context));
                             executeCallback(locationCallback);
                         });
                 break;

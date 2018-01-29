@@ -1,9 +1,6 @@
 package com.uniting.android.msic;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,14 +8,10 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 
-import java.util.concurrent.Callable;
-
 
 public class LoadingActivity extends AppCompatActivity {
 
     private static final String TAG = "LoadingActivity";
-
-    private SharedPreferences prefs;
 
     private SettingsDialog settingsDialog;
     private boolean phoneSet;
@@ -35,8 +28,7 @@ public class LoadingActivity extends AppCompatActivity {
         timeSet = false;
         locationSet = false;
         settingsDialog = new SettingsDialog(this);
-        new UserPrefs(this);
-        if(!UserPrefs.getInstance().isDisclaimerAccepted() && !UserPrefs.getInstance().isSetupComplete())
+        if(!Prefs.isDisclaimerAccepted(this) && !Prefs.isSetupComplete(this))
             checkDisclaimerAcceptance();
         else
             showConfirmationDialog();
@@ -44,7 +36,7 @@ public class LoadingActivity extends AppCompatActivity {
 
 
     private void checkDisclaimerAcceptance() {
-        if(UserPrefs.getInstance().isDisclaimerAccepted())
+        if(Prefs.isDisclaimerAccepted(this))
             Log.d(TAG, "disclaimer accepted");
         else
             showDisclaimerDialog();
@@ -132,23 +124,23 @@ public class LoadingActivity extends AppCompatActivity {
 
     private void handleDisclaimerAccepted() {
         Log.d(TAG, "disclaimer accepted");
-        UserPrefs.getInstance().setDisclaimerAccepted(true);
+        Prefs.setDisclaimerAccepted(this, true);
         getNextStep();
     }
 
     private void handleDisclaimerDenied() {
         Log.d(TAG, "disclaimer denied");
-        UserPrefs.getInstance().setDisclaimerAccepted(false);
+        Prefs.setDisclaimerAccepted(this, false);
         exitApplication();
     }
 
     private void handleSetUpDenied(){
-        UserPrefs.getInstance().setSetupComplete(false);
+        Prefs.setSetupComplete(this, false);
         exitApplication();
     }
 
     private void handleSetUpCompleted(){
-        UserPrefs.getInstance().setSetupComplete(true);
+        Prefs.setSetupComplete(this, true);
         startMainActivity();
     }
 

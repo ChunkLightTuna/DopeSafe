@@ -1,10 +1,8 @@
 package com.uniting.android.msic;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -24,7 +22,6 @@ import java.util.Locale;
 public class SmsMessagePreference extends EditTextPreference {
     private static final String REMAINING_FORMAT = "%1$d/%2$d";
     private static final String TAG = "SmsMessagePreference";
-    private String locationEnabledPrefKey;
 
     /**
      * for now we're only instantiating this programmatically, but to do it proper through XML would require this method
@@ -37,11 +34,10 @@ public class SmsMessagePreference extends EditTextPreference {
         super(context, attrs);
     }
 
-    static SmsMessagePreference newInstance(Context context, String locationEnabledPrefKey, String title, String defaultValue, String key) {
+    static SmsMessagePreference newInstance(Context context, String title, String defaultValue, String key) {
 
         SmsMessagePreference ed = new SmsMessagePreference(context, null);
 
-        ed.locationEnabledPrefKey = locationEnabledPrefKey;
         ed.setDefaultValue(defaultValue);
         ed.setKey(key);
         ed.setTitle(title);
@@ -57,8 +53,7 @@ public class SmsMessagePreference extends EditTextPreference {
     protected void showDialog(Bundle state) {
         super.showDialog(state);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        int maxChars = prefs.getBoolean(locationEnabledPrefKey, false) ? 120 : 160;
+        int maxChars = Prefs.isLoc(getContext()) ? 120 : 160;
 
         TextView textCounter = new TextView(getContext());
         textCounter.setText(String.format(Locale.getDefault(), REMAINING_FORMAT, getSummary().length(), maxChars));
