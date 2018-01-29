@@ -194,6 +194,20 @@
     understands and accepts the following conditions:\n\n
   </string>
     <string name="disclaimer">Disclaimer</string>
+
+    <string-array name="conditions">
+        <item>
+            1. The use of any opiate drug is an inherently dangerous activity with real and significant risks of injury and death.\n\n
+            2. The app user further acknowledges that the risks of opiate use are increased when the user is alone at the time of use.\n\n
+            3. That many opiates are illegal to possess and also, to supply and manufacture.\n\n
+            4. That this app in no way encourages, endorses or condones the use of opiates including those which are illegal to possess, supply and manufacture.\n\n
+            5. That while this app is intended to assist opiate users to reduce the risk of harm through accidental overdose, it is not failsafe. Even when using the app, opiate use remains a dangerous activity.\n\n
+            6. That the app, like all forms of software, is subject to malfunction and may not work as intended or at all on particular occasions depending upon matters such as the memory capacity of the device onto which it is downloaded, phone network coverage, device charge and the app user’s data allowance. Additionally, the app works by sending a message to a third party and relies on that third party receiving the message and responding in a timely manner.\n\n
+            7. That the app user freely and voluntarily accepts the risks associated with opiate use and releases, to the full extent permitted by law, XX from any liability for injury or death occurring as a result of opiate use while he or she is using this app.\n\n
+            8. That the app user may rely on the above acknowledgements and releases in any proceedings brought against it by the app user, his or her estate and his or her family members arising out of his or her injury or death.
+        </item>
+    </string-array>
+
     <string name="conditions">
     1. The use of any opiate drug is an inherently dangerous activity with real and
     significant risks of injury and death.\n\n
@@ -242,6 +256,9 @@
     <string name="emergency_contact_key">emergency_contact</string>
     <string name="enable_location_key">enable_location</string>
     <string name="countdown_time_key">countdown_timer_pref</string>
+    <string name="disclaimer_accepted_key">disclaimer_accepted</string>
+    <string name="setup_complete_key">setup_complete</string>
+
     <string name="confirmation_dialog_title">Confirmation Settings</string>
 
 </resources>

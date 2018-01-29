@@ -458,18 +458,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Log.d(TAG, "onNavigationItemSelected() called with: " + "item = [" + item + "]");
 
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-//        if (id == R.id.get_help) {
-//            Intent intent = new Intent(Intent.ACTION_VIEW);
-//            intent.setData(Uri.parse(getResources().getString(R.string.help_website)));
-//            startActivity(intent);
-//        } else
-
-        switch (id) {
+        switch (item.getItemId()) {
 
             case R.id.settings: {
                 Intent intent = new Intent(this, SettingsActivity.class);
@@ -478,17 +468,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             case R.id.disclaimer: {
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.disclaimer)
-                        .setMessage(R.string.conditions)
-                        .setPositiveButton(R.string.ok, (dialog, which) -> {})
-                        .show();
+                Intent intent = new Intent(this, InfoTextActivity.class);
+                intent.putExtra("activity_title", getResources().getString(R.string.disclaimer));
+                intent.putExtra("bodies", getResources().getStringArray(R.array.conditions));
+                startActivity(intent);
                 break;
             }
 
             case R.id.drug_safety_information: {
                 Intent intent = new Intent(this, InfoTextActivity.class);
-                intent.putExtra("title", getResources().getString(R.string.drug_safety_information));
+                intent.putExtra("activity_title", getResources().getString(R.string.drug_safety_information));
                 intent.putExtra("titles", getResources().getStringArray(R.array.drug_safety_titles));
                 intent.putExtra("bodies", getResources().getStringArray(R.array.drug_safety_bodies));
                 intent.putExtra("collapse", false);
@@ -498,7 +487,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.how_to_use_the_app: {
                 Intent intent = new Intent(this, InfoTextActivity.class);
-                intent.putExtra("title", getResources().getString(R.string.how_to_use_the_app));
+                intent.putExtra("activity_title", getResources().getString(R.string.how_to_use_the_app));
                 intent.putExtra("titles", getResources().getStringArray(R.array.how_to_titles));
                 intent.putExtra("bodies", getResources().getStringArray(R.array.how_to_bodies));
                 intent.putExtra("collapse", true);

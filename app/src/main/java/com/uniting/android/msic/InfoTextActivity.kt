@@ -25,7 +25,7 @@ class InfoTextActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_info_text)
 
-        val title = intent.extras.getString("title")
+        val title = intent.extras.getString("activity_title")
         supportActionBar?.title = title
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
