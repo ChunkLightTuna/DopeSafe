@@ -256,6 +256,9 @@
     <string name="emergency_contact_key">emergency_contact</string>
     <string name="enable_location_key">enable_location</string>
     <string name="countdown_time_key">countdown_timer_pref</string>
+    <string name="disclaimer_accepted_key">disclaimer_accepted</string>
+    <string name="setup_complete_key">setup_complete</string>
+
     <string name="confirmation_dialog_title">Confirmation Settings</string>
 
 </resources>
