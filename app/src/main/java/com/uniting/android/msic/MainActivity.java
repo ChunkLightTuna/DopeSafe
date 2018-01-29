@@ -473,7 +473,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (id) {
 
-
             case R.id.settings: {
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
@@ -481,11 +480,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             case R.id.disclaimer: {
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.disclaimer)
-                        .setMessage(R.string.conditions)
-                        .setPositiveButton(R.string.ok, (dialog, which) -> {})
-                        .show();
+                Intent intent = new Intent(this, InfoTextActivity.class);
+                intent.putExtra("title", getResources().getString(R.string.disclaimer));
+                intent.putExtra("bodies", getResources().getStringArray(R.array.conditions));
+                startActivity(intent);
                 break;
             }
 

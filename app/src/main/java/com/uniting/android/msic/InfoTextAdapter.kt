@@ -19,9 +19,10 @@ import android.text.SpannableString
  * RecyclerViewAdapter for title/ body items. Does a lot of hacky shit to get bulleted lists to indent
  * TODO: bold and italics support
  */
-class InfoTextAdapter(private val titles: Array<String>, private val bodies: Array<String>, private val collapse: Boolean) : RecyclerView.Adapter<InfoTextAdapter.InfoTextViewHolder>() {
+class InfoTextAdapter(private val titles: Array<String>?, private val bodies: Array<String>, c: Boolean) : RecyclerView.Adapter<InfoTextAdapter.InfoTextViewHolder>() {
 
     private val bullet = "• "
+    private val collapse: Boolean = if (titles == null) false else c
 
     class InfoTextViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         internal val container: View = itemView.findViewById(R.id.info_text_container)
@@ -30,7 +31,7 @@ class InfoTextAdapter(private val titles: Array<String>, private val bodies: Arr
     }
 
     override fun getItemCount(): Int {
-        return titles.size
+        return bodies.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InfoTextViewHolder {
@@ -52,7 +53,11 @@ class InfoTextAdapter(private val titles: Array<String>, private val bodies: Arr
             holder.body.visibility = if (position > 0) View.GONE else View.VISIBLE
         }
 
-        holder.title.text = titles[position]
+        if (titles != null)
+            holder.title.text = titles[position]
+        else
+            holder.title.visibility = View.GONE
+
         holder.body.text = bodies[position].split("\n").map(String::trim).map { line ->
 
             if (line.startsWith(bullet) || (line.length >= 3 && line.substring(0, 3).matches(Regex("[1-9]\\. ")))) {
