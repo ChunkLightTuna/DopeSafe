@@ -8,6 +8,7 @@
 
     <string name="time_format">%1$02d:%2$02d</string>
     <string name="emergency_contact">Emergency Contact</string>
+    <string name="emergency_contact_2">Emergency Contact 2</string>
     <string name="count_down">Count Down Time</string>
     <string name="message">Message</string>
     <string name="motion_detection">Motion Detection</string>
@@ -254,6 +255,8 @@
 
     <string name="emergency_message_key">emergency_message</string>
     <string name="emergency_contact_key">emergency_contact</string>
+    <string name="emergency_contact_aux_key">emergency_contact_aux</string>
+    <string name="emergency_contacts_key">emergency_contacts</string>
     <string name="enable_location_key">enable_location</string>
     <string name="countdown_time_key">countdown_timer_pref</string>
     <string name="disclaimer_accepted_key">disclaimer_accepted</string>

@@ -56,6 +56,7 @@ public class SmsMessagePreference extends EditTextPreference {
         int maxChars = Prefs.isLoc(getContext()) ? 120 : 160;
 
         TextView textCounter = new TextView(getContext());
+        textCounter.setText(String.format(Locale.getDefault(), REMAINING_FORMAT, getSummary().length(), maxChars));
 
         final LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 

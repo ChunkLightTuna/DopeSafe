@@ -1,9 +1,10 @@
 package com.uniting.android.msic;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.ArraySet;
 import android.util.Log;
+import java.util.Set;
 
 /**
  * Butchered by Chris Oelerich sometime after 5/27/16.
@@ -14,15 +15,33 @@ class Prefs {
     private static final String TAG = "Prefs";
 
     static String getPhone(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.emergency_contact_key), null);
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.emergency_contact_key), "");
     }
 
     static void setPhone(Context context, String phone) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(context.getString(R.string.emergency_contact_key), phone).apply();
     }
 
+    static String getPhoneAux(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.emergency_contact_aux_key), "");
+    }
+
+    static void setPhoneAux(Context context, String phone) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(context.getString(R.string.emergency_contact_aux_key), phone).apply();
+    }
+
+
+    //unused for now
+    static Set<String> getPhones(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context).getStringSet(context.getString(R.string.emergency_contact_key), new ArraySet<>());
+    }
+
+    static void setPhones(Context context, Set<String> phones) {
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putStringSet(context.getString(R.string.emergency_contact_key), phones).apply();
+    }
+
     static int getTime(Context context) {
-        return Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.countdown_time_key), "10"));
+        return Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.countdown_time_key), "5"));
     }
 
     static void setTime(Context context, int time) {
@@ -31,7 +50,7 @@ class Prefs {
     }
 
     static String getMsg(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.emergency_message_key), null);
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.emergency_message_key), "");
     }
 
     static void setMsg(Context context, String message) {

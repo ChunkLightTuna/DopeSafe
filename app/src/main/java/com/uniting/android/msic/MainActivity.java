@@ -3,11 +3,9 @@ package com.uniting.android.msic;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
-import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.AudioManager;
@@ -18,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -37,8 +34,6 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.ebanx.swipebtn.OnActiveListener;
-import com.ebanx.swipebtn.OnStateChangeListener;
 import com.ebanx.swipebtn.SwipeButton;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -388,18 +383,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private Runnable getTimer() {
-        Context context = this.getApplicationContext();
+
+        final int time = Prefs.getTime(this);
+        final String message = Prefs.getMsg(this);
+        final String phoneNumber = Prefs.getPhone(this);
+        final boolean location = Prefs.isLoc(this);
 
         return new Runnable() {
-//            final int time = Integer.valueOf(sharedPreferences.getString(getString(R.string.countdown_time_key), "5"));
-//            final String message = sharedPreferences.getString(getString(R.string.emergency_message_key), getString(R.string.pref_default_emergency_message));
-//            final String phoneNumber = sharedPreferences.getString(getString(R.string.emergency_contact_key), getString(R.string.pref_default_contact));
-//            final boolean location = sharedPreferences.getBoolean(getString(R.string.enable_location_key), false);
-            final int time = Prefs.getTime(context);
-            final String message = Prefs.getMsg(context);
-            final String phoneNumber = Prefs.getPhone(context);
-            final boolean location = Prefs.isLoc(context);
-
             public void run() {
                 if (!timerPaused) {
 
