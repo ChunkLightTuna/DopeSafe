@@ -3,6 +3,7 @@ package com.uniting.android.msic;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
+import android.app.Application;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -75,17 +76,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private AlertDialog alertDialog;
     private DrawerLayout drawer;
 
-    private SharedPreferences sharedPreferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         ringtone = RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
 
         if (ringtone == null) {
@@ -183,8 +179,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void updateTime() {
-
-        int timeInMinutes = Integer.valueOf(sharedPreferences.getString(getString(R.string.countdown_time_key), "5"));
+        int timeInMinutes = Prefs.getTime(this.getApplicationContext());
         timeDisplay.setText(String.format(getString(com.uniting.android.msic.R.string.time_format), timeInMinutes, 0));
     }
 
@@ -393,14 +388,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private Runnable getTimer() {
-
+        Context context = this.getApplicationContext();
 
         return new Runnable() {
-
-            final int time = Integer.valueOf(sharedPreferences.getString(getString(R.string.countdown_time_key), "5"));
-            final String message = sharedPreferences.getString(getString(R.string.emergency_message_key), getString(R.string.pref_default_emergency_message));
-            final String phoneNumber = sharedPreferences.getString(getString(R.string.emergency_contact_key), getString(R.string.pref_default_contact));
-            final boolean location = sharedPreferences.getBoolean(getString(R.string.enable_location_key), false);
+//            final int time = Integer.valueOf(sharedPreferences.getString(getString(R.string.countdown_time_key), "5"));
+//            final String message = sharedPreferences.getString(getString(R.string.emergency_message_key), getString(R.string.pref_default_emergency_message));
+//            final String phoneNumber = sharedPreferences.getString(getString(R.string.emergency_contact_key), getString(R.string.pref_default_contact));
+//            final boolean location = sharedPreferences.getBoolean(getString(R.string.enable_location_key), false);
+            final int time = Prefs.getTime(context);
+            final String message = Prefs.getMsg(context);
+            final String phoneNumber = Prefs.getPhone(context);
+            final boolean location = Prefs.isLoc(context);
 
             public void run() {
                 if (!timerPaused) {
@@ -472,7 +470,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        } else
 
         switch (id) {
-
 
             case R.id.settings: {
                 Intent intent = new Intent(this, SettingsActivity.class);

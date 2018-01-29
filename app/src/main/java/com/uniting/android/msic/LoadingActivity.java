@@ -91,6 +91,13 @@ public class LoadingActivity extends AppCompatActivity {
                 return null;
             });
             settingsDialog.showDialog(R.id.emergency_contact_pref);
+        }else if(!locationSet){
+            settingsDialog.setLocationCallback(() -> {
+                locationSet = true;
+                getNextStep();
+                return null;
+            });
+            settingsDialog.showDialog(R.id.enable_location_pref);
         }else if(!messageSet) {
             settingsDialog.setMessageCallBack(() -> {
                 messageSet = true;
@@ -105,13 +112,6 @@ public class LoadingActivity extends AppCompatActivity {
                 return null;
             });
             settingsDialog.showDialog(R.id.time_out);
-        }else if(!locationSet){
-            settingsDialog.setLocationCallback(() -> {
-                locationSet = true;
-                getNextStep();
-                return null;
-            });
-            settingsDialog.showDialog(R.id.enable_location_pref);
         }
         else
             showSetupCompleteDialog();

@@ -73,7 +73,33 @@ public class SettingsDialog {
 
                 break;
             }
-            case R.id.time_out:
+            case R.id.enable_location_pref: {
+
+                String current = Prefs.isLoc(context) ? "enabled" : "disabled";
+                String action = Prefs.isLoc(context) ? "disable" : "enable";
+                builder
+                        .setTitle("Location currently " + current + ".")
+                        .setMessage("Would you like to " + action + " it?")
+                        .setPositiveButton(action, (dialog, which) -> {
+                            Prefs.setLoc(context, !Prefs.isLoc(context));
+                            executeCallback(locationCallback);
+                        });
+                break;
+            }
+            case R.id.message: {
+                final EditMessageView messageView = new EditMessageView(context);
+                messageView.setMessage(Prefs.getMsg(context));
+                builder
+                        .setTitle("Message")
+                        .setView(messageView)
+                        .setPositiveButton("set", (dialog, which) -> {
+                            Prefs.setMsg(context, messageView.getMessage());
+                            executeCallback(messageCallBack);
+                        });
+
+                break;
+            }
+            case R.id.time_out: {
 
                 final NumberPicker numberPicker = new NumberPicker(context);
 
@@ -102,38 +128,6 @@ public class SettingsDialog {
                             executeCallback(timeoutCallback);
                         });
 
-                break;
-            case R.id.message: {
-
-                final EditText editText = new EditText(context);
-
-                editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                editText.setText(Prefs.getMsg(context));
-//                editText.setMinLines(5);
-                editText.setOverScrollMode(View.OVER_SCROLL_NEVER);
-
-                builder
-                        .setTitle("Message")
-                        .setView(editText)
-                        .setPositiveButton("set", (dialog, which) -> {
-                            Prefs.setMsg(context, editText.getText().toString());
-                            executeCallback(messageCallBack);
-                        });
-
-
-                break;
-            }
-            case R.id.enable_location_pref: {
-
-                String current = Prefs.isLoc(context) ? "enabled" : "disabled";
-                String action = Prefs.isLoc(context) ? "disable" : "enable";
-                builder
-                        .setTitle("Location currently " + current + ".")
-                        .setMessage("Would you like to " + action + " it?")
-                        .setPositiveButton(action, (dialog, which) -> {
-                            Prefs.setLoc(context, !Prefs.isLoc(context));
-                            executeCallback(locationCallback);
-                        });
                 break;
             }
             case R.id.disclaimer: {
