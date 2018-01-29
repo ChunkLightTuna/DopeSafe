@@ -285,11 +285,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void pauseTimer() {
         timerPaused = true;
+        alarmStarted = false;
         pauseTime = SystemClock.uptimeMillis();
         ringtone.stop();
         pauseButton.setVisibility(View.INVISIBLE);
         resumeButton.setVisibility(View.VISIBLE);
-        //progressCircle.setVisibility(View.INVISIBLE);
         stopButton.setText(getResources().getString(R.string.reset));
     }
 
