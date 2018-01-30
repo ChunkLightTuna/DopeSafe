@@ -2,8 +2,10 @@ package com.uniting.android.msic;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
-import android.util.ArraySet;
+import android.support.v4.util.ArraySet;
 import android.util.Log;
+
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -15,7 +17,7 @@ class Prefs {
     private static final String TAG = "Prefs";
 
     static String getPhone(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.emergency_contact_key), "");
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.emergency_contact_key), context.getString(R.string.pref_default_contact));
     }
 
     static void setPhone(Context context, String phone) {
@@ -23,21 +25,35 @@ class Prefs {
     }
 
     static String getPhoneAux(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.emergency_contact_aux_key), "");
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.emergency_contact_aux_key), context.getString(R.string.pref_default_contact));
     }
 
     static void setPhoneAux(Context context, String phone) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(context.getString(R.string.emergency_contact_aux_key), phone).apply();
     }
 
-
-    //unused for now
     static Set<String> getPhones(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).getStringSet(context.getString(R.string.emergency_contact_key), new ArraySet<>());
+        ArraySet<String> strings = new ArraySet<>();
+        strings.add(getPhone(context));
+
+        String phoneAux = getPhoneAux(context);
+        if (!phoneAux.equals("") && !phoneAux.equals(context.getString(R.string.pref_default_contact))) {
+            strings.add(phoneAux);
+        }
+
+        return strings;
+//        return PreferenceManager.getDefaultSharedPreferences(context).getStringSet(context.getString(R.string.emergency_contact_key), new ArraySet<>());
     }
 
     static void setPhones(Context context, Set<String> phones) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putStringSet(context.getString(R.string.emergency_contact_key), phones).apply();
+        Iterator<String> iterator = phones.iterator();
+        if (iterator.hasNext()) {
+            setPhone(context, iterator.next());
+        }
+        if (iterator.hasNext()) {
+            setPhoneAux(context, iterator.next());
+        }
+//        PreferenceManager.getDefaultSharedPreferences(context).edit().putStringSet(context.getString(R.string.emergency_contact_key), phones).apply();
     }
 
     static int getTime(Context context) {
@@ -66,6 +82,17 @@ class Prefs {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(context.getString(R.string.enable_location_key), location).apply();
         Log.d(TAG, "setLoc() called with: " + "location = [" + location + "]");
     }
+
+//    static boolean isFirstLocReq(Context context) {
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+//
+//        boolean firstLocReq = sharedPreferences.getBoolean("firstLocReq", true);
+//        if(firstLocReq) {
+//            sharedPreferences.edit().putBoolean("firstLocReq", false).apply();
+//        }
+//        return firstLocReq;
+//    }
+
 
     static boolean isDisclaimerAccepted(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getString(R.string.disclaimer_accepted_key), false);

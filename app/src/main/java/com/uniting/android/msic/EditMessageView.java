@@ -37,7 +37,7 @@ public class EditMessageView extends LinearLayout {
         TextView textCounter = view.findViewById(R.id.text_counter);
         messageField = view.findViewById(R.id.message_field);
         textCounter.setText(String.format(Locale.getDefault(), REMAINING_FORMAT, 0, maxChars));
-        messageField.setMinLines(5);
+//        messageField.setMinLines(5);
         messageField.setMaxLines(6);
         messageField.setSelectAllOnFocus(true);
         messageField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxChars)});

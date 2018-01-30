@@ -36,6 +36,8 @@ import android.widget.TextView;
 
 import com.ebanx.swipebtn.SwipeButton;
 
+import java.util.Set;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
 
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         resumeButton.setOnClickListener(view -> resumeTimer());
 
         stopButton = findViewById(R.id.stop_button);
-        stopButton.setVisibility(View.INVISIBLE);
+        stopButton.setVisibility(View.GONE);
         stopButton.setOnActiveListener(this::stopTimer);
 
         drawer = findViewById(R.id.drawer_layout);
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         Permissions.requestSMS(this);
-//        locationService = new LocationService(this);
+        Permissions.requestLocation(this);
     }
 
     @Override
@@ -146,12 +148,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        alertDialog = Permissions.dealWithIt(this, requestCode, grantResults);
+        alertDialog = Permissions.handlePermissionResult(this, requestCode, grantResults);
     }
 
     @Override
     protected void onResume() {
-//        if user enabled SMS through OS app settings dismiss the box
+        Log.d(TAG, "onResume() called");
+//        if user enabled SMS through OS app settings dismiss the box. working on sony, not motorola
         if (alertDialog != null) {
             TextView message = alertDialog.findViewById(android.R.id.message);
             if (message != null && message.getText() == getString(R.string.sms_permissions_dialog_message) && Permissions.smsGranted(this)) {
@@ -161,15 +164,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         updateTime();
-        super.onResume();
+        tryToInitLocationService();
 
+        super.onResume();
     }
 
     /**
      * https://developer.android.com/guide/topics/location/strategies.html#BestPerformance
      */
     private void tryToInitLocationService() {
-        if (Permissions.locationGranted(this))
+        if (Permissions.locationGranted(this) && locationService == null)
             locationService = new LocationService(this);
     }
 
@@ -299,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.show();
 
-        stopButton.setVisibility(View.INVISIBLE);
+        stopButton.setVisibility(View.GONE);
         pauseButton.setVisibility(View.INVISIBLE);
         resumeButton.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
@@ -324,8 +328,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.init_dialog_message)
                 .setTitle(R.string.init_dialog_title)
-                .setPositiveButton(R.string.init_dialog_positive_button_text, (dialogInterface, i) -> startTimer())
-                .setNegativeButton(R.string.init_dialog_negative_button_text, (dialogInterface, i) -> {
+                .setPositiveButton(R.string.cont, (dialogInterface, i) -> startTimer())
+                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                     //
                 })
                 .setCancelable(false)
@@ -333,36 +337,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .show();
     }
 
-
-    void sendSMS(String number, String message, Location location) {
-        sendSMS(number, message + "\n" + getGoogleMapsUrl(location));
-    }
-
-    void sendSMS(String number, String message) {
+    void sendSMS(Set<String> numbers, String message) {
         try {
-
             SmsManager smsManager = SmsManager.getDefault();
 
-            if (android.os.Build.VERSION.SDK_INT >= 22) {
-                Log.e("Alert", "Checking SubscriptionId");
-                try {
-                    Log.e("Alert", "SubscriptionId is " + smsManager.getSubscriptionId());
-                } catch (Exception e) {
-                    Log.e("Alert", e.getMessage());
-                    Log.e("Alert", "Fixed SubscriptionId to 1");
-                    smsManager = SmsManager.getSmsManagerForSubscriptionId(1);
+            for (String number : numbers) {
+                if (android.os.Build.VERSION.SDK_INT >= 22) {
+                    Log.e("Alert", "Checking SubscriptionId");
+                    try {
+                        Log.e("Alert", "SubscriptionId is " + smsManager.getSubscriptionId());
+                    } catch (Exception e) {
+                        Log.e("Alert", e.getMessage());
+                        Log.e("Alert", "Fixed SubscriptionId to 1");
+                        smsManager = SmsManager.getSmsManagerForSubscriptionId(1);
+                    }
                 }
-            }
 
-            smsManager.sendTextMessage(number, null, message, null, null);
-            Log.d(TAG, "sendSMS() called with: " + "number = [" + number + "], message = [" + message + "]");
+                smsManager.sendTextMessage(number, null, message, null, null);
+                Log.d(TAG, "sendSMS() called with: " + "number = [" + number + "], message = [" + message + "]");
+            }
         } catch (Exception e) {
             Log.e(TAG, "SMS failed!", e);
         }
     }
 
     @SuppressLint("DefaultLocale")
-    public String getGoogleMapsUrl(Location location) {
+    public String getGoogleMapsUrl() {
+        Location location = locationService.getLocation();
         String latitude = String.format("%1$,.6f", location.getLatitude());
         String longitude = String.format("%1$,.6f", location.getLongitude());
         return "google.com/maps?q=" + latitude + "," + longitude;
@@ -372,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /**
      * https://developer.android.com/guide/topics/media-apps/volume-and-earphones.html
      */
-    private void setRingVolumeMax() {
+    private void setAlarmVolumeMax() {
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         if (am != null) {
@@ -387,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         final int time = Prefs.getTime(this);
         final String message = Prefs.getMsg(this);
-        final String phoneNumber = Prefs.getPhone(this);
+        final Set<String> phoneNumbers = Prefs.getPhones(this);
         final boolean location = Prefs.isLoc(this);
 
         return new Runnable() {
@@ -403,12 +404,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     //times up
                     if (minutes == time) {
-
+                        Log.d(TAG, "run() called with minutes:" + minutes + " and time:" + time);
                         //TODO ask for location permissions
                         if (location) {
-                            sendSMS(phoneNumber, message, locationService.getLocation());
+                            sendSMS(phoneNumbers, message + "\n" + getGoogleMapsUrl());
                         } else {
-                            sendSMS(phoneNumber, message);
+                            sendSMS(phoneNumbers, message);
                         }
 
                         timeDisplay.setText(String.format(getString(com.uniting.android.msic.R.string.time_format), 0, 0));
@@ -422,7 +423,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (ringtone == null) {
                                 ringtone = RingtoneManager.getRingtone(getApplicationContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
                             }
-                            setRingVolumeMax();
+                            setAlarmVolumeMax();
                             ringtone.play();
                             vibrator.vibrate(200);
 

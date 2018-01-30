@@ -1,25 +1,28 @@
 package com.uniting.android.msic;
 
-import android.app.NotificationManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
+import android.preference.SwitchPreference;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 public class SettingsActivity extends AppCompatActivity {
+    private static final String TAG = "SettingsActivity";
+
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
         String stringValue = value.toString();
+
 
         if (preference instanceof ListPreference) {
             // For list preferences, look up the correct display value in
@@ -81,29 +84,42 @@ public class SettingsActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
         }
 
-        getFragmentManager().beginTransaction().replace(android.R.id.content,
-                new PrefsFrag()).commit();
+
+        getFragmentManager().beginTransaction().replace(android.R.id.content, new PrefsFrag()).commit();
     }
 
-    public static class PrefsFrag extends PreferenceFragment {
-        private static final String TAG = "PrefsFrag";
+    @Override
+    protected void onResume() {
+        Log.w(TAG, "onResume");
 
+        super.onResume();
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        Permissions.handlePermissionResult(this, requestCode, grantResults);
+    }
+
+
+    public static class PrefsFrag extends PreferenceFragment {
         PreferenceScreen preferenceScreen;
-        Preference notificationPref;
+        SwitchPreference locationPref;
+        boolean brb;
 
         @Override
         public void onResume() {
             super.onResume();
 
-            //remove option to enable notification permission on return from notification permission menu
-            NotificationManager nm = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N &&
-                    nm != null &&
-                    nm.isNotificationPolicyAccessGranted() &&
-                    preferenceScreen != null &&
-                    notificationPref != null
-                    )
-                preferenceScreen.removePreference(notificationPref);
+            if (brb) {
+                if (Permissions.locationGranted(getContext())) {
+                    locationPref.setChecked(Prefs.isLoc(getContext()));
+                } else {
+                    Prefs.setLoc(getContext(), false);
+                    locationPref.setChecked(false);
+                }
+                brb = false;
+            }
         }
 
         @Override
@@ -112,6 +128,25 @@ public class SettingsActivity extends AppCompatActivity {
 
             addPreferencesFromResource(com.uniting.android.msic.R.xml.prefs);
             preferenceScreen = getPreferenceScreen();
+            brb = false;
+
+            locationPref = ((SwitchPreference) preferenceScreen.findPreference(getContext().getString(R.string.enable_location_key)));
+
+            if (!Permissions.locationGranted(getContext()) && (locationPref.isChecked() || Prefs.isLoc(getContext()))) {
+                Prefs.setLoc(getContext(), false);
+                locationPref.setChecked(false);
+            }
+
+            locationPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                if ((boolean) newValue && !Permissions.locationGranted(getContext())) {
+                    brb = true;
+                    Prefs.setLoc(getContext(), true);
+                    Permissions.requestLocation(getActivity());
+
+                }
+                Log.d(TAG, "consistent? " + (Prefs.isLoc(getContext()) == Permissions.locationGranted(getContext())));
+                return true;
+            });
 
             preferenceScreen.addPreference(SmsMessagePreference.newInstance(
                     getContext(),
@@ -127,20 +162,6 @@ public class SettingsActivity extends AppCompatActivity {
             bindPreferenceSummaryToValue(findPreference(getString(R.string.emergency_message_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.emergency_contact_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.emergency_contact_aux_key)));
-//            bindPreferenceSummaryToValue(findPreference("enable_location"));
-
-            /*
-                        if (id == R.id.enable_location_pref) {
-
-                if(!Permissions.locationGranted(getContext())) {
-                    Permissions.requestLocation(getActivity());
-                    SharedPreferences preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-                }
-
-                return true;
-            }
-            */
-
         }
     }
 }

@@ -1,14 +1,11 @@
 package com.uniting.android.msic;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
-import android.widget.ToggleButton;
 
 import java.util.concurrent.Callable;
 
@@ -77,20 +74,15 @@ public class SettingsDialog {
             }
             case R.id.enable_location_pref: {
 
-                String current = Prefs.isLoc(context) ? "enabled" : "disabled";
-                String action = Prefs.isLoc(context) ? "disable" : "enable";
-                builder
-                        .setTitle("Location Services")
-                        .setMessage("Location currently " + current + ".")
-                        .setPositiveButton(R.string.cont, (dialog, which) -> {
+                builder.setTitle("GPS Location")
+                        .setMessage("Optionally, your phone's GPS may be used to append a google maps link to the text message. Would you like to enable this feature?")
+                        .setPositiveButton(R.string.ok, (dialog, which) -> {
+                            Prefs.setLoc(context, true);
                             executeCallback(locationCallback);
                         })
-                        .setNegativeButton(action, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Prefs.setLoc(context, !Prefs.isLoc(context));
-                                executeCallback(locationCallback);
-                            }
+                        .setNegativeButton(R.string.no, (dialog, which) -> {
+                            Prefs.setLoc(context, false);
+                            executeCallback(locationCallback);
                         });
                 break;
             }
@@ -150,7 +142,6 @@ public class SettingsDialog {
         }
         builder
                 .setCancelable(false)
-                .create()
                 .show();
     }
 
