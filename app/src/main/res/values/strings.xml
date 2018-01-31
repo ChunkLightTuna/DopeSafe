@@ -167,6 +167,7 @@
     <string name="ok">@android:string/ok</string>
     <string name="cancel">Cancel</string>
     <string name="no">No</string>
+    <string name="yes">Yes</string>
 
     <string name="lone_opiate_user_app">Lone Opiate User App</string>
 

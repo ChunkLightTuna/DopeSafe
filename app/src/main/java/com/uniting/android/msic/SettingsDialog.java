@@ -76,7 +76,7 @@ public class SettingsDialog {
 
                 builder.setTitle("GPS Location")
                         .setMessage("Optionally, your phone's GPS may be used to append a google maps link to the text message. Would you like to enable this feature?")
-                        .setPositiveButton(R.string.ok, (dialog, which) -> {
+                        .setPositiveButton(R.string.yes, (dialog, which) -> {
                             Prefs.setLoc(context, true);
                             executeCallback(locationCallback);
                         })

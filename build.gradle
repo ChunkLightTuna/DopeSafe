@@ -4,6 +4,8 @@ buildscript {
     ext.kotlin_version = '1.2.21'
     repositories {
         jcenter()
+        google()
+        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
