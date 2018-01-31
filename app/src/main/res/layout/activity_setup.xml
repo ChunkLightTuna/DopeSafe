@@ -3,4 +3,12 @@
     android:id="@+id/stepperLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    app:ms_activeStepColor="@color/unitingYellow"
+    app:ms_inactiveStepColor="@color/transparentUnitingYellow"
+    app:ms_nextButtonColor="@color/unitingYellow"
+    app:ms_backButtonColor="@color/unitingYellow"
+    app:ms_bottomNavigationBackground="@color/unitingPurple"
+    app:ms_completeButtonColor="@color/unitingYellow"
+    app:ms_stepperLayoutTheme="@style/CustomStepperLayoutTheme"
     app:ms_stepperType="tabs" />
