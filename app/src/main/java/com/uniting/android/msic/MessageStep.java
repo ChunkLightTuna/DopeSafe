@@ -112,7 +112,6 @@ public class MessageStep extends Fragment implements Step {
 
     @Override
     public void onSelected(){
-        //kfkls;adkf
     }
 
     @Override
