@@ -205,6 +205,7 @@
 
     <string name="reset">RESET</string>
 
+    <string name="error">Error</string>
     <string name="emergency_message_key">emergency_message</string>
     <string name="emergency_contact_key">emergency_contact</string>
     <string name="emergency_contact_aux_key">emergency_contact_aux</string>
@@ -217,4 +218,32 @@
     <string name="cont">Continue</string>
     <string name="app_logo">App Logo</string>
 
+    <string name="title_activity_setup">SetupActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="emergency_contact_step">
+        Please enter the 10 digit phone number of your emergency contact. This is the person
+        that a message will be attempted to send to in the case that your alarm goes off.
+    </string>
+    <string name="location_enabled_step">
+        Please choose whether or not to enable location services. If this feature is enabled a google
+        maps url with your approximate location will be sent as part of the emergency message.
+    </string>
+    <string name="message_step">
+        Please enter the message to send to your emergency contact in the case that your alarm goes
+        off. Messages are limited to 120 characters if location services are enabled and 160
+        characters otherwise.
+    </string>
+    <string name="time_step">
+        Please select the timer at the end of which you would like your alarm to go off. You can set
+        the value between 1 and 10 minutes.
+    </string>
+    <string name="phone_verification_error">Please enter a valid phone number.</string>
+    <string name="message_verification_error_empty">Emergency message cannot be empty</string>
+    <string name="message_verification_error_long">Your message exceeds the character limit</string>
+    <string name="message_shortened_error">Your message needed to be truncated to be within the
+        character limit please update your message to read correctly.
+    </string>
 </resources>

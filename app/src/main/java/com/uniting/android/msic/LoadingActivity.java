@@ -28,8 +28,10 @@ public class LoadingActivity extends AppCompatActivity {
         timeSet = false;
         locationSet = false;
         settingsDialog = new SettingsDialog(this);
-        if(!Prefs.isDisclaimerAccepted(this) && !Prefs.isSetupComplete(this))
+        if(!Prefs.isDisclaimerAccepted(this))
             checkDisclaimerAcceptance();
+        else if(!Prefs.isSetupComplete(this))
+            startSetUpActivity();
         else
             showConfirmationDialog();
     }
@@ -117,7 +119,11 @@ public class LoadingActivity extends AppCompatActivity {
     private void handleDisclaimerAccepted() {
         Log.d(TAG, "disclaimer accepted");
         Prefs.setDisclaimerAccepted(this, true);
-        getNextStep();
+        if(!Prefs.isSetupComplete(this))
+            startSetUpActivity();
+        else
+            showConfirmationDialog();
+        //getNextStep();
     }
 
     private void handleDisclaimerDenied() {
@@ -148,4 +154,11 @@ public class LoadingActivity extends AppCompatActivity {
         finish();
     }
 
+    private void startSetUpActivity(){
+        Log.d(TAG, "Starting setup activity");
+        Intent intent = new Intent(this, SetupActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
 }

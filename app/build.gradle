@@ -40,6 +40,7 @@ dependencies {
     compile 'com.android.support:support-vector-drawable:27.0.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.ebanx:swipe-button:0.8.3'
+    compile 'com.stepstone.stepper:material-stepper:4.3.1'
     testCompile 'junit:junit:4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 }
