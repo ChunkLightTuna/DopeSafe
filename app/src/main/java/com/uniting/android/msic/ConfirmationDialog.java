@@ -4,8 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.concurrent.Callable;
@@ -48,10 +51,21 @@ public class ConfirmationDialog {
                 .show();
     }
 
-    public LinearLayout getDialogContent() {
-        LinearLayout dialogLayout = new LinearLayout(context);
-        dialogLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        dialogLayout.setOrientation(LinearLayout.VERTICAL);
+//    public LinearLayout getDialogContent() {
+//        LinearLayout dialogLayout = new LinearLayout(context);
+//        dialogLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        dialogLayout.setOrientation(LinearLayout.VERTICAL);
+//        dialogLayout.addView(getContent("Emergency Contact:", Prefs.getPhone(context)));
+//        dialogLayout.addView(getContent("Message:", Prefs.getMsg(context)));
+//        dialogLayout.addView(getContent("Time:", "" + Prefs.getTime(context)));
+//        dialogLayout.addView(getContent("Location Enabled:", "" + Prefs.isLoc(context)));
+//        return dialogLayout;
+//    }
+
+    public TableLayout getDialogContent(){
+        TableLayout dialogLayout = new TableLayout(context);
+        dialogLayout.setPadding(20, 0,20,0 );
+        dialogLayout.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         dialogLayout.addView(getContent("Emergency Contact:", Prefs.getPhone(context)));
         dialogLayout.addView(getContent("Message:", Prefs.getMsg(context)));
         dialogLayout.addView(getContent("Time:", "" + Prefs.getTime(context)));
@@ -59,39 +73,38 @@ public class ConfirmationDialog {
         return dialogLayout;
     }
 
-    public LinearLayout getContent(String label, String value) {
-        LinearLayout phoneContent = getLinearLayout();
+    public TableRow getContent(String label, String value) {
+        TableRow tableRow = getRow();
         TextView labelView = getBoldTextView();
         TextView valueView = getTextView();
         labelView.setText(label);
         valueView.setText(value);
-        phoneContent.addView(labelView);
-        phoneContent.addView(valueView);
-        return phoneContent;
+        tableRow.addView(labelView);
+        tableRow.addView(valueView);
+        return tableRow;
     }
 
-    public LinearLayout getLinearLayout() {
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        return linearLayout;
+    public TableRow getRow(){
+        TableRow tableRow = new TableRow(context);
+        tableRow.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        tableRow.setBackgroundColor(context.getResources().getColor(R.color.colorMaterialGrey300));
+        return tableRow;
     }
 
     public TextView getBoldTextView() {
         TextView textView = new TextView(context);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, .5f));
-        textView.setGravity(Gravity.LEFT);
-        textView.setPadding(20, 0, 0, 0);
         textView.setTypeface(null, BOLD);
+        textView.setGravity(Gravity.END);
+        textView.setBackgroundColor(context.getColor(R.color.unitingPurple));
         return textView;
     }
 
     public TextView getTextView() {
         TextView textView = new TextView(context);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT, .5f));
-        textView.setGravity(Gravity.LEFT);
-        textView.setPadding(20, 0, 0, 0);
+        textView.setBackgroundColor(context.getColor(R.color.unitingYellow));
+        textView.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//        textView.setPadding(10, 0 ,0 ,0);
+//        textView.setGravity(Gravity.START);
         return textView;
     }
 
