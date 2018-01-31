@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
+import com.uniting.android.msic.Prefs;
+import com.uniting.android.msic.R;
 
 /**
  * Created by jeeppeck on 1/30/18.
