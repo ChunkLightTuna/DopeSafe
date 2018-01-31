@@ -8,6 +8,8 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 
+import com.uniting.android.msic.stepper.SetupActivity;
+
 
 public class LoadingActivity extends AppCompatActivity {
 

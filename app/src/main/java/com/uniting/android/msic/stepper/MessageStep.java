@@ -1,4 +1,4 @@
-package com.uniting.android.msic;
+package com.uniting.android.msic.stepper;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
+import com.uniting.android.msic.Prefs;
+import com.uniting.android.msic.R;
 
 import org.w3c.dom.Text;
 

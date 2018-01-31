@@ -1,4 +1,4 @@
-package com.uniting.android.msic;
+package com.uniting.android.msic.stepper;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.adapter.AbstractFragmentStepAdapter;
 import com.stepstone.stepper.viewmodel.StepViewModel;
+import com.uniting.android.msic.R;
 
 /**
  * Created by jeeppeck on 1/30/18.

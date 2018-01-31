@@ -1,4 +1,4 @@
-package com.uniting.android.msic;
+package com.uniting.android.msic.stepper;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +10,8 @@ import android.widget.Switch;
 
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
+import com.uniting.android.msic.Prefs;
+import com.uniting.android.msic.R;
 
 /**
  * Created by jeeppeck on 1/30/18.
@@ -19,12 +21,11 @@ public class LocationStep extends Fragment implements Step {
 
     private final static String TAG = "LocationStep";
 
-    private View view;
     private Switch locationSwitch;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.location_step, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.location_step, container, false);
         locationSwitch = view.findViewById(R.id.location_switch);
         return view;
     }

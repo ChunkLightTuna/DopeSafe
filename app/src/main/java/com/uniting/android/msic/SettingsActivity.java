@@ -1,6 +1,7 @@
 package com.uniting.android.msic;
 
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
@@ -10,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -137,14 +139,12 @@ public class SettingsActivity extends AppCompatActivity {
                 locationPref.setChecked(false);
             }
 
-            locationPref.setOnPreferenceChangeListener((preference, newValue) -> {
-                if ((boolean) newValue && !Permissions.locationGranted(getContext())) {
+            locationPref.setOnPreferenceChangeListener((preference, enable) -> {
+                if ((boolean) enable && !Permissions.locationGranted(getContext())) {
                     brb = true;
                     Prefs.setLoc(getContext(), true);
                     Permissions.requestLocation(getActivity());
-
                 }
-                Log.d(TAG, "consistent? " + (Prefs.isLoc(getContext()) == Permissions.locationGranted(getContext())));
                 return true;
             });
 
@@ -154,6 +154,15 @@ public class SettingsActivity extends AppCompatActivity {
                     getString(R.string.pref_default_emergency_message),
                     getString(R.string.emergency_message_key))
             );
+
+            preferenceScreen.findPreference(getContext().getString(R.string.emergency_contact_key))
+                    .setOnPreferenceChangeListener((p, number) -> PhoneNumberUtils.isGlobalPhoneNumber((String) number));
+
+            preferenceScreen.findPreference(getContext().getString(R.string.emergency_contact_aux_key))
+                    .setOnPreferenceChangeListener((p, number) -> PhoneNumberUtils.isGlobalPhoneNumber((String) number));
+
+            preferenceScreen.findPreference(getContext().getString(R.string.emergency_message_key))
+                    .setOnPreferenceChangeListener((p, message) -> !((String) message).isEmpty());
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are

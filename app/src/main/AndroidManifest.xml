@@ -60,7 +60,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".SetupActivity"
+            android:name=".stepper.SetupActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_setup"
             android:theme="@style/FullscreenTheme"
