@@ -3,6 +3,7 @@
     android:id="@+id/stepperLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     app:ms_activeStepColor="@color/unitingYellow"
     app:ms_inactiveStepColor="@color/transparentUnitingYellow"
     app:ms_nextButtonColor="@color/unitingYellow"

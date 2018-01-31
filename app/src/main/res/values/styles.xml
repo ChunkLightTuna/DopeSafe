@@ -75,6 +75,11 @@
         <item name="srcCompat">@drawable/custom_ms_ic_check</item>
     </style>
 
+    <style name="NumberPickerTheme" parent="MsicTheme">
+        <item name="colorControlNormal">@color/unitingPurple</item>
+        <item name="android:textColorPrimary">@color/unitingPurple</item>
+    </style>
+1144
     <!--<style name="CustomStepTabScrollViewStyle" parent="MSStepTabsScrollView">-->
         <!--<item name="android:background">@color/unitingYellow</item>-->
     <!--</style>-->
