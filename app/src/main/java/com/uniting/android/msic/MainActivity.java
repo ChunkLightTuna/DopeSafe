@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Build;
@@ -35,6 +36,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ebanx.swipebtn.SwipeButton;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "MainActivity";
@@ -64,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Handler handler = new Handler();
     private Runnable timer;
 
-    private Ringtone ringtone;
+    private MediaPlayer mediaPlayer;
     private Vibrator vibrator;
     private LocationService locationService;
 
@@ -77,11 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        ringtone = RingtoneManager.getRingtone(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
-
-        if (ringtone == null) {
-            Log.d(TAG, "volume is muted, might want to fix that!");
-        }
+        mediaPlayer = new MediaPlayer();
 
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
@@ -220,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d(TAG, "startTimer() called");
         if (timerStopped) {
             //timer will start
-
+            prepareAlarm();
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) actionBar.hide();
@@ -262,7 +261,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 Intent intent = new Intent(this, MainActivity.class);
                 PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
-
                 /*timeDisplay in miliseconds*/
                 am.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 1000, alarmIntent);
 
@@ -277,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         timerPaused = true;
         alarmStarted = false;
         pauseTime = SystemClock.uptimeMillis();
-        ringtone.stop();
+        mediaPlayer.pause();
         pauseButton.setVisibility(View.INVISIBLE);
         resumeButton.setVisibility(View.VISIBLE);
         stopButton.setText(getResources().getString(R.string.reset));
@@ -315,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         timeDisplay.setTextColor(Color.WHITE);
 
         alarmStarted = false;
-        ringtone.stop();
+        mediaPlayer.reset();
         vibrator.cancel();
         timerStopped = true;
     }
@@ -373,13 +371,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * https://developer.android.com/guide/topics/media-apps/volume-and-earphones.html
      */
     private void setRingVolumeMax() {
+        Log.d(TAG, "Setting ring volume max");
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
+        Log.d(TAG, "Max alarm volume: " + am.getStreamMaxVolume(AudioManager.STREAM_ALARM));
         if (am != null) {
             am.setStreamVolume(
                     AudioManager.STREAM_ALARM,
                     am.getStreamMaxVolume(AudioManager.STREAM_ALARM),
                     0);
+        }
+    }
+
+    private void prepareAlarm(){
+        try {
+            mediaPlayer.setDataSource(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            mediaPlayer.prepare();
+        }catch(IOException e){
+            //TODO - what should we do here?
         }
     }
 
@@ -419,11 +428,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if (minutes + 1 >= time && !alarmStarted) {
                             Log.d(TAG, "playing alarm");
 
-                            if (ringtone == null) {
-                                ringtone = RingtoneManager.getRingtone(getApplicationContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
-                            }
                             setRingVolumeMax();
-                            ringtone.play();
+                            if(!mediaPlayer.isPlaying())
+                                mediaPlayer.start();
                             vibrator.vibrate(200);
 
                             alarmStarted = true;
