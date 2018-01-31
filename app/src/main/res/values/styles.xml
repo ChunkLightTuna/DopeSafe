@@ -34,6 +34,53 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <style name="SCBSwitch" parent="Theme.AppCompat.Light">
+        <!-- active thumb & track color (30% transparency) -->
+        <item name="colorControlActivated">@color/unitingPurple</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">#f1f1f1
+        </item>
+
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#42221f1f
+        </item>
+    </style>
+
+    <style name="CustomStepperLayoutTheme" parent="MSDefaultStepperLayoutTheme">
+        <item name="ms_tabsContainerStyle">@style/CustomStepTabsContainerStyle</item>
+        <item name="ms_stepTabNumberStyle">@style/CustomStepTabNumberStyle</item>
+        <item name="ms_stepTabTitleStyle">@style/CustomStepTabTitleStyle</item>
+        <item name="ms_stepTabDividerStyle">@style/CustomStepTabDividerStyle</item>
+        <item name="ms_stepTabDoneIndicatorStyle">@style/CustomStepDoneIndicatorStyle</item>
+    </style>
+
+    <style name="CustomStepTabsContainerStyle" parent="MSStepTabsContainer">
+        <item name="android:background">@color/unitingPurple</item>
+    </style>
+
+    <style name="CustomStepTabNumberStyle" parent="MSStepTabNumber">
+        <item name="android:textColor">@color/unitingPurple</item>
+    </style>
+
+    <style name="CustomStepTabTitleStyle" parent="MSStepTabTitle">
+        <item name="android:textColor">@color/unitingYellow</item>
+    </style>
+
+    <style name="CustomStepTabDividerStyle" parent="MSStepTabDivider">
+        <item name="android:background">@drawable/custom_vertical_tab_divider</item>
+    </style>
+
+    <style name="CustomStepDoneIndicatorStyle" parent="MSStepTabDoneIndicator">
+        <item name="srcCompat">@drawable/custom_ms_ic_check</item>
+    </style>
+
+    <!--<style name="CustomStepTabScrollViewStyle" parent="MSStepTabsScrollView">-->
+        <!--<item name="android:background">@color/unitingYellow</item>-->
+    <!--</style>-->
+
+
+
     <!--<style name="FullscreenTheme" parent="MsicTheme.NoActionBar">-->
     <!--<item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>-->
     <!--<item name="android:windowActionBarOverlay">true</item>-->

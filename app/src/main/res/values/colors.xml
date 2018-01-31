@@ -10,6 +10,7 @@
     <color name="unitingPurple">#921e63</color>
     <color name="unitingPurpleDark">#5e133f</color>
     <color name="unitingYellow">#f9d148</color>
+    <color name="transparentUnitingYellow">#80f9d148</color>
     <color name="transparent">#00ff0000</color>
     <color name="transparentGrey">#80CCCCCC</color>
 </resources>
