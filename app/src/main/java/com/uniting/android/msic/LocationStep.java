@@ -3,7 +3,6 @@ package com.uniting.android.msic;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +19,14 @@ public class LocationStep extends Fragment implements Step {
 
     private final static String TAG = "LocationStep";
 
+    private View view;
     private Switch locationSwitch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.location_step, container, false);
-        locationSwitch = v.findViewById(R.id.location_switch);
-        return v;
+        view = inflater.inflate(R.layout.location_step, container, false);
+        locationSwitch = view.findViewById(R.id.location_switch);
+        return view;
     }
 
     @Override
@@ -41,6 +41,6 @@ public class LocationStep extends Fragment implements Step {
 
     @Override
     public void onError(@NonNull VerificationError error){
-        //handle error
     }
+
 }

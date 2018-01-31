@@ -1,11 +1,9 @@
 package com.uniting.android.msic;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +20,7 @@ public class ContactStep extends Fragment implements Step {
 
     private final static String TAG = "ContactStep";
     private EditText phoneField;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.emergency_contact_step, container, false);

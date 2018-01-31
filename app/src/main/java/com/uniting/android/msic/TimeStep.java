@@ -1,13 +1,12 @@
 package com.uniting.android.msic;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.NumberPicker;
 
 import com.stepstone.stepper.Step;
@@ -22,6 +21,7 @@ public class TimeStep extends Fragment implements Step {
     private final static String TAG = "TimeStep";
 
     NumberPicker numberPicker;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.time_step, container, false);
@@ -35,24 +35,15 @@ public class TimeStep extends Fragment implements Step {
     @Override
     public VerificationError verifyStep() {
         Prefs.setTime(getContext(), numberPicker.getValue());
-        Prefs.setSetupComplete(getContext(), true);
-        startMainActivity();
         return null;
     }
 
     @Override
-    public void onSelected(){
+    public void onSelected() {
     }
 
     @Override
-    public void onError(@NonNull VerificationError error){
+    public void onError(@NonNull VerificationError error) {
         //handle error
-    }
-
-    private void startMainActivity() {
-        Log.d(TAG, "starting main activity");
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
     }
 }
