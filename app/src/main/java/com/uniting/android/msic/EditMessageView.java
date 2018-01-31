@@ -22,8 +22,8 @@ public class EditMessageView extends LinearLayout {
     private static final String TAG = "EditMessageView";
 
     private static final String REMAINING_FORMAT = "%1$d/%2$d";
-    LayoutInflater inflater;
-    EditText messageField;
+    private final LayoutInflater inflater;
+    private EditText messageField;
 
     public EditMessageView(Context context) {
         super(context);
@@ -31,7 +31,7 @@ public class EditMessageView extends LinearLayout {
         init();
     }
 
-    public void init(){
+    private void init(){
         int maxChars = Prefs.isLoc(this.getContext()) ? 120 : 160;
         View view = inflater.inflate(R.layout.edit_message_view, this, true);
         TextView textCounter = view.findViewById(R.id.text_counter);

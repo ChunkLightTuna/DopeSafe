@@ -44,6 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/unitingYellow"
-        app:srcCompat="@drawable/uniting_logo" />
+        app:srcCompat="@drawable/uniting_logo"
+        android:contentDescription="@string/app_logo" />
 
 </FrameLayout>

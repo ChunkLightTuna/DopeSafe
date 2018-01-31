@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Button resumeButton;
     //private Switch stopButton;
     private ProgressBar progressCircle;
-    SwipeButton stopButton;
+    private SwipeButton stopButton;
     private long startTime = 0L;
     private long pauseTime = 0L;
     private long timeInMilliseconds = 0L;
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private boolean alarmStarted = false;
 
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private Runnable timer;
 
     private MediaPlayer mediaPlayer;
@@ -374,8 +373,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setAlarmVolumeMax() {
         Log.d(TAG, "Setting ring volume max");
         AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        Log.d(TAG, "Max alarm volume: " + am.getStreamMaxVolume(AudioManager.STREAM_ALARM));
         if (am != null) {
+            Log.d(TAG, "Max alarm volume: " + am.getStreamMaxVolume(AudioManager.STREAM_ALARM));
             am.setStreamVolume(
                     AudioManager.STREAM_ALARM,
                     am.getStreamMaxVolume(AudioManager.STREAM_ALARM),
@@ -383,12 +382,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void prepareAlarm(){
+    private void prepareAlarm() {
         try {
             mediaPlayer.setDataSource(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
             mediaPlayer.prepare();
-        }catch(IOException e){
+        } catch (IOException e) {
             //TODO - what should we do here?
         }
     }
@@ -430,7 +429,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             Log.d(TAG, "playing alarm");
 
                             setAlarmVolumeMax();
-                            if(!mediaPlayer.isPlaying())
+                            if (!mediaPlayer.isPlaying())
                                 mediaPlayer.start();
                             vibrator.vibrate(200);
 
