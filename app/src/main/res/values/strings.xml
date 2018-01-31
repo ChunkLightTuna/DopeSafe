@@ -233,8 +233,7 @@
     </string>
     <string name="message_step">
         Please enter the message to send to your emergency contact in the case that your alarm goes
-        off. Messages are limited to 120 characters if location services are enabled and 160
-        characters otherwise.
+        off.
     </string>
     <string name="time_step">
         Please select the timer at the end of which you would like your alarm to go off. You can set
@@ -246,4 +245,9 @@
     <string name="message_shortened_error">Your message needed to be truncated to be within the
         character limit please update your message to read correctly.
     </string>
+    <string name="phone_tab_title">Emergency Contact</string>
+    <string name="location_tab_title">Location</string>
+    <string name="message_tab_title">Emergency Message</string>
+    <string name="time_tab_title">Count Down Time</string>
+    strin
 </resources>

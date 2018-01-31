@@ -39,7 +39,9 @@ public class StepAdapter extends AbstractFragmentStepAdapter {
     @NonNull
     @Override
     public StepViewModel getViewModel(int position) {
-        return super.getViewModel(position);
+        return new StepViewModel.Builder(context)
+                .setTitle(getCurrentTitle(position))
+                .create();
     }
 
     public Step getCurrentStep(int position){
@@ -59,5 +61,20 @@ public class StepAdapter extends AbstractFragmentStepAdapter {
                break;
        }
        return retStep;
+    }
+
+    public String getCurrentTitle(int position){
+        switch(position){
+            case 0:
+              return context.getString(R.string.phone_tab_title);
+            case 1:
+                return context.getString(R.string.location_tab_title);
+            case 2:
+                return context.getString(R.string.message_tab_title);
+            case 3:
+                return context.getString(R.string.time_tab_title);
+            default:
+                return "";
+        }
     }
 }
