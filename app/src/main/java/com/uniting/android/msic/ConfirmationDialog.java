@@ -4,9 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -20,8 +18,8 @@ import static android.graphics.Typeface.BOLD;
  */
 
 public class ConfirmationDialog {
-    private static String TAG = "ConfirmationDialog";
-    private Context context;
+    private static final String TAG = "ConfirmationDialog";
+    private final Context context;
     private Callable<Void> continueCallback;
     private Callable<Void> editCallback;
 

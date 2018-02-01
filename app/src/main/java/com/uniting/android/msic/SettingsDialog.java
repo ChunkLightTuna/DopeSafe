@@ -14,14 +14,14 @@ import java.util.concurrent.Callable;
  */
 
 public class SettingsDialog {
-    private Context context;
+    private final Context context;
     private Callable<Void> messageCallBack;
     private Callable<Void> emergencyContactCallback;
     private Callable<Void> timeoutCallback;
-    private Callable<Void> motionDetectionCallback;
+    // --Commented out by Inspection (1/31/2018 9:02 PM):private Callable<Void> motionDetectionCallback;
     private Callable<Void> locationCallback;
     private Callable<Void> disclaimerCallback;
-    private static String TAG = "SettingsDialog";
+    private static final String TAG = "SettingsDialog";
 
     public SettingsDialog(Context context) {
         this.context = context;
@@ -39,9 +39,11 @@ public class SettingsDialog {
         this.timeoutCallback = timeoutCallback;
     }
 
-    public void setMotionDetectionCallback(Callable<Void> motionDetectionCallback) {
-        this.motionDetectionCallback = motionDetectionCallback;
-    }
+// --Commented out by Inspection START (1/31/2018 9:02 PM):
+//    public void setMotionDetectionCallback(Callable<Void> motionDetectionCallback) {
+//        this.motionDetectionCallback = motionDetectionCallback;
+//    }
+// --Commented out by Inspection STOP (1/31/2018 9:02 PM)
 
     public void setLocationCallback(Callable<Void> locationCallback) {
         this.locationCallback = locationCallback;
@@ -134,9 +136,7 @@ public class SettingsDialog {
                 builder
                         .setTitle("Conditions")
                         .setMessage(R.string.conditions)
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {
-                            executeCallback(disclaimerCallback);
-                        });
+                        .setPositiveButton("Ok", (dialogInterface, i) -> executeCallback(disclaimerCallback));
                 break;
             }
         }

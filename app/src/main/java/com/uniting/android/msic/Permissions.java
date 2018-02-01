@@ -18,7 +18,7 @@ import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 /**
- * Static permission logix.
+ * Static permission logic.
  */
 class Permissions {
     private static final int REQUEST_LOCATION = 1;
@@ -72,17 +72,18 @@ class Permissions {
             case REQUEST_SMS:
                 if (!permissionsGranted(grantResults)) {
                     AlertDialog.Builder smsDialog = new AlertDialog.Builder(activity);
+
                     smsDialog.setMessage(R.string.sms_permissions_dialog_message)
                             .setCancelable(false);
                     if (activity.shouldShowRequestPermissionRationale(SEND_SMS) && activity.shouldShowRequestPermissionRationale(READ_PHONE_STATE)) {
                         smsDialog.setPositiveButton(R.string.ok, (dialog, which) -> requestSMS(activity));
                     } else {
                         smsDialog.setPositiveButton(R.string.settings, (dialog, which) -> {
-                            Intent intent = new Intent();
-                            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                            Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
-                            intent.setData(uri);
-                            activity.startActivity(intent);
+                                    Intent intent = new Intent();
+                                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
+                                    intent.setData(uri);
+                                    activity.startActivity(intent);
                         })
                                 .setOnDismissListener(dialog -> requestSMS(activity));
                     }

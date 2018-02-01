@@ -73,7 +73,7 @@
             Overdose can happen in degrees. It can start as having trouble staying awake (being on the nod) and breathing slowly is already a sign of a minor overdose. If you are ever in this condition, then you at risk of getting worse.\n\n
 
             FINALLY, WE CAN’T STRESS ENOUGH HOW DANGEROUS IT IS TO USE ALONE. MANY PEOPLE DIE THIS WAY.\n
-            INFACT MOST OVERDOSE DEATHS HAPPEN TO PEOPLE WHO HAVE USED ALONE. WE DON’T WANT YOU TO BE THIS PERSON.\n\n
+            IN FACT MOST OVERDOSE DEATHS HAPPEN TO PEOPLE WHO HAVE USED ALONE. WE DON’T WANT YOU TO BE THIS PERSON.\n\n
 
             SAVE A FRIEND- LEARN RESUSCITATION
         </item>
@@ -150,7 +150,7 @@
             We recommend the response alarm is used each time.
         </item>
         <item>
-             No personally identifiable information is collected. In the event of an unforeseen application failure a crashdump may be reported to maintain app quality. This aim of this app is to save lives.\n\n
+             No personally identifiable information is collected. In the event of unforeseen application failure a crashdump may be reported for the purpose of ensuring app quality. The sole aim of this app is to save lives.\n\n
 
             The message itself is carried out over SMS which the user\'s and recipient\'s ISPs would have full access to. If enabled, the GPS in your phone will be used to assist in locating you.\n\n
 
@@ -171,7 +171,7 @@
     <string name="settings">Settings</string>
     <string name="init_dialog_title">Warning</string>
     <string name="init_dialog_message">An overdoes can still occur for some time after injection!</string>
-    <string name="sms_permissions_dialog_message">SMS permissions are required for the application to work.</string>
+    <string name="sms_permissions_dialog_message">Both SMS and Read Phone State permissions are required to send text messages on your device.</string>
 
     <string name="disclaimer_header">By clicking accept, the application user acknowledges that he/she understands and accepts the following conditions:\n\n </string>
     <string name="disclaimer">Disclaimer</string>
@@ -221,10 +221,7 @@
     <string name="app_logo">App Logo</string>
 
     <string name="title_activity_setup">SetupActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
 
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
     <string name="emergency_contact_step">
         Please enter the phone number of your emergency contact. This is the person
         that a message will be sent to when the timer runs down.
@@ -251,5 +248,7 @@
     <string name="location_tab_title">Location</string>
     <string name="message_tab_title">Emergency Message</string>
     <string name="time_tab_title">Count Down Time</string>
-    strin
+    <string name="chars_remaining">Characters Remaining</string>
+    <string name="location_services">Location Services:</string>
+    <string name="_160_characters_remaining">160 Characters Remaining</string>
 </resources>
