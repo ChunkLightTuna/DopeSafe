@@ -8,8 +8,8 @@ android {
         applicationId "com.uniting.android.msic"
         minSdkVersion 16
         targetSdkVersion 27
-        versionCode 8
-        versionName "1.0.8"
+        versionCode 9
+        versionName "0.8.4"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {

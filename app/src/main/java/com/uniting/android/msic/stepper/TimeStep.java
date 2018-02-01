@@ -1,4 +1,4 @@
-package com.uniting.android.msic;
+package com.uniting.android.msic.stepper;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,6 +11,8 @@ import android.widget.NumberPicker;
 
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
+import com.uniting.android.msic.Prefs;
+import com.uniting.android.msic.R;
 
 /**
  * Created by jeeppeck on 1/30/18.

@@ -1,4 +1,4 @@
-package com.uniting.android.msic;
+package com.uniting.android.msic.stepper;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,10 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.stepstone.stepper.StepperLayout;
 import com.stepstone.stepper.VerificationError;
+import com.uniting.android.msic.MainActivity;
+import com.uniting.android.msic.Prefs;
+import com.uniting.android.msic.R;
+import com.uniting.android.msic.stepper.StepAdapter;
 
 public class SetupActivity extends AppCompatActivity implements StepperLayout.StepperListener{
 

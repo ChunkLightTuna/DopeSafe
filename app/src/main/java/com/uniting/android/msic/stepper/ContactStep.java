@@ -1,9 +1,10 @@
-package com.uniting.android.msic;
+package com.uniting.android.msic.stepper;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.EditText;
 
 import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
+import com.uniting.android.msic.Prefs;
+import com.uniting.android.msic.R;
 
 /**
  * Created by jeeppeck on 1/30/18.
@@ -22,7 +25,7 @@ public class ContactStep extends Fragment implements Step {
     private EditText phoneField;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.emergency_contact_step, container, false);
         phoneField = v.findViewById(R.id.initial_phone_field);
         phoneField.setText(Prefs.getPhone(getContext()));
@@ -32,16 +35,12 @@ public class ContactStep extends Fragment implements Step {
 
     @Override
     public VerificationError verifyStep(){
-        if(isPhoneValid(phoneField.getText().toString())){
+        if(PhoneNumberUtils.isGlobalPhoneNumber(phoneField.getText().toString())){
             Prefs.setPhone(getContext(),  phoneField.getText().toString());
             return null;
         }else{
             return new VerificationError(getString(R.string.phone_verification_error));
         }
-    }
-
-    private boolean isPhoneValid(String phone){
-        return phone.matches("[0-9]+") && phone.length() == 10;
     }
 
     @Override
