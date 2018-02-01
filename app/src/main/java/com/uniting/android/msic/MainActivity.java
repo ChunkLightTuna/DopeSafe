@@ -452,7 +452,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void playSiren(){
         if(alarmStarted)
             stopAlarm();
-        mediaPlayer = MediaPlayer.create(this, R.raw.siren, new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(), 0);
+
+        AudioAttributes.Builder audioAttributesBuilder = new AudioAttributes.Builder();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            audioAttributesBuilder.setUsage(AudioAttributes.USAGE_ALARM);
+        }
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.siren, audioAttributesBuilder.build(), 0);
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
     }
