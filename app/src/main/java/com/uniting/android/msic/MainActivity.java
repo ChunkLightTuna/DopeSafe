@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
@@ -35,6 +36,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Button startButton;
     private Button pauseButton;
     private Button resumeButton;
+    private ImageView alertView;
     //private Switch stopButton;
     private ProgressBar progressCircle;
     private SwipeButton stopButton;
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int seconds = 0;
     private int minutes = 0;
 
+    private boolean emergencyProcedureInitialized;
     private boolean alarmStarted = false;
 
     private final Handler handler = new Handler();
@@ -131,6 +135,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         stopButton = findViewById(R.id.stop_button);
         stopButton.setVisibility(View.GONE);
         stopButton.setOnActiveListener(this::stopTimer);
+
+        alertView = findViewById(R.id.alert_view);
 
         drawer = findViewById(R.id.drawer_layout);
 
@@ -272,7 +278,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (timerStopped) {
             //timer will start
-            prepareAlarm();
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) actionBar.hide();
@@ -349,8 +354,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggleHideyBar();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.show();
-
         stopButton.setVisibility(View.GONE);
+        alertView.setVisibility(View.INVISIBLE);
         pauseButton.setVisibility(View.INVISIBLE);
         resumeButton.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
@@ -366,6 +371,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         timeDisplay.setTextColor(Color.WHITE);
 
         alarmStarted = false;
+        emergencyProcedureInitialized = false;
         mediaPlayer.reset();
         vibrator.cancel();
         timerStopped = true;
@@ -432,14 +438,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void prepareAlarm() {
+    private void startAlarm() {
         try {
+            mediaPlayer = new MediaPlayer();
             mediaPlayer.setDataSource(this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
             mediaPlayer.prepare();
-        } catch (IOException e) {
-            //TODO - what should we do here?
+            mediaPlayer.start();
+        }catch (IOException e){
+            //TODO - what do we do here?
         }
+    }
+
+    private void playSiren(){
+        if(alarmStarted)
+            stopAlarm();
+        mediaPlayer = MediaPlayer.create(this, R.raw.siren, new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_ALARM).build(), 0);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+    }
+
+    private void stopAlarm(){
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        mediaPlayer = null;
+        alarmStarted = false;
     }
 
     private Runnable getTimer() {
@@ -451,7 +473,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         return new Runnable() {
             public void run() {
-                if (!timerPaused) {
+                if (!timerPaused && !timerStopped) {
 
                     timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
                     updatedTime = timeInMilliseconds;
@@ -462,16 +484,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     //times up
                     if (minutes == time) {
-                        Log.d(TAG, "run() called with minutes:" + minutes + " and time:" + time);
-                        //TODO ask for location permissions
-                        if (location) {
-                            sendSMS(phoneNumbers, message + "\n" + getGoogleMapsUrl());
-                        } else {
-                            sendSMS(phoneNumbers, message);
+                        if(!emergencyProcedureInitialized){
+                            emergencyProcedureInitialized = true;
+                            if (location) {
+                                sendSMS(phoneNumbers, message + "\n" + getGoogleMapsUrl());
+                            } else {
+                                sendSMS(phoneNumbers, message);
+                            }
+                            pauseButton.setVisibility(View.INVISIBLE);
+                            progressCircle.setVisibility(View.INVISIBLE);
+                            alertView.setVisibility(View.VISIBLE);
+                            timeDisplay.setText(String.format(getString(com.uniting.android.msic.R.string.time_format), 0, 0));
+                            timeDisplay.setTextColor(Color.RED);
+                            playSiren();
                         }
-
-                        timeDisplay.setText(String.format(getString(com.uniting.android.msic.R.string.time_format), 0, 0));
-                        timeDisplay.setTextColor(Color.RED);
                     } else {
 
                         //one minute left
@@ -480,10 +506,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             setAlarmVolumeMax();
                             if (!mediaPlayer.isPlaying())
-                                mediaPlayer.start();
-                            vibrator.vibrate(200);
-
+                                startAlarm();
                             alarmStarted = true;
+                        }else if(minutes + 1 >= time && alarmStarted){
+                            //vibrate?
                         }
 
                         if (minutes != 0 || seconds != 0) {
@@ -503,6 +529,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
     }
 
+    private void initializeEmergencyProcedure(){
+
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

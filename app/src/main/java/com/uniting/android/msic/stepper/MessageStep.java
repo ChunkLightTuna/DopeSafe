@@ -34,6 +34,7 @@ public class MessageStep extends Fragment implements Step {
         View v = inflater.inflate(R.layout.message_step, container, false);
         charRemainingView = v.findViewById(R.id.characters_remaining);
         messageField = v.findViewById(R.id.initial_message);
+        messageField.setText(Prefs.getMsg(getContext()));
         messageField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

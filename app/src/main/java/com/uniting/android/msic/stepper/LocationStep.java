@@ -28,6 +28,7 @@ public class LocationStep extends Fragment implements Step {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.location_step, container, false);
         locationSwitch = view.findViewById(R.id.location_switch);
+        locationSwitch.setChecked(Prefs.isDisclaimerAccepted(getContext()));
         return view;
     }
 
