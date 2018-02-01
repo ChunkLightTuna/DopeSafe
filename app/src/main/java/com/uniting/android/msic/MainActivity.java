@@ -32,6 +32,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Button startButton;
     private Button pauseButton;
     private Button resumeButton;
+    private ImageView alertView;
     //private Switch stopButton;
     private ProgressBar progressCircle;
     private SwipeButton stopButton;
@@ -108,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         stopButton = findViewById(R.id.stop_button);
         stopButton.setVisibility(View.GONE);
         stopButton.setOnActiveListener(this::stopTimer);
+
+        alertView = findViewById(R.id.alert_view);
 
         drawer = findViewById(R.id.drawer_layout);
 
@@ -301,6 +305,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.show();
         stopButton.setVisibility(View.GONE);
+        alertView.setVisibility(View.INVISIBLE);
         pauseButton.setVisibility(View.INVISIBLE);
         resumeButton.setVisibility(View.INVISIBLE);
         startButton.setVisibility(View.VISIBLE);
@@ -436,7 +441,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             } else {
                                 sendSMS(phoneNumbers, message);
                             }
-
+                            pauseButton.setVisibility(View.INVISIBLE);
+                            progressCircle.setVisibility(View.INVISIBLE);
+                            alertView.setVisibility(View.VISIBLE);
                             timeDisplay.setText(String.format(getString(com.uniting.android.msic.R.string.time_format), 0, 0));
                             timeDisplay.setTextColor(Color.RED);
                             playSiren();
@@ -472,6 +479,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         };
     }
 
+    private void initializeEmergencyProcedure(){
+
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
