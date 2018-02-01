@@ -56,11 +56,11 @@ public class Prefs {
 //        PreferenceManager.getDefaultSharedPreferences(context).edit().putStringSet(context.getString(R.string.emergency_contact_key), phones).apply();
     }
 
-    static int getTime(Context context) {
+    static Integer getTime(Context context) {
         return Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.countdown_time_key), "5"));
     }
 
-    public static void setTime(Context context, int time) {
+    public static void setTime(Context context, Integer time) {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(context.getString(R.string.countdown_time_key), String.valueOf(time)).apply();
         Log.d(TAG, "setTime() called with: " + "time = [" + time + "]");
     }

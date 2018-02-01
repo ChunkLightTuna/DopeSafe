@@ -35,7 +35,7 @@ public class MessageStep extends Fragment implements Step {
     private EditText messageField;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.message_step, container, false);
         charRemainingView = v.findViewById(R.id.characters_remaining);
         messageField = v.findViewById(R.id.initial_message);
@@ -70,7 +70,7 @@ public class MessageStep extends Fragment implements Step {
 
     private void updateCharsRemainingField(){
         int charsRemaining = maxChars - messageField.length();
-        charRemainingView.setText(charsRemaining + " Characters Remaining");
+        charRemainingView.setText(charsRemaining + getString(R.string.chars_remaining));
     }
 
     private boolean isMessageWithinLength(){

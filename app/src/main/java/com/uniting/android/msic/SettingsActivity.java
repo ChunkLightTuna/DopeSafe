@@ -18,34 +18,6 @@ import android.view.MenuItem;
 public class SettingsActivity extends AppCompatActivity {
     private static final String TAG = "SettingsActivity";
 
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = (preference, value) -> {
-        String stringValue = value.toString();
-
-
-        if (preference instanceof ListPreference) {
-            // For list preferences, look up the correct display value in
-            // the preference's 'entries' list.
-            ListPreference listPreference = (ListPreference) preference;
-            int index = listPreference.findIndexOfValue(stringValue);
-
-            // Set the summary to reflect the new value.
-            preference.setSummary(
-                    index >= 0
-                            ? listPreference.getEntries()[index]
-                            : null);
-
-        } else {
-            // For all other preferences, set the summary to the value's
-            // simple string representation.
-            preference.setSummary(stringValue);
-        }
-        return true;
-    };
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -54,27 +26,6 @@ public class SettingsActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary (line of text below the
-     * preference title) is updated to reflect the value. The summary is also
-     * immediately updated upon calling this method. The exact display format is
-     * dependent on the type of preference.
-     *
-     * @see #sBindPreferenceSummaryToValueListener
-     */
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
     }
 
     @Override
@@ -132,15 +83,25 @@ public class SettingsActivity extends AppCompatActivity {
             preferenceScreen = getPreferenceScreen();
             brb = false;
 
-            locationPref = ((SwitchPreference) preferenceScreen.findPreference(getContext().getString(R.string.enable_location_key)));
+            locationPref = ((SwitchPreference) findPreference(getString(R.string.enable_location_key)));
+            Preference timePref = findPreference(getString(R.string.countdown_time_key));
+            Preference phoneOnePref = findPreference(getString(R.string.emergency_contact_key));
+            Preference phoneTwoPref = findPreference(getString(R.string.emergency_contact_aux_key));
+            SmsMessagePreference msgPref = SmsMessagePreference.newInstance(
+                    getContext(),
+                    getString(R.string.pref_title_emergency_message),
+                    getString(R.string.pref_default_emergency_message),
+                    getString(R.string.emergency_message_key));
+
+            preferenceScreen.addPreference(msgPref);
 
             if (!Permissions.locationGranted(getContext()) && (locationPref.isChecked() || Prefs.isLoc(getContext()))) {
                 Prefs.setLoc(getContext(), false);
                 locationPref.setChecked(false);
             }
 
-            locationPref.setOnPreferenceChangeListener((preference, enable) -> {
-                if ((boolean) enable && !Permissions.locationGranted(getContext())) {
+            locationPref.setOnPreferenceChangeListener((p, v) -> {
+                if ((boolean) v && !Permissions.locationGranted(getContext())) {
                     brb = true;
                     Prefs.setLoc(getContext(), true);
                     Permissions.requestLocation(getActivity());
@@ -148,29 +109,36 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             });
 
-            preferenceScreen.addPreference(SmsMessagePreference.newInstance(
-                    getContext(),
-                    getString(R.string.pref_title_emergency_message),
-                    getString(R.string.pref_default_emergency_message),
-                    getString(R.string.emergency_message_key))
-            );
+            Preference.OnPreferenceChangeListener phoneNumberListener = (p, number) -> {
+                boolean globalPhoneNumber = PhoneNumberUtils.isGlobalPhoneNumber((String) number);
+                if (globalPhoneNumber) p.setSummary(number.toString());
+                return globalPhoneNumber;
+            };
 
-            preferenceScreen.findPreference(getContext().getString(R.string.emergency_contact_key))
-                    .setOnPreferenceChangeListener((p, number) -> PhoneNumberUtils.isGlobalPhoneNumber((String) number));
+            Preference.OnPreferenceChangeListener timeListener = (p, v) -> {
+                ListPreference listPreference = (ListPreference) p;
 
-            preferenceScreen.findPreference(getContext().getString(R.string.emergency_contact_aux_key))
-                    .setOnPreferenceChangeListener((p, number) -> PhoneNumberUtils.isGlobalPhoneNumber((String) number));
+                int index = listPreference.findIndexOfValue(v.toString());
 
-            preferenceScreen.findPreference(getContext().getString(R.string.emergency_message_key))
-                    .setOnPreferenceChangeListener((p, message) -> !((String) message).isEmpty());
+                p.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
+                return true;
+            };
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.emergency_message_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.emergency_contact_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.emergency_contact_aux_key)));
+            Preference.OnPreferenceChangeListener msgListener = (p, message) -> {
+                boolean b = !((String) message).isEmpty();
+                if (b) p.setSummary(message.toString());
+                return b;
+            };
+
+            phoneOnePref.setOnPreferenceChangeListener(phoneNumberListener);
+            phoneTwoPref.setOnPreferenceChangeListener(phoneNumberListener);
+            timePref.setOnPreferenceChangeListener(timeListener);
+            msgPref.setOnPreferenceChangeListener(msgListener);
+
+            phoneNumberListener.onPreferenceChange(phoneOnePref, Prefs.getPhone(getContext()));
+            phoneNumberListener.onPreferenceChange(phoneTwoPref, Prefs.getPhoneAux(getContext()));
+            timeListener.onPreferenceChange(timePref, Prefs.getTime(getContext()));
+            msgListener.onPreferenceChange(msgPref, Prefs.getMsg(getContext()));
         }
     }
 }

@@ -34,6 +34,8 @@ public class SmsMessagePreference extends EditTextPreference {
         super(context, attrs);
     }
 
+    int defaultTextColor;
+
     static SmsMessagePreference newInstance(Context context, String title, String defaultValue, String key) {
 
         SmsMessagePreference ed = new SmsMessagePreference(context, null);
@@ -50,13 +52,20 @@ public class SmsMessagePreference extends EditTextPreference {
     }
 
     @Override
-    protected void showDialog(Bundle state) {
+    public void showDialog(Bundle state) {
         super.showDialog(state);
 
         int maxChars = Prefs.isLoc(getContext()) ? 120 : 160;
 
         TextView textCounter = new TextView(getContext());
-        textCounter.setText(String.format(Locale.getDefault(), REMAINING_FORMAT, getSummary().length(), maxChars));
+        int curLen= Prefs.getMsg(getContext()).length();
+
+        textCounter.setText(String.format(Locale.getDefault(), REMAINING_FORMAT, curLen, maxChars));
+        defaultTextColor = textCounter.getCurrentTextColor();
+        if (curLen == 0) {
+            textCounter.setTextColor(getContext().getResources().getColor(R.color.ms_errorColor));
+        }
+
 
         final LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
@@ -87,6 +96,12 @@ public class SmsMessagePreference extends EditTextPreference {
                         s.length(),
                         maxChars
                 ));
+
+                if (s.length() == 0) {
+                    textCounter.setTextColor(getContext().getResources().getColor(R.color.ms_errorColor));
+                } else {
+                    textCounter.setTextColor(defaultTextColor);
+                }
             }
 
             public void afterTextChanged(Editable s) {
