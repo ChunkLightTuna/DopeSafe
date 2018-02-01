@@ -25,6 +25,7 @@ public class ContactStep extends Fragment implements Step {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.emergency_contact_step, container, false);
         phoneField = v.findViewById(R.id.initial_phone_field);
+        phoneField.setText(Prefs.getPhone(getContext()));
         return v;
     }
 

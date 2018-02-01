@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int minutes = 0;
 
     private boolean alarmStarted = false;
+    private boolean sirenStarted = false;
 
     private final Handler handler = new Handler();
     private Runnable timer;
@@ -316,6 +317,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         timeDisplay.setTextColor(Color.WHITE);
 
         alarmStarted = false;
+        sirenStarted = false;
         mediaPlayer.reset();
         vibrator.cancel();
         timerStopped = true;
@@ -392,6 +394,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void playSiren(){
+        if(alarmStarted)
+            stopAlarm();
+//            mediaPlayer = MediaPlayer.create(this, R.raw.siren);
+//            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+//            mediaPlayer.setOnPreparedListener(mp -> {
+//                mediaPlayer.start();
+//                mediaPlayer.setLooping(true);
+//            });
+//            mediaPlayer.prepareAsync();
+//            alarmStarted = false;
+//            sirenStarted = true;
+    }
+
+    private void stopAlarm(){
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        mediaPlayer = null;
+        alarmStarted = false;
+    }
+
     private Runnable getTimer() {
 
         final int time = Prefs.getTime(this);
@@ -422,6 +445,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         timeDisplay.setText(String.format(getString(com.uniting.android.msic.R.string.time_format), 0, 0));
                         timeDisplay.setTextColor(Color.RED);
+                        if(!sirenStarted)
+                            playSiren();
                     } else {
 
                         //one minute left
@@ -432,7 +457,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             if (!mediaPlayer.isPlaying())
                                 mediaPlayer.start();
                             vibrator.vibrate(200);
-
                             alarmStarted = true;
                         }
 
