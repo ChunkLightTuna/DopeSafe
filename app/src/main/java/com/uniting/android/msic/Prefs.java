@@ -16,7 +16,7 @@ import java.util.Set;
 public class Prefs {
     private static final String TAG = "Prefs";
 
-    static String getPhone(Context context) {
+    public static String getPhone(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.emergency_contact_key), context.getString(R.string.pref_default_contact));
     }
 
@@ -65,7 +65,7 @@ public class Prefs {
         Log.d(TAG, "setTime() called with: " + "time = [" + time + "]");
     }
 
-    static String getMsg(Context context) {
+    public static String getMsg(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getString(context.getString(R.string.emergency_message_key), "");
     }
 
@@ -94,7 +94,7 @@ public class Prefs {
 //    }
 
 
-    static boolean isDisclaimerAccepted(Context context) {
+    public static boolean isDisclaimerAccepted(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(context.getString(R.string.disclaimer_accepted_key), false);
     }
 
