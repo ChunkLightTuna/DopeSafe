@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -29,13 +30,18 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ebanx.swipebtn.SwipeButton;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import java.io.IOException;
@@ -72,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Vibrator vibrator;
     private LocationService locationService;
 
-    private AlertDialog alertDialog;
+    private List<AlertDialog> permissionsAlerts = new ArrayList<>();
     private DrawerLayout drawer;
 
     @Override
@@ -82,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mediaPlayer = new MediaPlayer();
-
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         progressCircle = findViewById(R.id.progress_bar);
@@ -95,10 +100,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.timeDisplay = findViewById(R.id.time);
 
         startButton = findViewById(R.id.start_button);
-        startButton.setOnClickListener(v -> confirmInitializeOfSession());
+        startButton.setOnClickListener(v -> {
+            if (Permissions.smsGranted(this)) {
+                confirmInitializeOfSession();
+            }
+
+        });
 
         pauseButton = findViewById(R.id.pause_button);
-        pauseButton.setOnClickListener(v -> pauseTimer());
+        final Animation animShake = AnimationUtils.loadAnimation(this, R.anim.wiggle);
+
+        pauseButton.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.startAnimation(animShake);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.clearAnimation();
+            }
+
+            return false;
+        });
+        pauseButton.setOnLongClickListener(v -> {
+            v.clearAnimation();
+            pauseTimer();
+            return false;
+        });
 
         resumeButton = findViewById(R.id.resume_button);
         resumeButton.setOnClickListener(view -> resumeTimer());
@@ -146,20 +171,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        alertDialog = Permissions.handlePermissionResult(this, requestCode, grantResults);
+        permissionsAlerts.add(Permissions.handlePermissionResult(this, requestCode, grantResults));
     }
 
     @Override
     protected void onResume() {
-        Log.d(TAG, "onResume() called");
 //        if user enabled SMS through OS app settings dismiss the box. working on sony, not motorola
-        if (alertDialog != null) {
-            TextView message = alertDialog.findViewById(android.R.id.message);
-            if (message != null && message.getText() == getString(R.string.sms_permissions_dialog_message) && Permissions.smsGranted(this)) {
-                alertDialog.dismiss();
-                alertDialog = null;
+
+        if (permissionsAlerts != null) {
+            if (Permissions.smsGranted(this)) {
+                for (AlertDialog alertDialog : permissionsAlerts) {
+                    if (alertDialog != null) {
+                        TextView message = alertDialog.findViewById(android.R.id.message);
+                        if (message != null && message.getText() == getString(R.string.sms_permissions_dialog_message)) {
+                            alertDialog.dismiss();
+                        }
+                    }
+                }
+                permissionsAlerts.clear();
+            } else {
+                for (int i = 0, j = permissionsAlerts.size(); i < j; ) {
+                    if (permissionsAlerts.get(i) == null) {
+                        permissionsAlerts.remove(i);
+                        j--;
+                    } else {
+                        i++;
+                    }
+                }
+                while (permissionsAlerts.size() > 1) {
+                    AlertDialog alertDialog = permissionsAlerts.get(0);
+                    alertDialog.setOnDismissListener(d -> {
+                    });
+                    alertDialog.dismiss();
+                    permissionsAlerts.remove(0);
+                }
             }
         }
+
 
         updateTime();
         tryToInitLocationService();
@@ -220,6 +268,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void startTimer() {
         Log.d(TAG, "startTimer() called");
+
+
         if (timerStopped) {
             //timer will start
             prepareAlarm();

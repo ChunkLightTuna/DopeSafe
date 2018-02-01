@@ -1,15 +1,12 @@
 package com.uniting.android.msic.stepper;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.preference.PreferenceGroup;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +17,6 @@ import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 import com.uniting.android.msic.Prefs;
 import com.uniting.android.msic.R;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by jeeppeck on 1/30/18.

@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.NumberPicker;
 
 import com.stepstone.stepper.Step;
@@ -25,7 +24,7 @@ public class TimeStep extends Fragment implements Step {
     NumberPicker numberPicker;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.time_step, container, false);
         numberPicker = v.findViewById(R.id.time_picker);
         numberPicker.setMaxValue(10);

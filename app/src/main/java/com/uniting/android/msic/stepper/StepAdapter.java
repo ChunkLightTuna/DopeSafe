@@ -24,17 +24,11 @@ public class StepAdapter extends AbstractFragmentStepAdapter {
 
     @Override
     public Step createStep(int position){
-        final Step step = getCurrentStep(position);
-        return step;
+        return getCurrentStep(position);
     }
 
     public int getCount(){
         return 4;
-    }
-
-    @Override
-    public Step findStep(int position) {
-        return super.findStep(position);
     }
 
     @NonNull

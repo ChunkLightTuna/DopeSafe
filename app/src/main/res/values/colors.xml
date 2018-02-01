@@ -4,13 +4,9 @@
     <!--<color name="colorPrimaryDark">@color/unitingPurpleDark</color>-->
     <!--<color name="colorAccent">@color/unitingYellow</color>-->
     <color name="colorMaterialGrey300">#ffe0e0e0</color>
-    <color name="colorWhite">#fff</color>
-    <color name="colorDarkGray">#80000000</color>
     <color name="black_overlay">#66000000</color>
     <color name="unitingPurple">#921e63</color>
     <color name="unitingPurpleDark">#5e133f</color>
     <color name="unitingYellow">#f9d148</color>
     <color name="transparentUnitingYellow">#80f9d148</color>
-    <color name="transparent">#00ff0000</color>
-    <color name="transparentGrey">#80CCCCCC</color>
 </resources>
