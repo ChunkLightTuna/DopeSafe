@@ -15,9 +15,10 @@ import static android.graphics.Typeface.BOLD;
 
 /**
  * Created by jeeppeck on 1/27/18.
+ * John makes UI in code because he eats garbage
  */
 
-public class ConfirmationDialog {
+class ConfirmationDialog {
     private static final String TAG = "ConfirmationDialog";
     private final Context context;
     private Callable<Void> continueCallback;
@@ -27,17 +28,17 @@ public class ConfirmationDialog {
         this.context = context;
     }
 
-    public ConfirmationDialog setContinueCallback(Callable<Void> continueCallback) {
+    ConfirmationDialog setContinueCallback(Callable<Void> continueCallback) {
         this.continueCallback = continueCallback;
         return this;
     }
 
-    public ConfirmationDialog setEditCallback(Callable<Void> editCallback) {
+    ConfirmationDialog setEditCallback(Callable<Void> editCallback) {
         this.editCallback = editCallback;
         return this;
     }
 
-    public void showDialog() {
+    void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder
                 .setTitle(R.string.confirmation_dialog_title).setView(getDialogContent())
@@ -71,7 +72,7 @@ public class ConfirmationDialog {
         return dialogLayout;
     }
 
-    public TableRow getContent(String label, String value) {
+    private TableRow getContent(String label, String value) {
         TableRow tableRow = getRow();
         TextView labelView = getBoldTextView();
         TextView valueView = getTextView();
@@ -82,14 +83,14 @@ public class ConfirmationDialog {
         return tableRow;
     }
 
-    public TableRow getRow(){
+    private TableRow getRow(){
         TableRow tableRow = new TableRow(context);
         tableRow.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         tableRow.setBackgroundColor(context.getResources().getColor(R.color.colorMaterialGrey300));
         return tableRow;
     }
 
-    public TextView getBoldTextView() {
+    private TextView getBoldTextView() {
         TextView textView = new TextView(context);
         textView.setTypeface(null, BOLD);
         textView.setGravity(Gravity.END);
@@ -97,7 +98,7 @@ public class ConfirmationDialog {
         return textView;
     }
 
-    public TextView getTextView() {
+    private TextView getTextView() {
         TextView textView = new TextView(context);
         textView.setBackgroundColor(context.getColor(R.color.unitingYellow));
         textView.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -105,7 +106,6 @@ public class ConfirmationDialog {
 //        textView.setGravity(Gravity.START);
         return textView;
     }
-
 
     private void executeCallback(Callable<Void> callback) {
         if (callback != null)

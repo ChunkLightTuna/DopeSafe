@@ -58,6 +58,7 @@ class InfoTextAdapter(private val titles: Array<String>?, private val bodies: Ar
         else
             holder.title.visibility = View.GONE
 
+
         holder.body.text = bodies[position].split("\n").map(String::trim).map { line ->
 
             if (line.startsWith(bullet) || (line.length >= 3 && line.substring(0, 3).matches(Regex("[1-9]\\. ")))) {

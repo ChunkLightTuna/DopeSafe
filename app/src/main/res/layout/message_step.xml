@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/unitingYellow"
-    android:padding="20dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/unitingYellow"
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/textView3"
@@ -19,6 +18,8 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.019"
         tools:layout_editor_absoluteX="28dp" />
@@ -32,16 +33,16 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/unitingPurple"
-        android:textColor="@color/unitingYellow"
         android:ems="10"
+        android:gravity="top"
         android:inputType="textMultiLine"
         android:lines="4"
         android:maxLength="160"
         android:maxLines="4"
         android:minLines="4"
-        android:textSize="20sp"
         android:singleLine="false"
-        android:gravity="top"
+        android:textColor="@color/unitingYellow"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -56,11 +57,12 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="160 Characters Remaining"
+        android:text="@string/_160_characters_remaining"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/initial_message"
-        app:layout_constraintVertical_bias="0.008" />
+        app:layout_constraintVertical_bias="0.008"
+        android:layout_marginLeft="8dp" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import com.stepstone.stepper.Step;
 import com.stepstone.stepper.VerificationError;
 import com.uniting.android.msic.Prefs;
 import com.uniting.android.msic.R;
+import com.uniting.android.msic.Utils;
 
 /**
  * Created by jeeppeck on 1/30/18.
@@ -34,21 +34,21 @@ public class ContactStep extends Fragment implements Step {
 
 
     @Override
-    public VerificationError verifyStep(){
-        if(PhoneNumberUtils.isGlobalPhoneNumber(phoneField.getText().toString())){
-            Prefs.setPhone(getContext(),  phoneField.getText().toString());
+    public VerificationError verifyStep() {
+        if (Utils.validSMS(phoneField.getText().toString())) {
+            Prefs.setPhone(getContext(), phoneField.getText().toString());
             return null;
-        }else{
+        } else {
             return new VerificationError(getString(R.string.phone_verification_error));
         }
     }
 
     @Override
-    public void onSelected(){
+    public void onSelected() {
     }
 
     @Override
-    public void onError(@NonNull VerificationError error){
+    public void onError(@NonNull VerificationError error) {
         new AlertDialog.Builder(getContext())
                 .setTitle(getString(R.string.error))
                 .setMessage(error.getErrorMessage())

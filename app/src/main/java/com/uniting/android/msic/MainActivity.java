@@ -5,7 +5,6 @@ import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -82,9 +81,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Vibrator vibrator;
     private LocationService locationService;
 
-    private List<AlertDialog> permissionsAlerts = new ArrayList<>();
+    private final List<AlertDialog> permissionsAlerts = new ArrayList<>();
     private DrawerLayout drawer;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -454,7 +454,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             stopAlarm();
 
         AudioAttributes.Builder audioAttributesBuilder = new AudioAttributes.Builder();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             audioAttributesBuilder.setUsage(AudioAttributes.USAGE_ALARM);
         }
@@ -518,6 +517,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 startAlarm();
                             alarmStarted = true;
                         }else if(minutes + 1 >= time && alarmStarted){
+                            vibrator.vibrate(500);
                             //vibrate?
                         }
 
@@ -548,8 +548,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
 
             case R.id.settings: {
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
             }
 

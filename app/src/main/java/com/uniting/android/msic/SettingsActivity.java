@@ -1,5 +1,6 @@
 package com.uniting.android.msic;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -9,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -24,6 +24,17 @@ public class SettingsActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * just always go back to main
+     */
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -108,9 +119,9 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
             Preference.OnPreferenceChangeListener phoneNumberListener = (p, number) -> {
-                boolean globalPhoneNumber = PhoneNumberUtils.isGlobalPhoneNumber((String) number);
-                if (globalPhoneNumber) p.setSummary(number.toString());
-                return globalPhoneNumber;
+                boolean validPhone = Utils.validSMS((String) number);
+                if (validPhone) p.setSummary(number.toString());
+                return validPhone;
             };
 
             Preference.OnPreferenceChangeListener timeListener = (p, v) -> {
